@@ -119,13 +119,13 @@ export default function Portfolio() {
       >
         For other portfolio, you can visit my GitHub at{' '}
         <Link
-          href='https://github.com/hutamatr'
+          href='https://github.com/hutamadev'
           target='_blank'
           rel='noopener noreferrer'
           className={clsx('text-blue-700 underline', 'dark:text-custom-green')}
         >
           {' '}
-          github.com/hutamatr.
+          github.com/hutamadev.
         </Link>
       </p>
     </section>

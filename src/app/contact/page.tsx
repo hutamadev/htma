@@ -8,7 +8,7 @@ import Contact from '@modules/contact-page/contact';
 
 export const metadata: Metadata = {
   title: 'contact',
-  description: 'hutamatr portfolio website - contact',
+  description: 'hutama portfolio website - contact',
 };
 
 export default function ContactPage() {

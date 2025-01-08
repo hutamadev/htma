@@ -9,7 +9,7 @@ import Skills from '@modules/home-page/skills';
 
 export const metadata: Metadata = {
   title: 'htma',
-  description: 'hutamatr portfolio website',
+  description: 'hutama portfolio website',
 };
 
 export default function HomePage() {
