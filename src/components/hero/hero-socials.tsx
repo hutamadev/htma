@@ -10,7 +10,7 @@ const socials = [
   {
     id: '01',
     title: 'GitHub',
-    href: 'https://github.com/hutamatr',
+    href: 'https://github.com/hutamadev',
     image: GithubSVG,
   },
 ];
