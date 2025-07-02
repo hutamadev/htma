@@ -13,7 +13,7 @@ export default function Footer() {
       >
         <p>© Created with</p>
         <GiBrain className={clsx('text-xl text-red-400', 'md:text-2xl')} />
-        <p>by hutama,</p>
+        <p>by htma,</p>
         <p>{new Date().getFullYear()}</p>
       </div>
     </footer>

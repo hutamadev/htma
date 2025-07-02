@@ -20,23 +20,25 @@ export default function HeroTitle() {
     >
       {isClient ? (
         <motion.h1
-          className={clsx(
-            'text-sm font-normal text-custom-black',
-            'dark:text-custom-green',
-            'md:text-base',
-            'lg:text-lg',
-            '2xl:text-xl'
-          )}
-          initial={{ opacity: 0, x: -24 }}
-          animate={{
-            opacity: 1,
-            x: 0,
-            transition: {
-              delay: 0.3,
-              duration: 0.6,
+          {...{
+            className: clsx(
+              'text-sm font-normal text-custom-black',
+              'dark:text-custom-green',
+              'md:text-base',
+              'lg:text-lg',
+              '2xl:text-xl'
+            ),
+            initial: { opacity: 0, x: -24 },
+            animate: {
+              opacity: 1,
+              x: 0,
+              transition: {
+                delay: 0.3,
+                duration: 0.6,
+              },
             },
+            exit: { opacity: 0, x: -24 },
           }}
-          exit={{ opacity: 0, x: -24 }}
         >
           hello, I'm
         </motion.h1>
@@ -54,21 +56,23 @@ export default function HeroTitle() {
         {isClient ? (
           <>
             <motion.h1
-              className={clsx(
-                neutral.className,
-                'nameBaffle relative z-[1200] whitespace-nowrap text-base font-bold text-custom-black',
-                'dark:text-custom-green',
-                'md:text-2xl',
-                'lg:whitespace-normal lg:text-4xl',
-                '2xl:text-5xl'
-              )}
-              initial={{ opacity: 0, x: -24 }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                transition: { delay: 0.5, duration: 0.7 },
+              {...{
+                className: clsx(
+                  neutral.className,
+                  'nameBaffle relative z-[1200] whitespace-nowrap text-base font-bold text-custom-black',
+                  'dark:text-custom-green',
+                  'md:text-2xl',
+                  'lg:whitespace-normal lg:text-4xl',
+                  '2xl:text-5xl'
+                ),
+                initial: { opacity: 0, x: -24 },
+                animate: {
+                  opacity: 1,
+                  x: 0,
+                  transition: { delay: 0.5, duration: 0.7 },
+                },
+                exit: { opacity: 0, x: -24 },
               }}
-              exit={{ opacity: 0, x: -24 }}
             >
               hutama
             </motion.h1>
@@ -99,14 +103,7 @@ export default function HeroTitle() {
         )}
       </div>
       {isClient ? (
-        <motion.h3
-          className={clsx(
-            'w-fit whitespace-nowrap rounded bg-custom-black px-1 text-base font-light text-custom-green',
-            'dark:text-custom-white-2',
-            'md:text-lg',
-            'lg:whitespace-normal lg:bg-transparent lg:text-2xl lg:font-thin lg:text-custom-black',
-            '2xl:text-3xl'
-          )}
+        <motion.div
           initial={{ opacity: 0, x: -24 }}
           animate={{
             opacity: 1,
@@ -114,9 +111,18 @@ export default function HeroTitle() {
             transition: { delay: 0.9, duration: 0.7 },
           }}
           exit={{ opacity: 0, x: -24 }}
+          {...{
+            className: clsx(
+              'w-fit whitespace-nowrap rounded bg-custom-black px-1 text-base font-light text-custom-green',
+              'dark:text-custom-white-2',
+              'md:text-lg',
+              'lg:whitespace-normal lg:bg-transparent lg:text-2xl lg:font-thin lg:text-custom-black',
+              '2xl:text-3xl'
+            ),
+          }}
         >
           --web developer
-        </motion.h3>
+        </motion.div>
       ) : (
         <LoadingSkeleton className={clsx('h-4 w-40', 'lg:h-8 lg:w-56')} />
       )}

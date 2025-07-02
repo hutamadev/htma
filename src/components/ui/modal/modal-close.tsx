@@ -17,7 +17,7 @@ export default function ModalClose() {
     >
       <div
         className={clsx(
-          'layout flex w-fit items-center justify-center rounded-full bg-custom-black p-2',
+          'layout flex w-fit items-center justify-center rounded-full bg-custom-black p-3',
           'dark:bg-custom-green'
         )}
       >
@@ -27,7 +27,7 @@ export default function ModalClose() {
               'mx-auto w-5 text-custom-green',
               'dark:text-custom-black',
               'md:w-6',
-              'lg:w-7'
+              'lg:w-6'
             )}
             fill='currentColor'
           />

@@ -1,7 +1,7 @@
 import CSS from '@public/assets/images/skills/css-3.webp';
 import DAISYUI from '@public/assets/images/skills/daisyui-logo.webp';
 import EXPRESS from '@public/assets/images/skills/express.webp';
-import GOLANG from '@public/assets/images/skills/golang.webp';
+// import GOLANG from '@public/assets/images/skills/golang.webp';
 import HTML from '@public/assets/images/skills/html-5.webp';
 import JS from '@public/assets/images/skills/js.webp';
 import MYSQL from '@public/assets/images/skills/mysql.webp';
@@ -54,12 +54,12 @@ export const langSkillsImage = [
     title: 'MYSQL',
     link: 'https://www.mysql.com/',
   },
-  {
-    id: '07',
-    image: GOLANG.src,
-    title: 'Golang',
-    link: 'https://go.dev/',
-  },
+  // {
+  //   id: '07',
+  //   image: GOLANG.src,
+  //   title: 'Golang',
+  //   link: 'https://go.dev/',
+  // },
 ];
 
 export const libFrameSkillsImage = [
