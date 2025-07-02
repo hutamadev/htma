@@ -6,7 +6,7 @@ import { useStore } from '@store/useStore';
 import { neutral } from '@utils/localFont';
 
 import NextImage from '../next-image';
-import ArrowSVG from '../svg/ArrowSVG';
+// import ArrowSVG from '../svg/ArrowSVG';
 import GithubSVG from '../svg/GithubSVG';
 
 export interface IModalCardProps {
@@ -48,21 +48,27 @@ export default function ModalCard({
           >
             {portfolioData?.title}.
           </h1>
-          <div className={clsx('flex flex-row items-center', 'md:items-end')}>
-            <button
-              className={clsx(
-                'flex w-full -translate-x-[0.2rem] -translate-y-[0.2rem] flex-row items-center justify-around rounded-xl border border-custom-black bg-custom-green px-4 py-4 shadow-[0.25rem_0.25rem_#24282C] duration-500',
-                'active:translate-x-0 active:translate-y-0 active:shadow-none',
-                'md:col-start-5 md:col-end-7'
-              )}
-            >
-              {portfolioData?.repo && (
+          <div
+            className={clsx(
+              'flex flex-row items-center',
+              'md:items-end',
+              portfolioData?.repo && 'gap-x-4'
+            )}
+          >
+            {portfolioData?.repo && (
+              <button
+                className={clsx(
+                  'flex w-full -translate-x-[0.2rem] -translate-y-[0.2rem] flex-row items-center justify-around rounded-xl border border-custom-black bg-custom-green px-4 py-4 shadow-[0.25rem_0.25rem_#24282C] duration-500',
+                  'active:translate-x-0 active:translate-y-0 active:shadow-none',
+                  'md:col-start-5 md:col-end-7'
+                )}
+              >
                 <a
                   href={portfolioData.repo}
                   target='_blank'
                   rel='noreferrer'
                   className={clsx(
-                    'flex items-center gap-x-1 text-base lowercase text-custom-black',
+                    'flex items-center gap-x-1 text-base text-custom-black',
                     'md:text-2xl'
                   )}
                 >
@@ -70,30 +76,30 @@ export default function ModalCard({
                     className={clsx('w-4 text-custom-black', 'md:w-5')}
                     fill='currentColor'
                   />
-                  repository
+                  Repository
                 </a>
+              </button>
+            )}
+            <button
+              className={clsx(
+                'flex w-full -translate-x-[0.2rem] -translate-y-[0.2rem] flex-row items-center justify-around rounded-xl border border-custom-black bg-custom-green px-4 py-4 shadow-[0.25rem_0.25rem_#24282C] duration-500',
+                'active:translate-x-0 active:translate-y-0 active:shadow-none',
+                'md:col-start-5 md:col-end-7'
               )}
+            >
               <a
                 href={portfolioData?.url as string}
                 target='_blank'
                 rel='noreferrer'
                 className={clsx(
-                  'flex items-center gap-x-1 text-base lowercase text-custom-black',
+                  'flex items-center gap-x-1 text-base text-custom-black',
                   'md:text-2xl'
                 )}
               >
                 <MdLink className={clsx('-rotate-45 text-xl', 'lg:text-2xl')} />
-                view
+                Demo
               </a>
             </button>
-            <ArrowSVG
-              className={clsx(
-                'relative w-24 rotate-180 text-custom-black',
-                'md:top-4 md:w-32',
-                'lg:rotate-0'
-              )}
-              fill='currentColor'
-            />
           </div>
         </div>
         {portfolioData?.image && (
