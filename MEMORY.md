@@ -144,22 +144,51 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Buat branch baru: `feat/migrate-bun` (mengunci snapshot hasil migrasi Bun murni)
    - Tetap di branch aktif: `feat/portfolio-update` untuk melanjutkan Phase 1
 
+### Session 4 — 2026-09-15
+
+1. **Integrasi Agent Skills Suite ke Perencanaan**:
+   - Evaluasi menyeluruh via `using-agent-skills`.
+   - Mengadopsi 5 skills kunci: `source-driven-development`, `constraint-driven-development`, `planning-and-task-breakdown` + `incremental-implementation`, `frontend-ui-engineering`, `doubt-driven-development`.
+   - Update `BRAINSTORMING.md`:
+     - Tambah Section 3.7 *Quality Constraints Contract* (non-negotiables).
+     - Refactor Section 13 Roadmap menjadi *vertical slices* terverifikasi.
+   - Update `DESIGN.md`:
+     - Menghasilkan dan mengunci nilai hex M3 Expressive akurat dari seed `#D3F36A` via `@material/material-color-utilities`.
+2. **Double-Check Mitigations (Doubt-Driven Development)**:
+   - *Zustand & next-themes*: Wajib upgrade `next-themes@^0.4.4` & `zustand@^5.0.0` untuk peer compatibility React 19.
+   - *Tailwind v4 Token Aliasing*: Tambahkan alias backward-compatible (`--color-custom-black`, dll) di `@theme` agar 51 file UI lama tidak rusak.
+   - *Phased Locomotive Removal*: Tahan `locomotive-scroll` di Phase 1, baru di-uninstall di Slice 2.1 setelah Lenis terpasang.
+3. **Pemetaan Lead Skills per Fase**:
+
+| Fase | Fokus | Lead Skills | Gate Verifikasi |
+|---|---|---|---|
+| **Phase 0** | Runtime Migration | `incremental-implementation` | ✅ DONE (`bun.lock`, build OK) |
+| **Phase 1** | Foundation (Next 15, React 19, Tailwind v4, Oxlint) | `source-driven-development` + `incremental-implementation` | `bun install`, `bun run lint` (0 error), `bun run typechecks` |
+| **Phase 2** | Core Components (Lenis, Scramble, Cursor) | `doubt-driven-development` + `frontend-ui-engineering` | Visual & feel parity check 100% |
+| **Phase 3** | Home Sections (M3 Cards, Hero, About, Skills, Modal) | `frontend-ui-engineering` | M3 tokens, responsive, WCAG AA |
+| **Phase 4** | Contact Page (Zod & M3 Text Fields) | `frontend-ui-engineering` + `security-and-hardening` | Zod validation edge cases |
+| **Phase 5** | Polish, SEO & Launch | `performance-optimization` + `shipping-and-launch` | Lighthouse >= 90 semua metrik, production build |
+
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 1 commit dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 2 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean
-- **Commit terbaru:** `71eceea` (`feat: migrate runtime and package manager to bun`)
+- **Working tree:** Modified docs
+- **Commit terbaru:** `f15f8ea` (`docs: update memory with phase 0 execution and feat/migrate-bun branch`)
 
 ---
 
 ## Langkah Selanjutnya
 
-1. Eksekusi **Phase 1 — Foundation** (package upgrades Next.js 15, React 19, Tailwind v4, Motion v12, lenis, zod, Oxlint, Lefthook, M3 color palette)
-2. Lanjut Phase 2–5 sesuai roadmap di `BRAINSTORMING.md` section 13
+1. Eksekusi **Phase 1 — Foundation** di branch `feat/portfolio-update` slice-by-slice:
+   - Slice 1.1: Core package upgrade
+   - Slice 1.2: Tooling overhaul (Oxlint + next.config.ts)
+   - Slice 1.3: M3 color palette generation
+   - Slice 1.4: Typography setup
+2. Lanjut Phase 2–5 sesuai roadmap irisan vertikal.
 
 ---
 

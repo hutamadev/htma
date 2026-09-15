@@ -367,8 +367,23 @@ Better T Stack mendukung:
 | `oxlint`             | Ultra-fast Rust linter        | **Wajib di-install**          |
 | `turborepo`          | Monorepo                      | Tidak untuk sekarang          |
 | `pwa`                | Progressive Web App           | Opsional, bisa ditambah nanti |
-| `husky` / `lefthook` | Git hooks                     | Sudah ada Husky               |
+| `husky` / `lefthook` | Git hooks                     | Migrasi ke Lefthook           |
 | `ultracite`          | Agent-friendly linter rules   | Opsional                      |
+
+### 3.7 Quality Constraints Contract (constraint-driven-development)
+
+Kontrak kualitas tertulis yang mengikat setiap AI Agent yang mengeksekusi proyek ini (tidak boleh diturunkan secara diam-diam):
+
+| Dimensi | Batasan / Target (Non-Negotiable) | Cara Verifikasi |
+|---|---|---|
+| **Layout Invariant** | Layout vertical 100% terkunci (Hero kiri sticky, Content scroll, Sidebar kanan sticky, Gradient mask atas-bawah). | Visual check & inspection |
+| **Data Invariant** | 0 perubahan data portfolio (foto, list project, URL, repo tetap). | `git diff src/utils/portfolio-data.ts` = 0 |
+| **Type-Safety** | 0 `any`, 0 `@ts-ignore`, 0 `@ts-expect-error`, strict mode aktif. | `bun run typechecks` (0 errors) |
+| **Lint Quality** | 0 error, 0 warnings pada linter Oxlint. | `bun run lint` (0 warnings/errors) |
+| **Scroll Parity** | Perilaku & feel scroll Lenis wajib sama persis dengan Locomotive lama. | Runtime browser check |
+| **Text Scramble** | Native `useTextScramble` wajib identik visualnya dengan Baffle.js lama. | Runtime browser check |
+| **Performance Bar** | Lighthouse Core Web Vitals target: 90+ (Performance, Accessibility, Best Practices, SEO). | Lighthouse CLI / DevTools audit |
+| **Form Security** | Validasi input sisi klien via Zod schema (nama, email valid, pesan). | Zod schema validation tests |
 
 ---
 
@@ -1210,66 +1225,90 @@ Sesuai Global Rules (validasi input end-to-end), contact form akan diperkuat den
 
 ---
 
-## 13. Urutan Eksekusi (Roadmap)
+## 13. Urutan Eksekusi (Roadmap & Slices)
 
-### Phase 0 — Runtime Migration (Paling Pertama)
+Setiap fase dipandu oleh **Lead Skill** dari *Agent Skills Suite* dan dieksekusi dalam *thin vertical slices* yang terverifikasi sebelum commit.
 
-1. ✅ Buat branch `feat/portfolio-update`
-2. Hapus `pnpm-lock.yaml`
-3. Update `package.json` — hapus referensi pnpm, tambah `"packageManager": "bun"`
-4. Update `engines` field ke Bun
-5. Migrasi `next.config.js` → `next.config.ts`
-6. Run `bun install` → generate `bun.lockb`
-7. Verify `bun run dev` berjalan normal
+### Phase 0 — Runtime Migration (Paling Pertama) — ✅ SELESAI
+* **Status**: Selesai (Commit `71eceea`, snapshot branch `feat/migrate-bun`).
+* **Hasil**: Hapus pnpm artifacts, `bun.lock` ter-generate, script package.json & husky hooks dimigrasi ke Bun. Typecheck & build lulus 100%.
 
-### Phase 1 — Foundation
+---
 
-8. Update `package.json` — upgrade Next.js 15, React 19, Tailwind v4, Motion v12, dll
-9. Hapus `locomotive-scroll`, `baffle` dari dependencies
-10. Tambah `lenis`, `zod`, `@hookform/resolvers`
-11. Setup Oxlint — hapus ESLint artifacts, buat `oxlint.json`
-12. Generate M3 color palette dari seed `#D3F36A`
-13. Update `tailwind.config` dengan color tokens M3 baru
-14. Update `globals.css` untuk Tailwind v4 syntax
-15. Update/ganti font files (jika pakai opsi A atau B)
-16. Fix breaking changes dari package upgrades
-17. Fix TypeScript strict issues (hapus `any`, tambah `displayName`, dll)
+### Phase 1 — Foundation (Dependencies, Tooling & Design Tokens)
+* **Lead Skill**: `source-driven-development` + `incremental-implementation`
+* **Objective**: Membangun fondasi runtime, linter, css tokens, dan font tanpa merusak compile.
 
-### Phase 2 — Core Components
+* **Slice 1.1 — Package Upgrade & Peer Resolution (Mitigasi)**:
+  * Action:
+    * Upgrade core: Next.js 15, React 19, `motion@^12`, `lenis`, `zod`, `@hookform/resolvers`, `@material/material-color-utilities`.
+    * Upgrade pendukung (hasil double-check): `next-themes@^0.4.4` (peer React 19 support) & `zustand@^5.0.0` (concurrent safe).
+    * Hapus `baffle` dari dependencies.
+    * **PENTING (Mitigasi)**: JANGAN hapus `locomotive-scroll` di Phase 1 ini agar `src/components/ui/page-wrapper.tsx` tidak langsung crash saat dev/build. `locomotive-scroll` baru dicabut di Slice 2.1 setelah Lenis aktif.
+  * Verifikasi: `bun install` berhasil 0 peer conflicts, dry-run compile pass.
+* **Slice 1.2 — Tooling Overhaul (Oxlint & Lefthook)**:
+  * Action: Setup `oxlint.json`, hapus artifacts ESLint (`.eslintrc.js`, `.eslintignore`, paket eslint). Setup `next.config.ts` dengan `eslint: { ignoreDuringBuilds: true }`. Setup `lefthook.yml` (ganti Husky).
+  * Verifikasi: `bun run lint` (Oxlint) berjalan 0 warnings/errors, `bun run typechecks` lulus.
+* **Slice 1.3 — M3 Expressive Palette & Backward-Compatible Aliases**:
+  * Action:
+    * Tulis CSS variables M3 resmi dari seed `#D3F36A` ke `src/styles/globals.css`.
+    * **PENTING (Mitigasi Tailwind v4)**: Sediakan alias token lama di `@theme` (`--color-custom-black`, `--color-custom-green`, `--color-custom-white`) yang memetakan ke token M3 baru agar 51 file komponen tidak langsung *broken styling* sebelum giliran refactor di Phase 3.
+  * Verifikasi: Token CSS terdaftar dan style lama tetap render dengan palet M3 baru.
+* **Slice 1.4 — Typography Setup**:
+  * Action: Setup Google Sans Flex variable font (6 variable axes). Hapus file font lama (Kata Grotesk & Neutral Face).
+  * Verifikasi: `bun run build` sukses, font ter-load.
 
-18. Migrasi `locomotive-scroll` → `lenis` di `page-wrapper.tsx`
-19. Rewrite `useBaffle` → `useTextScramble` (native)
-20. Improve `useCursorPosition` performance (hapus `any`, `pointermove`, passive)
-21. Update `layout-wrapper.tsx` — gradient masks, warna M3
-22. Update `navigation.tsx` — M3 styling
+---
+
+### Phase 2 — Core Components & Mechanics
+* **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering`
+* **Objective**: Mengganti engine scroll, text scramble, dan cursor dengan performa tinggi & hasil visual identik.
+
+* **Slice 2.1 — Lenis Smooth Scroll & Locomotive Cleanup**:
+  * Action: Implementasi Lenis di `src/components/page-wrapper.tsx`. Setelah Lenis terbukti bekerja identik, hapus `locomotive-scroll` dari `package.json` dan jalankan `bun install`.
+  * Verifikasi: Parity check visual & feel scroll identik 100% dengan sebelumnya. Tidak ada crash runtime.
+* **Slice 2.2 — Native Text Scramble Hook**:
+  * Action: Buat `src/hooks/useTextScramble.ts` (native rAF) menggantikan Baffle.js.
+  * Verifikasi: Efek decoding scramble identik visualnya dengan Baffle.js.
+* **Slice 2.3 — Cursor Optimization**:
+  * Action: Refactor `src/hooks/useCursorPosition.ts` (pointermove, passive listener, rAF throttle, hapus `any`).
+  * Verifikasi: Performa 60fps tanpa frame drop, type-safe.
+* **Slice 2.4 — Layout & Navigation**:
+  * Action: Update `src/components/layout-wrapper.tsx` & `src/components/navigation.tsx` (solid `bg-surface`, Sun/Moon icon toggle).
+  * Verifikasi: Toggle theme smooth, layout vertical tetap terkunci.
+
+---
 
 ### Phase 3 — Sections (Home Page)
+* **Lead Skill**: `frontend-ui-engineering`
+* **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Containment, Elevation).
 
-23. Update `hero/` components — M3 colors, typography
-24. Update `about.tsx` — M3 section header, typography, colors
-25. Update `skills.tsx` — M3 card containers, hover states
-26. Update `portfolio.tsx` — M3 card design, elevation
-27. Update modal components — M3 dialog style
-28. Update `sidebar/` — M3 navigation rail style
-29. Update `footer.tsx` — M3 colors
+* **Slice 3.1 — Hero Section**: M3 typography hierarchy & layout alignment.
+* **Slice 3.2 — About Section**: M3 section header & surface card containment.
+* **Slice 3.3 — Skills Section**: M3 expressive chips/cards dengan state layers (hover/focus).
+* **Slice 3.4 — Portfolio Section & Modal**: Elevated cards (hapus brutalist offset shadow), dialog modal M3.
+* **Slice 3.5 — Sidebar & Footer**: Navigation rail M3 & footer alignment.
+* Verifikasi: `bun run build` sukses, visual responsive di desktop & mobile.
+
+---
 
 ### Phase 4 — Contact Page
+* **Lead Skill**: `frontend-ui-engineering` + `security-and-hardening`
+* **Objective**: Redesain form kontak dengan text field M3 Expressive & validasi Zod schema yang aman.
 
-30. Update `contact.tsx` — M3 section header
-31. Update `contact-form.tsx` — M3 text fields, button, Zod validation
-32. Update `input-form.tsx` — M3 input styling
+* **Slice 4.1 — Zod Schema & Validation**: Skema Zod untuk nama, email, subjek, pesan.
+* **Slice 4.2 — M3 Text Fields & UI**: Input form dengan floating label/indicator, state error tersanitasi, animasi submit.
+* Verifikasi: Pengujian input invalid, email salah format, submit loading state.
 
-### Phase 5 — Polish & SEO
+---
 
-33. SEO metadata overhaul
-34. Structured data (JSON-LD)
-35. Sitemap & robots
-36. Hapus `declare module 'baffle'` dari `types.d.ts`
-37. Performance audit (Lighthouse) — target 90+ semua kategori
-38. Cross-browser testing
-39. Dark/light mode polish & transition smoothness
-40. Final `bun run build` — pastikan zero errors
-41. Final `bun run lint` (atau `biome check`) — pastikan zero warnings
+### Phase 5 — Polish, SEO & Launch
+* **Lead Skill**: `performance-optimization` + `shipping-and-launch`
+* **Objective**: Validasi akhir, SEO, aksesibilitas, dan audit Lighthouse.
+
+* **Slice 5.1 — Metadata & SEO**: OpenGraph, Twitter card, JSON-LD (`Person`, `WebSite`), `sitemap.ts`, `robots.ts`.
+* **Slice 5.2 — Audit Kualitas**: Audit Lighthouse (target 90+ semua metrik: Performance, Accessibility, Best Practices, SEO).
+* **Slice 5.3 — Cross-Browser & Final Build**: Uji di browser Chromium (Helium on CachyOS), final `bun run build` & `bun run lint` zero errors/warnings.
 
 ---
 

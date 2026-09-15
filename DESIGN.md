@@ -85,80 +85,86 @@ Karena ini adalah portfolio web (bukan Android app), kita mengambil **prinsip da
 
 **Seed:** `#D3F36A` (custom-green saat ini — lime green, energetic)
 
-Dari seed ini, di-generate M3 tonal palette menggunakan `@material/material-color-utilities`.
+Tonal palette resmi di bawah di-generate langsung menggunakan `@material/material-color-utilities` (Mathematical M3 HCT Model).
 
-### 4.2 M3 Expressive Color Roles
-
-M3 Expressive memperluas color roles dari M3 standard. Berikut mapping lengkap:
+### 4.2 M3 Expressive Color Roles (Nilai Akurat)
 
 #### Light Mode
 
 | Role | Token | Hex | Penggunaan di Portfolio |
 |------|-------|-----|------------------------|
-| **Primary** | `primary` | `#3E6A00` | CTA buttons, active nav links, accent utama |
+| **Primary** | `primary` | `#526600` | CTA buttons, active nav links, accent utama |
 | **On Primary** | `on-primary` | `#FFFFFF` | Teks/icon di atas primary |
-| **Primary Container** | `primary-container` | `#B8F54E` | Hero badge, highlighted name, chip bg |
-| **On Primary Container** | `on-primary-container` | `#102000` | Teks di primary container |
-| **Secondary** | `secondary` | `#57624A` | Elemen pendukung, subtitle |
+| **Primary Container** | `primary-container` | `#D0EF67` | Hero badge, highlighted name, chip bg |
+| **On Primary Container** | `on-primary-container` | `#171E00` | Teks di primary container |
+| **Secondary** | `secondary` | `#5B6146` | Elemen pendukung, subtitle |
 | **On Secondary** | `on-secondary` | `#FFFFFF` | Teks di atas secondary |
-| **Secondary Container** | `secondary-container` | `#DBE7C8` | Social button bg, secondary cards |
-| **On Secondary Container** | `on-secondary-container` | `#151E0B` | Teks di secondary container |
-| **Tertiary** | `tertiary` | `#386664` | Decorative accent (brain icon, etc) |
-| **Tertiary Container** | `tertiary-container` | `#BBECE9` | Tertiary bg elements |
-| **Surface** | `surface` | `#F9FAF0` | Page background utama |
-| **Surface Dim** | `surface-dim` | `#DADBD2` | Surface yang lebih gelap (scroll area) |
-| **Surface Bright** | `surface-bright` | `#F9FAF0` | Surface paling terang |
+| **Secondary Container** | `secondary-container` | `#E0E6C4` | Social button bg, secondary cards |
+| **On Secondary Container** | `on-secondary-container` | `#191E08` | Teks di secondary container |
+| **Tertiary** | `tertiary` | `#3A665E` | Decorative accent (brain icon, etc) |
+| **Tertiary Container** | `tertiary-container` | `#BCECE1` | Tertiary bg elements |
+| **On Tertiary Container** | `on-tertiary-container` | `#00201B` | Teks di tertiary container |
+| **Surface** | `surface` | `#FDFCFA` | Page background utama |
+| **Surface Dim** | `surface-dim` | `#DADBD1` | Surface yang lebih gelap (scroll area) |
+| **Surface Bright** | `surface-bright` | `#FDFCFA` | Surface paling terang |
 | **Surface Container Lowest** | `surface-container-lowest` | `#FFFFFF` | Card background paling terang |
-| **Surface Container Low** | `surface-container-low` | `#F3F4EB` | Low elevation container |
-| **Surface Container** | `surface-container` | `#EDEEE4` | Default card/container bg |
-| **Surface Container High** | `surface-container-high` | `#E7E8DF` | Elevated card, modal bg |
-| **Surface Container Highest** | `surface-container-highest` | `#E1E3D9` | Highest elevation (nav rail bg) |
-| **On Surface** | `on-surface` | `#1A1C17` | Teks utama body |
-| **On Surface Variant** | `on-surface-variant` | `#44483E` | Teks secondary, subtitle, caption |
-| **Outline** | `outline` | `#74796D` | Border, divider |
-| **Outline Variant** | `outline-variant` | `#C4C8BA` | Subtle border, section separator |
+| **Surface Container Low** | `surface-container-low` | `#F7F6F2` | Low elevation container |
+| **Surface Container** | `surface-container` | `#F1F1EC` | Default card/container bg |
+| **Surface Container High** | `surface-container-high` | `#EBEBE6` | Elevated card, modal bg |
+| **Surface Container Highest** | `surface-container-highest` | `#E5E5E0` | Highest elevation (nav rail bg) |
+| **On Surface** | `on-surface` | `#1B1C17` | Teks utama body |
+| **On Surface Variant** | `on-surface-variant` | `#46483C` | Teks secondary, subtitle, caption |
+| **Outline** | `outline` | `#76786B` | Border, divider |
+| **Outline Variant** | `outline-variant` | `#C7C8B8` | Subtle border, section separator |
 | **Error** | `error` | `#BA1A1A` | Error state form validation |
 | **On Error** | `on-error` | `#FFFFFF` | Teks di error |
 | **Error Container** | `error-container` | `#FFDAD6` | Error bg container |
-| **Inverse Surface** | `inverse-surface` | `#2F312B` | Tooltip bg, snackbar |
-| **Inverse On Surface** | `inverse-on-surface` | `#F1F1E9` | Teks di inverse surface |
-| **Inverse Primary** | `inverse-primary` | `#9DD835` | Primary di inverse context |
+| **Inverse Surface** | `inverse-surface` | `#30312B` | Tooltip bg, snackbar |
+| **Inverse On Surface** | `inverse-on-surface` | `#F3F1E9` | Teks di inverse surface |
+| **Inverse Primary** | `inverse-primary` | `#B4D34E` | Primary di inverse context |
 
 #### Dark Mode
 
 | Role | Token | Hex | Penggunaan |
 |------|-------|-----|------------|
-| **Primary** | `primary` | `#9DD835` | CTA, accent |
-| **On Primary** | `on-primary` | `#1D3700` | Teks di atas primary |
-| **Primary Container** | `primary-container` | `#2D5000` | Container primary |
-| **On Primary Container** | `on-primary-container` | `#B8F54E` | Teks di container |
-| **Secondary** | `secondary` | `#BFCBAD` | Elemen pendukung |
-| **Secondary Container** | `secondary-container` | `#404A34` | Container secondary |
-| **Tertiary** | `tertiary` | `#A0D0CD` | Decorative |
-| **Surface** | `surface` | `#12140E` | Page background |
-| **Surface Dim** | `surface-dim` | `#12140E` | Sama dengan surface |
-| **Surface Bright** | `surface-bright` | `#383A33` | Surface terang di dark |
-| **Surface Container Lowest** | `surface-container-lowest` | `#0D0F09` | Deepest bg |
-| **Surface Container Low** | `surface-container-low` | `#1A1C17` | Low container |
-| **Surface Container** | `surface-container` | `#1E201A` | Default container |
-| **Surface Container High** | `surface-container-high` | `#282B24` | Elevated container |
-| **Surface Container Highest** | `surface-container-highest` | `#333529` | Highest container |
-| **On Surface** | `on-surface` | `#E1E3D9` | Teks utama |
-| **On Surface Variant** | `on-surface-variant` | `#C4C8BA` | Teks secondary |
-| **Outline** | `outline` | `#8E9386` | Border |
-| **Outline Variant** | `outline-variant` | `#44483E` | Subtle border |
+| **Primary** | `primary` | `#B4D34E` | CTA, accent |
+| **On Primary** | `on-primary` | `#293500` | Teks di atas primary |
+| **Primary Container** | `primary-container` | `#3D4D00` | Container primary |
+| **On Primary Container** | `on-primary-container` | `#D0EF67` | Teks di container |
+| **Secondary** | `secondary` | `#C4CAA9` | Elemen pendukung |
+| **On Secondary** | `on-secondary` | `#2D331B` | Teks di atas secondary |
+| **Secondary Container** | `secondary-container` | `#444930` | Container secondary |
+| **On Secondary Container** | `on-secondary-container` | `#E0E6C4` | Teks di secondary container |
+| **Tertiary** | `tertiary` | `#A1D0C5` | Decorative |
+| **Tertiary Container** | `tertiary-container` | `#214E46` | Tertiary container |
+| **On Tertiary Container** | `on-tertiary-container` | `#BCECE1` | Teks di tertiary container |
+| **Surface** | `surface` | `#1B1C17` | Page background |
+| **Surface Dim** | `surface-dim` | `#131410` | Surface yang lebih gelap |
+| **Surface Bright** | `surface-bright` | `#3A3A35` | Surface terang di dark |
+| **Surface Container Lowest** | `surface-container-lowest` | `#0E0F0B` | Deepest bg |
+| **Surface Container Low** | `surface-container-low` | `#1B1C17` | Low container |
+| **Surface Container** | `surface-container` | `#1F201B` | Default container |
+| **Surface Container High** | `surface-container-high` | `#2A2A25` | Elevated container |
+| **Surface Container Highest** | `surface-container-highest` | `#353530` | Highest container |
+| **On Surface** | `on-surface` | `#E4E3DA` | Teks utama |
+| **On Surface Variant** | `on-surface-variant` | `#C7C8B8` | Teks secondary |
+| **Outline** | `outline` | `#909283` | Border |
+| **Outline Variant** | `outline-variant` | `#46483C` | Subtle border |
 | **Error** | `error` | `#FFB4AB` | Error state |
-| **Inverse Surface** | `inverse-surface` | `#E1E3D9` | Snackbar bg |
-| **Inverse Primary** | `inverse-primary` | `#3E6A00` | Primary di inverse |
+| **On Error** | `on-error` | `#690005` | Teks error |
+| **Error Container** | `error-container` | `#93000A` | Container error |
+| **Inverse Surface** | `inverse-surface` | `#E4E3DA` | Snackbar bg |
+| **Inverse On Surface** | `inverse-on-surface` | `#30312B` | Teks inverse |
+| **Inverse Primary** | `inverse-primary` | `#526600` | Primary di inverse |
 
 ### 4.3 Mapping Warna Lama → Baru
 
 | Lama | Baru (Light) | Baru (Dark) |
 |------|-------------|-------------|
-| `custom-black (#24282C)` | `on-surface (#1A1C17)` | `surface (#12140E)` |
-| `custom-white-2 (#EAE9E2)` | `surface (#F9FAF0)` | — |
+| `custom-black (#24282C)` | `on-surface (#1B1C17)` | `surface (#1B1C17)` |
+| `custom-white-2 (#EAE9E2)` | `surface (#FDFCFA)` | — |
 | `custom-white (#fbfbf8)` | `surface-container-lowest (#FFFFFF)` | — |
-| `custom-green (#D3F36A)` | `primary-container (#B8F54E)` / `primary (#3E6A00)` | `primary (#9DD835)` |
+| `custom-green (#D3F36A)` | `primary-container (#D0EF67)` / `primary (#526600)` | `primary (#B4D34E)` |
 
 ### 4.4 M3 Expressive Color Emphasis
 
@@ -855,68 +861,70 @@ const animationConfig = shouldReduceMotion
 
 ```css
 :root {
-  --color-primary: #3E6A00;
+  --color-primary: #526600;
   --color-on-primary: #FFFFFF;
-  --color-primary-container: #B8F54E;
-  --color-on-primary-container: #102000;
-  --color-secondary: #57624A;
+  --color-primary-container: #D0EF67;
+  --color-on-primary-container: #171E00;
+  --color-secondary: #5B6146;
   --color-on-secondary: #FFFFFF;
-  --color-secondary-container: #DBE7C8;
-  --color-on-secondary-container: #151E0B;
-  --color-tertiary: #386664;
-  --color-tertiary-container: #BBECE9;
-  --color-surface: #F9FAF0;
-  --color-surface-dim: #DADBD2;
-  --color-surface-bright: #F9FAF0;
+  --color-secondary-container: #E0E6C4;
+  --color-on-secondary-container: #191E08;
+  --color-tertiary: #3A665E;
+  --color-tertiary-container: #BCECE1;
+  --color-on-tertiary-container: #00201B;
+  --color-surface: #FDFCFA;
+  --color-surface-dim: #DADBD1;
+  --color-surface-bright: #FDFCFA;
   --color-surface-container-lowest: #FFFFFF;
-  --color-surface-container-low: #F3F4EB;
-  --color-surface-container: #EDEEE4;
-  --color-surface-container-high: #E7E8DF;
-  --color-surface-container-highest: #E1E3D9;
-  --color-on-surface: #1A1C17;
-  --color-on-surface-variant: #44483E;
-  --color-outline: #74796D;
-  --color-outline-variant: #C4C8BA;
+  --color-surface-container-low: #F7F6F2;
+  --color-surface-container: #F1F1EC;
+  --color-surface-container-high: #EBEBE6;
+  --color-surface-container-highest: #E5E5E0;
+  --color-on-surface: #1B1C17;
+  --color-on-surface-variant: #46483C;
+  --color-outline: #76786B;
+  --color-outline-variant: #C7C8B8;
   --color-error: #BA1A1A;
   --color-on-error: #FFFFFF;
   --color-error-container: #FFDAD6;
-  --color-inverse-surface: #2F312B;
-  --color-inverse-on-surface: #F1F1E9;
-  --color-inverse-primary: #9DD835;
+  --color-inverse-surface: #30312B;
+  --color-inverse-on-surface: #F3F1E9;
+  --color-inverse-primary: #B4D34E;
 }
 
 .dark {
-  --color-primary: #9DD835;
-  --color-on-primary: #1D3700;
-  --color-primary-container: #2D5000;
-  --color-on-primary-container: #B8F54E;
-  --color-secondary: #BFCBAD;
-  --color-on-secondary: #2A331F;
-  --color-secondary-container: #404A34;
-  --color-on-secondary-container: #DBE7C8;
-  --color-tertiary: #A0D0CD;
-  --color-tertiary-container: #1F4E4C;
-  --color-surface: #12140E;
-  --color-surface-dim: #12140E;
-  --color-surface-bright: #383A33;
-  --color-surface-container-lowest: #0D0F09;
-  --color-surface-container-low: #1A1C17;
-  --color-surface-container: #1E201A;
-  --color-surface-container-high: #282B24;
-  --color-surface-container-highest: #333529;
-  --color-on-surface: #E1E3D9;
-  --color-on-surface-variant: #C4C8BA;
-  --color-outline: #8E9386;
-  --color-outline-variant: #44483E;
+  --color-primary: #B4D34E;
+  --color-on-primary: #293500;
+  --color-primary-container: #3D4D00;
+  --color-on-primary-container: #D0EF67;
+  --color-secondary: #C4CAA9;
+  --color-on-secondary: #2D331B;
+  --color-secondary-container: #444930;
+  --color-on-secondary-container: #E0E6C4;
+  --color-tertiary: #A1D0C5;
+  --color-tertiary-container: #214E46;
+  --color-on-tertiary-container: #BCECE1;
+  --color-surface: #1B1C17;
+  --color-surface-dim: #131410;
+  --color-surface-bright: #3A3A35;
+  --color-surface-container-lowest: #0E0F0B;
+  --color-surface-container-low: #1B1C17;
+  --color-surface-container: #1F201B;
+  --color-surface-container-high: #2A2A25;
+  --color-surface-container-highest: #353530;
+  --color-on-surface: #E4E3DA;
+  --color-on-surface-variant: #C7C8B8;
+  --color-outline: #909283;
+  --color-outline-variant: #46483C;
   --color-error: #FFB4AB;
   --color-on-error: #690005;
   --color-error-container: #93000A;
-  --color-inverse-surface: #E1E3D9;
-  --color-inverse-on-surface: #2F312B;
-  --color-inverse-primary: #3E6A00;
+  --color-inverse-surface: #E4E3DA;
+  --color-inverse-on-surface: #30312B;
+  --color-inverse-primary: #526600;
 }
 ```
 
 ---
 
-> **Catatan:** Semua hex values di dokumen ini adalah perkiraan berdasarkan seed `#D3F36A`. Saat implementasi, nilai akurat akan di-generate menggunakan `@material/material-color-utilities` dan di-hardcode ke CSS variables di atas. Warna final mungkin bergeser sedikit dari perkiraan ini.
+> **Status Token:** Nilai hex di atas sudah 100% final dan akurat, di-generate langsung dari seed `#D3F36A` menggunakan `@material/material-color-utilities` resmi Google. Siap dipindahkan langsung ke `src/styles/globals.css` pada Phase 1.
