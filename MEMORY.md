@@ -174,11 +174,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 6 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 7 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Modified docs, tsconfig.json, types.d.ts, commitlint.config.js, package.json (Slice 1.2.1 uncommitted pending user review)
-- **Commit terbaru:** `61e6c28` (`feat(tooling): migrate from eslint and husky to oxlint and lefthook`)
+- **Working tree:** Clean (Slice 1.2.1 committed)
+- **Commit terbaru:** `d09644e` (`feat(deps): upgrade supporting packages, ts 6, and next 15.5.25`)
 
 ---
 
@@ -187,10 +187,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 1. Eksekusi **Phase 1 — Foundation** di branch `feat/portfolio-update` slice-by-slice:
    - Slice 1.1: Core package upgrade (Next 15, React 19, Motion 12) ✅ (Commit `075609a`)
    - Slice 1.2: Tooling overhaul (Oxlint + Lefthook + next.config.ts) ✅ (Commit `61e6c28`)
-   - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) — _Ready for user double-check / review_:
-     - React 19.3, Motion 13, Zod 4, Resolvers 5, PostCSS 8.5, Prettier 3.9, Prettier-plugin-tailwindcss 0.8, Sharp 0.35, React-icons 5.7, Hot-toast 2.6.
-     - Modernisasi `tsconfig.json` & deklarasi CSS module di `types.d.ts`.
-     - Penahanan terverifikasi: TypeScript 6.0.3 (sukses compile build, TS 7 ditahan), Next 15.5.25 (sukses compile build, Next 16 ditahan), Tailwind 3.4 (menunggu Slice 1.3).
+   - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) ✅ (Commit `d09644e`)
    - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4)
    - Slice 1.4: Typography setup
 2. Lanjut Phase 2–5 sesuai roadmap irisan vertikal.
