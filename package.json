@@ -2,15 +2,16 @@
   "name": "htma.site",
   "version": "1.1.5",
   "private": true,
+  "packageManager": "bun@1.4.2",
   "engines": {
-    "node": ">= 18"
+    "bun": ">= 1.1.0"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint src --fix && pnpm format",
+    "lint:fix": "eslint src --fix && bun run format",
     "lint:strict": "eslint --max-warnings=0 src",
     "typechecks": "tsc --noEmit --incremental false",
     "format": "prettier --write .",
