@@ -100,8 +100,8 @@ Belum ada file source code yang diedit. Hanya 3 file dokumentasi yang ada:
 | 18  | Theme toggle icon             | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq`                                     |
 | 19  | Navbar background             | Solid `bg-surface` — tanpa `backdrop-blur`                                                                    |
 | 20  | Tailwind v4                   | Migrasi config JS → CSS-based `@theme`                                                                        |
-| 21  | Framer Motion                 | `framer-motion` → `motion` (v12 rebranding)                                                                   |
-| 22  | React 19 + Next.js 15         | Siap — terima potensi breaking changes                                                                        |
+| 21  | Framer Motion                 | `framer-motion` & `motion` di-upgrade ke v13 (`^13.3.0`)                                                      |
+| 22  | React 19 + Next.js 15         | `react@^19.3.0` + `next@^15.5.25` (LTS stabil, Next 16 ditahan)                                               |
 | 23  | Bun lockfile                  | **Commit `bun.lockb`** ke git (reproducible builds)                                                           |
 | 24  | Monorepo                      | **Tetap single app** — tidak convert ke Turborepo                                                             |
 | 25  | Git hooks                     | **Migrasi ke Lefthook** (ganti Husky + lint-staged)                                                           |
@@ -174,20 +174,24 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 2 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 6 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Modified docs
-- **Commit terbaru:** `f15f8ea` (`docs: update memory with phase 0 execution and feat/migrate-bun branch`)
+- **Working tree:** Modified docs, tsconfig.json, types.d.ts, commitlint.config.js, package.json (Slice 1.2.1 uncommitted pending user review)
+- **Commit terbaru:** `61e6c28` (`feat(tooling): migrate from eslint and husky to oxlint and lefthook`)
 
 ---
 
 ## Langkah Selanjutnya
 
 1. Eksekusi **Phase 1 — Foundation** di branch `feat/portfolio-update` slice-by-slice:
-   - Slice 1.1: Core package upgrade
-   - Slice 1.2: Tooling overhaul (Oxlint + next.config.ts)
-   - Slice 1.3: M3 color palette generation
+   - Slice 1.1: Core package upgrade (Next 15, React 19, Motion 12) ✅ (Commit `075609a`)
+   - Slice 1.2: Tooling overhaul (Oxlint + Lefthook + next.config.ts) ✅ (Commit `61e6c28`)
+   - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) — _Ready for user double-check / review_:
+     - React 19.3, Motion 13, Zod 4, Resolvers 5, PostCSS 8.5, Prettier 3.9, Prettier-plugin-tailwindcss 0.8, Sharp 0.35, React-icons 5.7, Hot-toast 2.6.
+     - Modernisasi `tsconfig.json` & deklarasi CSS module di `types.d.ts`.
+     - Penahanan terverifikasi: TypeScript 6.0.3 (sukses compile build, TS 7 ditahan), Next 15.5.25 (sukses compile build, Next 16 ditahan), Tailwind 3.4 (menunggu Slice 1.3).
+   - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4)
    - Slice 1.4: Typography setup
 2. Lanjut Phase 2–5 sesuai roadmap irisan vertikal.
 

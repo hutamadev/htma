@@ -1270,8 +1270,24 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
     - **PENTING (Mitigasi)**: JANGAN hapus `locomotive-scroll` di Phase 1 ini agar `src/components/ui/page-wrapper.tsx` tidak langsung crash saat dev/build. `locomotive-scroll` baru dicabut di Slice 2.1 setelah Lenis aktif.
   - Verifikasi: `bun install` berhasil 0 peer conflicts, dry-run compile pass.
 - **Slice 1.2 — Tooling Overhaul (Oxlint & Lefthook)**:
-  - Action: Setup `oxlint.json`, hapus artifacts ESLint (`.eslintrc.js`, `.eslintignore`, paket eslint). Setup `next.config.ts` dengan `eslint: { ignoreDuringBuilds: true }`. Setup `lefthook.yml` (ganti Husky).
+  - Action: Setup `.oxlintrc.json`, hapus artifacts ESLint (`.eslintrc.js`, `.eslintignore`, paket eslint). Setup `next.config.ts` dengan `eslint: { ignoreDuringBuilds: true }`. Setup `lefthook.yml` (ganti Husky).
   - Verifikasi: `bun run lint` (Oxlint) berjalan 0 warnings/errors, `bun run typechecks` lulus.
+- **Slice 1.2.1 — Supporting Packages Maintenance (Update & Deprecations Pruning)**:
+  - Action:
+    - Update paket utama & pendukung ke versi LATEST yang terbukti aman & stabil:
+      - React: `react@^19.3.0`, `react-dom@^19.3.0`, `@types/react@^19.3.0`, `@types/react-dom@^19.3.0`.
+      - Motion: `motion@^13.3.0`, `framer-motion@^13.3.0`.
+      - Form & Validation: `zod@4.6.5`, `@hookform/resolvers@5.9.1`, `react-hook-form@^7.88.0`.
+      - Tooling & Utilities: `@commitlint/*@^21.2.2`, `prettier@^3.9.6`, `prettier-plugin-tailwindcss@^0.8.1`, `postcss@8.5.28`, `autoprefixer@10.6.1`, `cssnano@^9.0.4`, `@material/material-color-utilities@^0.4.0`, `@vercel/analytics@^2.0.1`, `sharp@^0.35.4`, `react-icons@^5.7.0`, `react-hot-toast@^2.6.0`, `lenis@^1.3.26`, `locomotive-scroll@5.0.1`, `next-themes@^0.4.6`, `zustand@^5.0.15`, `@types/node@^26.5.1`.
+    - Modernisasi `tsconfig.json` (`target: es2022`, `moduleResolution: bundler`, path aliases `./src/*`) & deklarasi CSS module di `types.d.ts`.
+    - Audit & eliminasi total paket usang/deprekasi: `eslint`, `eslint-config-next`, `@typescript-eslint/*`, `eslint-config-prettier`, `eslint-plugin-*`, `husky`, `lint-staged`.
+    - Perampingan [`commitlint.config.js`](<file:///home/hutamatr/git-repo(hutamadev)/htma/commitlint.config.js>) (menghapus redundant defaults & tipe monorepo tak terpakai).
+    - **PENTING (Mitigasi Doubt-Driven & Penahanan Terkalibrasi)**:
+      - _TypeScript_: Di-upgrade ke `typescript@6.0.3` (TS 6 terbukti 100% kompatibel dengan Next.js 15 config loader dan compile build, sedangkan TS 7 ditahan karena perubahan compiler API).
+      - _Next.js_: Terkunci pada versi rilis penuh terbaru `next@15.5.25` (Next 16 ditahan karena Turbopack breaking changes).
+      - _Tailwind_: Tahan pada `tailwindcss@3.4.13` sampai masuk gerbang **Slice 1.3** khusus migrasi CSS `@theme`.
+      - _Baffle_: Tahan `baffle@^0.3.6` secara temporer (sampai Slice 2.2 native scramble hook) agar `src/components/hero/hero.tsx` tidak crash pada instalasi baru.
+  - Verifikasi: `bun install` 0 peer conflicts, `bun run lint` (0 error), `bun run typechecks` (pass), `bun run build` (pass, 6/6 static pages).
 - **Slice 1.3 — M3 Expressive Palette & Backward-Compatible Aliases**:
   - Action:
     - Tulis CSS variables M3 resmi dari seed `#D3F36A` ke `src/styles/globals.css`.
