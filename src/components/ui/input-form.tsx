@@ -8,8 +8,10 @@ import {
 
 type RefType = HTMLInputElement | HTMLTextAreaElement;
 
-interface IInputFormProps
-  extends DetailedHTMLProps<InputHTMLAttributes<RefType>, RefType> {
+interface IInputFormProps extends DetailedHTMLProps<
+  InputHTMLAttributes<RefType>,
+  RefType
+> {
   title: string;
   isTextArea?: boolean;
   className?: string;

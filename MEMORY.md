@@ -9,6 +9,7 @@
 ## Status Saat Ini: BRAINSTORMING PHASE (Belum ada kode yang diubah)
 
 Belum ada file source code yang diedit. Hanya 3 file dokumentasi yang ada:
+
 - `BRAINSTORMING.md` — rencana detail update ✅ **Confirmed & final**
 - `DESIGN.md` — panduan desain sistem Material 3 Expressive ✅ **Expanded & confirmed**
 - `MEMORY.md` — file ini
@@ -77,33 +78,33 @@ Belum ada file source code yang diedit. Hanya 3 file dokumentasi yang ada:
 
 ## Keputusan yang Sudah Final
 
-| # | Keputusan | Detail |
-|---|-----------|--------|
-| 1 | Layout vertical | TETAP 100%, tidak berubah |
-| 2 | Design system | Material 3 Expressive — ambil prinsipnya, panduan lengkap ada di DESIGN.md |
-| 3 | Seed color | `#D3F36A` → generate M3 tonal palette (via `@material/material-color-utilities`, replace estimasi) |
-| 4 | Basic color tone | Tetap sama (gelap/terang/hijau), hanya dihaluskan ke M3 Expressive |
-| 5 | Data portfolio | TIDAK BERUBAH (foto, list, judul, URL, repo semua tetap) |
-| 6 | `locomotive-scroll` → `lenis` | Hapus locomotive, ganti lenis. Hasil scroll HARUS sama persis |
-| 7 | `baffle` → native hook | Hapus baffle.js, buat `useTextScramble` native. Hasil HARUS SAMA PERSIS |
-| 8 | Custom cursor | Tetap dipertahankan, improve performance (pointermove, passive, rAF, fix `any`) |
-| 9 | Runtime | Bun (full) — ganti Node.js |
-| 10 | Package manager | Bun — ganti pnpm |
-| 11 | Halaman contact | Ikut di-update (M3 Expressive text fields, Zod validation) |
-| 12 | Global Rules | Diterapkan (strict TS, no `any`, immutability, input validation, zero hardcoded secrets) |
-| 13 | Better T Stack | Diterapkan sebagai fondasi (tsconfig strict, full Oxlint untuk linter, tetap single app) |
-| 14 | Deployment | Tetap Vercel |
-| 15 | Linter | Full menggunakan Oxlint (50-100x lebih cepat, native support Next.js/React/TS) |
-| 16 | Font | Full M3 Expressive — **Google Sans Flex** (fallback: **Google Sans Text**). Hapus Kata Grotesk & Neutral Face |
-| 17 | Portfolio card | Full M3 Expressive elevated card — hapus brutalist offset shadow |
-| 18 | Theme toggle icon | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq` |
-| 19 | Navbar background | Solid `bg-surface` — tanpa `backdrop-blur` |
-| 20 | Tailwind v4 | Migrasi config JS → CSS-based `@theme` |
-| 21 | Framer Motion | `framer-motion` → `motion` (v12 rebranding) |
-| 22 | React 19 + Next.js 15 | Siap — terima potensi breaking changes |
-| 23 | Bun lockfile | **Commit `bun.lockb`** ke git (reproducible builds) |
-| 24 | Monorepo | **Tetap single app** — tidak convert ke Turborepo |
-| 25 | Git hooks | **Migrasi ke Lefthook** (ganti Husky + lint-staged) |
+| #   | Keputusan                     | Detail                                                                                                        |
+| --- | ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| 1   | Layout vertical               | TETAP 100%, tidak berubah                                                                                     |
+| 2   | Design system                 | Material 3 Expressive — ambil prinsipnya, panduan lengkap ada di DESIGN.md                                    |
+| 3   | Seed color                    | `#D3F36A` → generate M3 tonal palette (via `@material/material-color-utilities`, replace estimasi)            |
+| 4   | Basic color tone              | Tetap sama (gelap/terang/hijau), hanya dihaluskan ke M3 Expressive                                            |
+| 5   | Data portfolio                | TIDAK BERUBAH (foto, list, judul, URL, repo semua tetap)                                                      |
+| 6   | `locomotive-scroll` → `lenis` | Hapus locomotive, ganti lenis. Hasil scroll HARUS sama persis                                                 |
+| 7   | `baffle` → native hook        | Hapus baffle.js, buat `useTextScramble` native. Hasil HARUS SAMA PERSIS                                       |
+| 8   | Custom cursor                 | Tetap dipertahankan, improve performance (pointermove, passive, rAF, fix `any`)                               |
+| 9   | Runtime                       | Bun (full) — ganti Node.js                                                                                    |
+| 10  | Package manager               | Bun — ganti pnpm                                                                                              |
+| 11  | Halaman contact               | Ikut di-update (M3 Expressive text fields, Zod validation)                                                    |
+| 12  | Global Rules                  | Diterapkan (strict TS, no `any`, immutability, input validation, zero hardcoded secrets)                      |
+| 13  | Better T Stack                | Diterapkan sebagai fondasi (tsconfig strict, full Oxlint untuk linter, tetap single app)                      |
+| 14  | Deployment                    | Tetap Vercel                                                                                                  |
+| 15  | Linter                        | Full menggunakan Oxlint (50-100x lebih cepat, native support Next.js/React/TS)                                |
+| 16  | Font                          | Full M3 Expressive — **Google Sans Flex** (fallback: **Google Sans Text**). Hapus Kata Grotesk & Neutral Face |
+| 17  | Portfolio card                | Full M3 Expressive elevated card — hapus brutalist offset shadow                                              |
+| 18  | Theme toggle icon             | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq`                                     |
+| 19  | Navbar background             | Solid `bg-surface` — tanpa `backdrop-blur`                                                                    |
+| 20  | Tailwind v4                   | Migrasi config JS → CSS-based `@theme`                                                                        |
+| 21  | Framer Motion                 | `framer-motion` → `motion` (v12 rebranding)                                                                   |
+| 22  | React 19 + Next.js 15         | Siap — terima potensi breaking changes                                                                        |
+| 23  | Bun lockfile                  | **Commit `bun.lockb`** ke git (reproducible builds)                                                           |
+| 24  | Monorepo                      | **Tetap single app** — tidak convert ke Turborepo                                                             |
+| 25  | Git hooks                     | **Migrasi ke Lefthook** (ganti Husky + lint-staged)                                                           |
 
 ---
 
@@ -115,19 +116,19 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## File yang Sudah Dimodifikasi (Di Luar Project)
 
-| File | Aksi | Detail |
-|------|------|--------|
+| File                                            | Aksi    | Detail                                      |
+| ----------------------------------------------- | ------- | ------------------------------------------- |
 | `~/.agents/skills/permissioned-github/SKILL.md` | Rewrite | Zed-compatible, tambah Conventional Commits |
 
 ---
 
 ## File Project yang Sudah Dibuat/Dimodifikasi
 
-| File | Aksi | Detail |
-|------|------|--------|
-| `htma/BRAINSTORMING.md` | Created (S1), Confirmed (S2) | Rencana detail update portfolio — final |
-| `htma/DESIGN.md` | Created (S1), Expanded (S2) | Panduan M3 Expressive — tambah 3 section baru (15 sections total) |
-| `htma/MEMORY.md` | Created (S1), Updated (S2) | File ini |
+| File                    | Aksi                         | Detail                                                            |
+| ----------------------- | ---------------------------- | ----------------------------------------------------------------- |
+| `htma/BRAINSTORMING.md` | Created (S1), Confirmed (S2) | Rencana detail update portfolio — final                           |
+| `htma/DESIGN.md`        | Created (S1), Expanded (S2)  | Panduan M3 Expressive — tambah 3 section baru (15 sections total) |
+| `htma/MEMORY.md`        | Created (S1), Updated (S2)   | File ini                                                          |
 
 ---
 
@@ -150,24 +151,24 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Evaluasi menyeluruh via `using-agent-skills`.
    - Mengadopsi 5 skills kunci: `source-driven-development`, `constraint-driven-development`, `planning-and-task-breakdown` + `incremental-implementation`, `frontend-ui-engineering`, `doubt-driven-development`.
    - Update `BRAINSTORMING.md`:
-     - Tambah Section 3.7 *Quality Constraints Contract* (non-negotiables).
-     - Refactor Section 13 Roadmap menjadi *vertical slices* terverifikasi.
+     - Tambah Section 3.7 _Quality Constraints Contract_ (non-negotiables).
+     - Refactor Section 13 Roadmap menjadi _vertical slices_ terverifikasi.
    - Update `DESIGN.md`:
      - Menghasilkan dan mengunci nilai hex M3 Expressive akurat dari seed `#D3F36A` via `@material/material-color-utilities`.
 2. **Double-Check Mitigations (Doubt-Driven Development)**:
-   - *Zustand & next-themes*: Wajib upgrade `next-themes@^0.4.4` & `zustand@^5.0.0` untuk peer compatibility React 19.
-   - *Tailwind v4 Token Aliasing*: Tambahkan alias backward-compatible (`--color-custom-black`, dll) di `@theme` agar 51 file UI lama tidak rusak.
-   - *Phased Locomotive Removal*: Tahan `locomotive-scroll` di Phase 1, baru di-uninstall di Slice 2.1 setelah Lenis terpasang.
+   - _Zustand & next-themes_: Wajib upgrade `next-themes@^0.4.4` & `zustand@^5.0.0` untuk peer compatibility React 19.
+   - _Tailwind v4 Token Aliasing_: Tambahkan alias backward-compatible (`--color-custom-black`, dll) di `@theme` agar 51 file UI lama tidak rusak.
+   - _Phased Locomotive Removal_: Tahan `locomotive-scroll` di Phase 1, baru di-uninstall di Slice 2.1 setelah Lenis terpasang.
 3. **Pemetaan Lead Skills per Fase**:
 
-| Fase | Fokus | Lead Skills | Gate Verifikasi |
-|---|---|---|---|
-| **Phase 0** | Runtime Migration | `incremental-implementation` | ✅ DONE (`bun.lock`, build OK) |
-| **Phase 1** | Foundation (Next 15, React 19, Tailwind v4, Oxlint) | `source-driven-development` + `incremental-implementation` | `bun install`, `bun run lint` (0 error), `bun run typechecks` |
-| **Phase 2** | Core Components (Lenis, Scramble, Cursor) | `doubt-driven-development` + `frontend-ui-engineering` | Visual & feel parity check 100% |
-| **Phase 3** | Home Sections (M3 Cards, Hero, About, Skills, Modal) | `frontend-ui-engineering` | M3 tokens, responsive, WCAG AA |
-| **Phase 4** | Contact Page (Zod & M3 Text Fields) | `frontend-ui-engineering` + `security-and-hardening` | Zod validation edge cases |
-| **Phase 5** | Polish, SEO & Launch | `performance-optimization` + `shipping-and-launch` | Lighthouse >= 90 semua metrik, production build |
+| Fase        | Fokus                                                | Lead Skills                                                | Gate Verifikasi                                               |
+| ----------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
+| **Phase 0** | Runtime Migration                                    | `incremental-implementation`                               | ✅ DONE (`bun.lock`, build OK)                                |
+| **Phase 1** | Foundation (Next 15, React 19, Tailwind v4, Oxlint)  | `source-driven-development` + `incremental-implementation` | `bun install`, `bun run lint` (0 error), `bun run typechecks` |
+| **Phase 2** | Core Components (Lenis, Scramble, Cursor)            | `doubt-driven-development` + `frontend-ui-engineering`     | Visual & feel parity check 100%                               |
+| **Phase 3** | Home Sections (M3 Cards, Hero, About, Skills, Modal) | `frontend-ui-engineering`                                  | M3 tokens, responsive, WCAG AA                                |
+| **Phase 4** | Contact Page (Zod & M3 Text Fields)                  | `frontend-ui-engineering` + `security-and-hardening`       | Zod validation edge cases                                     |
+| **Phase 5** | Polish, SEO & Launch                                 | `performance-optimization` + `shipping-and-launch`         | Lighthouse >= 90 semua metrik, production build               |
 
 ---
 

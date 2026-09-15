@@ -32,6 +32,7 @@
 M3 Expressive adalah evolusi terbaru dari Material Design 3 oleh Google (2025). Fokus utamanya: **membuat UI yang membangkitkan emosi** tanpa mengorbankan usability.
 
 Prinsip inti:
+
 - **Vibrant colors** — Penggunaan warna yang lebih berani dan expressive
 - **Contrasting shapes** — Bentuk-bentuk yang kontras dan beragam (35 shape baru)
 - **Intuitive motion** — Physics-based motion system, spring animations
@@ -39,6 +40,7 @@ Prinsip inti:
 - **Flexible typography** — Tipografi yang lebih expressive, mendukung variable fonts
 
 Riset di balik M3 Expressive:
+
 - 46 studi riset terpisah
 - 18.000+ partisipan dari seluruh dunia
 - Metode: eye tracking, heuristic evaluation, unmoderated usability testing, longitudinal diary studies
@@ -49,18 +51,18 @@ Riset di balik M3 Expressive:
 
 ## 3. Perbedaan M3 Standard vs M3 Expressive
 
-| Aspek | M3 Standard | M3 Expressive |
-|-------|-------------|---------------|
-| **Color** | Tonal palette, subtle | Vibrant, higher emphasis, bolder primary container usage |
-| **Shape** | 5 skala rounded (XS→XL) | 35+ shapes, shape morphing saat interaksi |
-| **Size** | Moderate contrast | Kontras ukuran ekstrem, CTA significantly lebih besar |
-| **Motion** | Standard easing curves | Physics-based springs, shape morphing pada interaksi |
-| **Containment** | Implicit grouping | Explicit visual grouping via background/shape/border |
-| **Typography** | Static type scale | Flexible, variable font emphasis, optical sizing |
-| **Components** | Static appearance | Adaptive — berubah bentuk saat hover/press/focus |
-| **Elevation** | Shadow-based | Tonal surface tint + shadow hybrid |
-| **Emotional impact** | Neutral, functional | Intentionally emotional, "delightful" |
-| **Usability** | Good | Better — 4x faster element discovery (eye-tracking data) |
+| Aspek                | M3 Standard             | M3 Expressive                                            |
+| -------------------- | ----------------------- | -------------------------------------------------------- |
+| **Color**            | Tonal palette, subtle   | Vibrant, higher emphasis, bolder primary container usage |
+| **Shape**            | 5 skala rounded (XS→XL) | 35+ shapes, shape morphing saat interaksi                |
+| **Size**             | Moderate contrast       | Kontras ukuran ekstrem, CTA significantly lebih besar    |
+| **Motion**           | Standard easing curves  | Physics-based springs, shape morphing pada interaksi     |
+| **Containment**      | Implicit grouping       | Explicit visual grouping via background/shape/border     |
+| **Typography**       | Static type scale       | Flexible, variable font emphasis, optical sizing         |
+| **Components**       | Static appearance       | Adaptive — berubah bentuk saat hover/press/focus         |
+| **Elevation**        | Shadow-based            | Tonal surface tint + shadow hybrid                       |
+| **Emotional impact** | Neutral, functional     | Intentionally emotional, "delightful"                    |
+| **Usability**        | Good                    | Better — 4x faster element discovery (eye-tracking data) |
 
 ### Yang Kita Ambil untuk Portfolio Ini
 
@@ -91,90 +93,92 @@ Tonal palette resmi di bawah di-generate langsung menggunakan `@material/materia
 
 #### Light Mode
 
-| Role | Token | Hex | Penggunaan di Portfolio |
-|------|-------|-----|------------------------|
-| **Primary** | `primary` | `#526600` | CTA buttons, active nav links, accent utama |
-| **On Primary** | `on-primary` | `#FFFFFF` | Teks/icon di atas primary |
-| **Primary Container** | `primary-container` | `#D0EF67` | Hero badge, highlighted name, chip bg |
-| **On Primary Container** | `on-primary-container` | `#171E00` | Teks di primary container |
-| **Secondary** | `secondary` | `#5B6146` | Elemen pendukung, subtitle |
-| **On Secondary** | `on-secondary` | `#FFFFFF` | Teks di atas secondary |
-| **Secondary Container** | `secondary-container` | `#E0E6C4` | Social button bg, secondary cards |
-| **On Secondary Container** | `on-secondary-container` | `#191E08` | Teks di secondary container |
-| **Tertiary** | `tertiary` | `#3A665E` | Decorative accent (brain icon, etc) |
-| **Tertiary Container** | `tertiary-container` | `#BCECE1` | Tertiary bg elements |
-| **On Tertiary Container** | `on-tertiary-container` | `#00201B` | Teks di tertiary container |
-| **Surface** | `surface` | `#FDFCFA` | Page background utama |
-| **Surface Dim** | `surface-dim` | `#DADBD1` | Surface yang lebih gelap (scroll area) |
-| **Surface Bright** | `surface-bright` | `#FDFCFA` | Surface paling terang |
-| **Surface Container Lowest** | `surface-container-lowest` | `#FFFFFF` | Card background paling terang |
-| **Surface Container Low** | `surface-container-low` | `#F7F6F2` | Low elevation container |
-| **Surface Container** | `surface-container` | `#F1F1EC` | Default card/container bg |
-| **Surface Container High** | `surface-container-high` | `#EBEBE6` | Elevated card, modal bg |
-| **Surface Container Highest** | `surface-container-highest` | `#E5E5E0` | Highest elevation (nav rail bg) |
-| **On Surface** | `on-surface` | `#1B1C17` | Teks utama body |
-| **On Surface Variant** | `on-surface-variant` | `#46483C` | Teks secondary, subtitle, caption |
-| **Outline** | `outline` | `#76786B` | Border, divider |
-| **Outline Variant** | `outline-variant` | `#C7C8B8` | Subtle border, section separator |
-| **Error** | `error` | `#BA1A1A` | Error state form validation |
-| **On Error** | `on-error` | `#FFFFFF` | Teks di error |
-| **Error Container** | `error-container` | `#FFDAD6` | Error bg container |
-| **Inverse Surface** | `inverse-surface` | `#30312B` | Tooltip bg, snackbar |
-| **Inverse On Surface** | `inverse-on-surface` | `#F3F1E9` | Teks di inverse surface |
-| **Inverse Primary** | `inverse-primary` | `#B4D34E` | Primary di inverse context |
+| Role                          | Token                       | Hex       | Penggunaan di Portfolio                     |
+| ----------------------------- | --------------------------- | --------- | ------------------------------------------- |
+| **Primary**                   | `primary`                   | `#526600` | CTA buttons, active nav links, accent utama |
+| **On Primary**                | `on-primary`                | `#FFFFFF` | Teks/icon di atas primary                   |
+| **Primary Container**         | `primary-container`         | `#D0EF67` | Hero badge, highlighted name, chip bg       |
+| **On Primary Container**      | `on-primary-container`      | `#171E00` | Teks di primary container                   |
+| **Secondary**                 | `secondary`                 | `#5B6146` | Elemen pendukung, subtitle                  |
+| **On Secondary**              | `on-secondary`              | `#FFFFFF` | Teks di atas secondary                      |
+| **Secondary Container**       | `secondary-container`       | `#E0E6C4` | Social button bg, secondary cards           |
+| **On Secondary Container**    | `on-secondary-container`    | `#191E08` | Teks di secondary container                 |
+| **Tertiary**                  | `tertiary`                  | `#3A665E` | Decorative accent (brain icon, etc)         |
+| **Tertiary Container**        | `tertiary-container`        | `#BCECE1` | Tertiary bg elements                        |
+| **On Tertiary Container**     | `on-tertiary-container`     | `#00201B` | Teks di tertiary container                  |
+| **Surface**                   | `surface`                   | `#FDFCFA` | Page background utama                       |
+| **Surface Dim**               | `surface-dim`               | `#DADBD1` | Surface yang lebih gelap (scroll area)      |
+| **Surface Bright**            | `surface-bright`            | `#FDFCFA` | Surface paling terang                       |
+| **Surface Container Lowest**  | `surface-container-lowest`  | `#FFFFFF` | Card background paling terang               |
+| **Surface Container Low**     | `surface-container-low`     | `#F7F6F2` | Low elevation container                     |
+| **Surface Container**         | `surface-container`         | `#F1F1EC` | Default card/container bg                   |
+| **Surface Container High**    | `surface-container-high`    | `#EBEBE6` | Elevated card, modal bg                     |
+| **Surface Container Highest** | `surface-container-highest` | `#E5E5E0` | Highest elevation (nav rail bg)             |
+| **On Surface**                | `on-surface`                | `#1B1C17` | Teks utama body                             |
+| **On Surface Variant**        | `on-surface-variant`        | `#46483C` | Teks secondary, subtitle, caption           |
+| **Outline**                   | `outline`                   | `#76786B` | Border, divider                             |
+| **Outline Variant**           | `outline-variant`           | `#C7C8B8` | Subtle border, section separator            |
+| **Error**                     | `error`                     | `#BA1A1A` | Error state form validation                 |
+| **On Error**                  | `on-error`                  | `#FFFFFF` | Teks di error                               |
+| **Error Container**           | `error-container`           | `#FFDAD6` | Error bg container                          |
+| **Inverse Surface**           | `inverse-surface`           | `#30312B` | Tooltip bg, snackbar                        |
+| **Inverse On Surface**        | `inverse-on-surface`        | `#F3F1E9` | Teks di inverse surface                     |
+| **Inverse Primary**           | `inverse-primary`           | `#B4D34E` | Primary di inverse context                  |
 
 #### Dark Mode
 
-| Role | Token | Hex | Penggunaan |
-|------|-------|-----|------------|
-| **Primary** | `primary` | `#B4D34E` | CTA, accent |
-| **On Primary** | `on-primary` | `#293500` | Teks di atas primary |
-| **Primary Container** | `primary-container` | `#3D4D00` | Container primary |
-| **On Primary Container** | `on-primary-container` | `#D0EF67` | Teks di container |
-| **Secondary** | `secondary` | `#C4CAA9` | Elemen pendukung |
-| **On Secondary** | `on-secondary` | `#2D331B` | Teks di atas secondary |
-| **Secondary Container** | `secondary-container` | `#444930` | Container secondary |
-| **On Secondary Container** | `on-secondary-container` | `#E0E6C4` | Teks di secondary container |
-| **Tertiary** | `tertiary` | `#A1D0C5` | Decorative |
-| **Tertiary Container** | `tertiary-container` | `#214E46` | Tertiary container |
-| **On Tertiary Container** | `on-tertiary-container` | `#BCECE1` | Teks di tertiary container |
-| **Surface** | `surface` | `#1B1C17` | Page background |
-| **Surface Dim** | `surface-dim` | `#131410` | Surface yang lebih gelap |
-| **Surface Bright** | `surface-bright` | `#3A3A35` | Surface terang di dark |
-| **Surface Container Lowest** | `surface-container-lowest` | `#0E0F0B` | Deepest bg |
-| **Surface Container Low** | `surface-container-low` | `#1B1C17` | Low container |
-| **Surface Container** | `surface-container` | `#1F201B` | Default container |
-| **Surface Container High** | `surface-container-high` | `#2A2A25` | Elevated container |
-| **Surface Container Highest** | `surface-container-highest` | `#353530` | Highest container |
-| **On Surface** | `on-surface` | `#E4E3DA` | Teks utama |
-| **On Surface Variant** | `on-surface-variant` | `#C7C8B8` | Teks secondary |
-| **Outline** | `outline` | `#909283` | Border |
-| **Outline Variant** | `outline-variant` | `#46483C` | Subtle border |
-| **Error** | `error` | `#FFB4AB` | Error state |
-| **On Error** | `on-error` | `#690005` | Teks error |
-| **Error Container** | `error-container` | `#93000A` | Container error |
-| **Inverse Surface** | `inverse-surface` | `#E4E3DA` | Snackbar bg |
-| **Inverse On Surface** | `inverse-on-surface` | `#30312B` | Teks inverse |
-| **Inverse Primary** | `inverse-primary` | `#526600` | Primary di inverse |
+| Role                          | Token                       | Hex       | Penggunaan                  |
+| ----------------------------- | --------------------------- | --------- | --------------------------- |
+| **Primary**                   | `primary`                   | `#B4D34E` | CTA, accent                 |
+| **On Primary**                | `on-primary`                | `#293500` | Teks di atas primary        |
+| **Primary Container**         | `primary-container`         | `#3D4D00` | Container primary           |
+| **On Primary Container**      | `on-primary-container`      | `#D0EF67` | Teks di container           |
+| **Secondary**                 | `secondary`                 | `#C4CAA9` | Elemen pendukung            |
+| **On Secondary**              | `on-secondary`              | `#2D331B` | Teks di atas secondary      |
+| **Secondary Container**       | `secondary-container`       | `#444930` | Container secondary         |
+| **On Secondary Container**    | `on-secondary-container`    | `#E0E6C4` | Teks di secondary container |
+| **Tertiary**                  | `tertiary`                  | `#A1D0C5` | Decorative                  |
+| **Tertiary Container**        | `tertiary-container`        | `#214E46` | Tertiary container          |
+| **On Tertiary Container**     | `on-tertiary-container`     | `#BCECE1` | Teks di tertiary container  |
+| **Surface**                   | `surface`                   | `#1B1C17` | Page background             |
+| **Surface Dim**               | `surface-dim`               | `#131410` | Surface yang lebih gelap    |
+| **Surface Bright**            | `surface-bright`            | `#3A3A35` | Surface terang di dark      |
+| **Surface Container Lowest**  | `surface-container-lowest`  | `#0E0F0B` | Deepest bg                  |
+| **Surface Container Low**     | `surface-container-low`     | `#1B1C17` | Low container               |
+| **Surface Container**         | `surface-container`         | `#1F201B` | Default container           |
+| **Surface Container High**    | `surface-container-high`    | `#2A2A25` | Elevated container          |
+| **Surface Container Highest** | `surface-container-highest` | `#353530` | Highest container           |
+| **On Surface**                | `on-surface`                | `#E4E3DA` | Teks utama                  |
+| **On Surface Variant**        | `on-surface-variant`        | `#C7C8B8` | Teks secondary              |
+| **Outline**                   | `outline`                   | `#909283` | Border                      |
+| **Outline Variant**           | `outline-variant`           | `#46483C` | Subtle border               |
+| **Error**                     | `error`                     | `#FFB4AB` | Error state                 |
+| **On Error**                  | `on-error`                  | `#690005` | Teks error                  |
+| **Error Container**           | `error-container`           | `#93000A` | Container error             |
+| **Inverse Surface**           | `inverse-surface`           | `#E4E3DA` | Snackbar bg                 |
+| **Inverse On Surface**        | `inverse-on-surface`        | `#30312B` | Teks inverse                |
+| **Inverse Primary**           | `inverse-primary`           | `#526600` | Primary di inverse          |
 
 ### 4.3 Mapping Warna Lama → Baru
 
-| Lama | Baru (Light) | Baru (Dark) |
-|------|-------------|-------------|
-| `custom-black (#24282C)` | `on-surface (#1B1C17)` | `surface (#1B1C17)` |
-| `custom-white-2 (#EAE9E2)` | `surface (#FDFCFA)` | — |
-| `custom-white (#fbfbf8)` | `surface-container-lowest (#FFFFFF)` | — |
-| `custom-green (#D3F36A)` | `primary-container (#D0EF67)` / `primary (#526600)` | `primary (#B4D34E)` |
+| Lama                       | Baru (Light)                                        | Baru (Dark)         |
+| -------------------------- | --------------------------------------------------- | ------------------- |
+| `custom-black (#24282C)`   | `on-surface (#1B1C17)`                              | `surface (#1B1C17)` |
+| `custom-white-2 (#EAE9E2)` | `surface (#FDFCFA)`                                 | —                   |
+| `custom-white (#fbfbf8)`   | `surface-container-lowest (#FFFFFF)`                | —                   |
+| `custom-green (#D3F36A)`   | `primary-container (#D0EF67)` / `primary (#526600)` | `primary (#B4D34E)` |
 
 ### 4.4 M3 Expressive Color Emphasis
 
 M3 Expressive mendorong penggunaan warna yang **lebih berani** dibanding M3 standard:
+
 - **Primary Container** digunakan lebih sering dan prominent (bukan hanya chip/badge)
 - **Kontras warna lebih tinggi** antara surface dan container
 - **Vibrant accent** pada elemen interaktif (button, link, icon aktif)
 - **Tonal variety** — jangan hanya pakai primary, gunakan secondary dan tertiary untuk depth
 
 **Implementasi di portfolio:**
+
 - Section header hover → `bg-primary-container` (bukan `bg-primary/8`)
 - Portfolio card overlay → `bg-primary-container/90 backdrop-blur-sm`
 - Active sidebar link → `bg-primary-container text-on-primary-container rounded-full`
@@ -200,39 +204,39 @@ M3 Expressive mendukung variable fonts dan optical sizing.
 
 M3 Expressive memperluas type scale dengan emphasis pada **kontras ukuran** yang lebih besar antar hierarchy.
 
-| Role | Size | Line Height | Weight | Tracking | Tailwind Class |
-|------|------|-------------|--------|----------|---------------|
-| Display Large | 57px | 64px | 400 | -0.25px | `text-display-lg` |
-| Display Medium | 45px | 52px | 400 | 0 | `text-display-md` |
-| Display Small | 36px | 44px | 400 | 0 | `text-display-sm` |
-| Headline Large | 32px | 40px | 400 | 0 | `text-headline-lg` |
-| Headline Medium | 28px | 36px | 400 | 0 | `text-headline-md` |
-| Headline Small | 24px | 32px | 400 | 0 | `text-headline-sm` |
-| Title Large | 22px | 28px | 400 | 0 | `text-title-lg` |
-| Title Medium | 16px | 24px | 500 | 0.15px | `text-title-md` |
-| Title Small | 14px | 20px | 500 | 0.1px | `text-title-sm` |
-| Body Large | 16px | 24px | 400 | 0.5px | `text-body-lg` |
-| Body Medium | 14px | 20px | 400 | 0.25px | `text-body-md` |
-| Body Small | 12px | 16px | 400 | 0.4px | `text-body-sm` |
-| Label Large | 14px | 20px | 500 | 0.1px | `text-label-lg` |
-| Label Medium | 12px | 16px | 500 | 0.5px | `text-label-md` |
-| Label Small | 11px | 16px | 500 | 0.5px | `text-label-sm` |
+| Role            | Size | Line Height | Weight | Tracking | Tailwind Class     |
+| --------------- | ---- | ----------- | ------ | -------- | ------------------ |
+| Display Large   | 57px | 64px        | 400    | -0.25px  | `text-display-lg`  |
+| Display Medium  | 45px | 52px        | 400    | 0        | `text-display-md`  |
+| Display Small   | 36px | 44px        | 400    | 0        | `text-display-sm`  |
+| Headline Large  | 32px | 40px        | 400    | 0        | `text-headline-lg` |
+| Headline Medium | 28px | 36px        | 400    | 0        | `text-headline-md` |
+| Headline Small  | 24px | 32px        | 400    | 0        | `text-headline-sm` |
+| Title Large     | 22px | 28px        | 400    | 0        | `text-title-lg`    |
+| Title Medium    | 16px | 24px        | 500    | 0.15px   | `text-title-md`    |
+| Title Small     | 14px | 20px        | 500    | 0.1px    | `text-title-sm`    |
+| Body Large      | 16px | 24px        | 400    | 0.5px    | `text-body-lg`     |
+| Body Medium     | 14px | 20px        | 400    | 0.25px   | `text-body-md`     |
+| Body Small      | 12px | 16px        | 400    | 0.4px    | `text-body-sm`     |
+| Label Large     | 14px | 20px        | 500    | 0.1px    | `text-label-lg`    |
+| Label Medium    | 12px | 16px        | 500    | 0.5px    | `text-label-md`    |
+| Label Small     | 11px | 16px        | 500    | 0.5px    | `text-label-sm`    |
 
 ### 5.3 Type Usage di Portfolio
 
-| Elemen | Current | M3 Expressive |
-|--------|---------|---------------|
-| Hero "hutama" | `text-4xl font-bold` (Neutral Face) | `text-display-sm` atau `text-display-md` (heading font) |
-| Hero "hello, I'm" | `text-lg` | `text-title-lg` |
-| Hero "--web developer" | `text-2xl font-thin` | `text-headline-sm font-normal` |
-| Section header ("about", "skills", etc) | `text-xl` / `text-2xl` (Neutral Face) | `text-headline-sm` (heading font) |
-| About body text | `text-sm` / `text-base` | `text-body-lg` |
-| Skill subheading ("Main", "Library") | `text-base` | `text-title-md` |
-| Portfolio card title | `text-sm font-semibold` | `text-title-sm` |
-| Footer text | `text-xs` / `text-base` | `text-body-sm` |
-| Contact form label | `text-sm font-medium` | `text-label-lg` |
-| Navigation logo "HTMA" | `text-lg font-semibold` | `text-title-md font-semibold` |
-| Sidebar nav links | `text-base` | `text-label-lg` |
+| Elemen                                  | Current                               | M3 Expressive                                           |
+| --------------------------------------- | ------------------------------------- | ------------------------------------------------------- |
+| Hero "hutama"                           | `text-4xl font-bold` (Neutral Face)   | `text-display-sm` atau `text-display-md` (heading font) |
+| Hero "hello, I'm"                       | `text-lg`                             | `text-title-lg`                                         |
+| Hero "--web developer"                  | `text-2xl font-thin`                  | `text-headline-sm font-normal`                          |
+| Section header ("about", "skills", etc) | `text-xl` / `text-2xl` (Neutral Face) | `text-headline-sm` (heading font)                       |
+| About body text                         | `text-sm` / `text-base`               | `text-body-lg`                                          |
+| Skill subheading ("Main", "Library")    | `text-base`                           | `text-title-md`                                         |
+| Portfolio card title                    | `text-sm font-semibold`               | `text-title-sm`                                         |
+| Footer text                             | `text-xs` / `text-base`               | `text-body-sm`                                          |
+| Contact form label                      | `text-sm font-medium`                 | `text-label-lg`                                         |
+| Navigation logo "HTMA"                  | `text-lg font-semibold`               | `text-title-md font-semibold`                           |
+| Sidebar nav links                       | `text-base`                           | `text-label-lg`                                         |
 
 ---
 
@@ -242,15 +246,15 @@ M3 Expressive memperluas type scale dengan emphasis pada **kontras ukuran** yang
 
 M3 Expressive memperkenalkan **35 shape baru** dan memperluas skala shape. Untuk web (CSS), kita fokus pada rounded corner scale:
 
-| Shape Token | Radius | Tailwind Class | Penggunaan |
-|-------------|--------|----------------|------------|
-| None | 0px | `rounded-none` | Flat edges |
-| Extra Small | 4px | `rounded-xs` (custom) | Small chips, badges |
-| Small | 8px | `rounded-sm` atau `rounded-lg` | Input fields, small cards |
-| Medium | 12px | `rounded-xl` | Buttons, medium cards |
-| Large | 16px | `rounded-2xl` | Cards, containers |
-| Extra Large | 28px | `rounded-3xl` (custom `rounded-[28px]`) | Modal, dialog, prominent cards |
-| Full | 9999px | `rounded-full` | FAB, pills, avatar, chips |
+| Shape Token | Radius | Tailwind Class                          | Penggunaan                     |
+| ----------- | ------ | --------------------------------------- | ------------------------------ |
+| None        | 0px    | `rounded-none`                          | Flat edges                     |
+| Extra Small | 4px    | `rounded-xs` (custom)                   | Small chips, badges            |
+| Small       | 8px    | `rounded-sm` atau `rounded-lg`          | Input fields, small cards      |
+| Medium      | 12px   | `rounded-xl`                            | Buttons, medium cards          |
+| Large       | 16px   | `rounded-2xl`                           | Cards, containers              |
+| Extra Large | 28px   | `rounded-3xl` (custom `rounded-[28px]`) | Modal, dialog, prominent cards |
+| Full        | 9999px | `rounded-full`                          | FAB, pills, avatar, chips      |
 
 ### 6.2 M3 Expressive Shape Morphing (CSS Implementation)
 
@@ -276,19 +280,19 @@ Shape morphing = border-radius berubah saat interaksi. Implementasi CSS:
 
 ### 6.3 Shape Usage di Portfolio
 
-| Elemen | Current | M3 Expressive |
-|--------|---------|---------------|
-| Navigation logo | `rounded` (4px) | `rounded-xl` (12px) |
-| Portfolio card | `rounded` (4px) | `rounded-2xl` (16px), hover: `rounded-3xl` (28px) |
-| Modal dialog | Unknown | `rounded-[28px]` (Extra Large) |
-| Social button | `rounded-3xl` | `rounded-full` (pill) |
-| Skill icon container | `rounded-sm` (2px) | `rounded-xl` (12px) |
-| Input fields | Border-bottom only | `rounded-t-xs` (4px top) filled style |
-| Send button | `rounded` (4px) | `rounded-full` (pill) |
-| Scroll-to-top | `rounded` (4px) | `rounded-xl` (12px) |
-| Active sidebar link | `rounded` (4px) | `rounded-full` (pill) |
-| Sidebar rail (desktop) | `rounded-t-full` | `rounded-t-[28px]` (Extra Large top) |
-| Highlighted name "Hutama" | `rounded` (4px) | `rounded-lg` (8px) |
+| Elemen                    | Current            | M3 Expressive                                     |
+| ------------------------- | ------------------ | ------------------------------------------------- |
+| Navigation logo           | `rounded` (4px)    | `rounded-xl` (12px)                               |
+| Portfolio card            | `rounded` (4px)    | `rounded-2xl` (16px), hover: `rounded-3xl` (28px) |
+| Modal dialog              | Unknown            | `rounded-[28px]` (Extra Large)                    |
+| Social button             | `rounded-3xl`      | `rounded-full` (pill)                             |
+| Skill icon container      | `rounded-sm` (2px) | `rounded-xl` (12px)                               |
+| Input fields              | Border-bottom only | `rounded-t-xs` (4px top) filled style             |
+| Send button               | `rounded` (4px)    | `rounded-full` (pill)                             |
+| Scroll-to-top             | `rounded` (4px)    | `rounded-xl` (12px)                               |
+| Active sidebar link       | `rounded` (4px)    | `rounded-full` (pill)                             |
+| Sidebar rail (desktop)    | `rounded-t-full`   | `rounded-t-[28px]` (Extra Large top)              |
+| Highlighted name "Hutama" | `rounded` (4px)    | `rounded-lg` (8px)                                |
 
 ---
 
@@ -301,6 +305,7 @@ Shape morphing = border-radius berubah saat interaksi. Implementasi CSS:
 M3 Expressive menggunakan **kontras ukuran yang lebih ekstrem** antar elemen untuk memperjelas hierarchy. Ini berbeda dari M3 Standard yang lebih moderate.
 
 **Aturan utama:**
+
 - **CTA (Call-to-Action) harus significantly lebih besar** dari elemen di sekitarnya — bukan hanya slightly lebih besar
 - **Heading utama vs body text** — gap lebih besar (bukan proporsi linier)
 - **Icon dalam konteks penting** → `text-2xl` atau lebih besar
@@ -310,16 +315,16 @@ M3 Expressive menggunakan **kontras ukuran yang lebih ekstrem** antar elemen unt
 
 ### 7.2 Size Hierarchy di Portfolio
 
-| Elemen | M3 Standard Size | M3 Expressive Size | Alasan |
-|--------|-----------------|-------------------|--------|
-| Hero name "hutama" | `text-headline-lg` | `text-display-sm` (36px) | Elemen paling penting di halaman |
-| Section header | `text-title-lg` | `text-headline-sm` (24px) | Navigasi hierarchy yang jelas |
-| Body text | `text-body-md` | `text-body-lg` (16px) | Readability, bukan minimum |
-| Send button | `px-4 py-2` | `px-8 py-3 rounded-full` (lebih besar, pill shape) | CTA harus prominent |
-| Skill icon container | `w-10 h-10` | `w-12 h-12 md:w-16 md:w-16` | Grid visual yang lebih expressive |
-| Arrow icon (section header) | `text-base` | `text-2xl` | Icon sebagai visual anchor |
-| Footer text | `text-sm` | `text-body-sm` (12px) | Eksplisit de-emphasize |
-| Nav logo "HTMA" | `text-sm` | `text-title-md` (16px) | Brand presence yang lebih kuat |
+| Elemen                      | M3 Standard Size   | M3 Expressive Size                                 | Alasan                            |
+| --------------------------- | ------------------ | -------------------------------------------------- | --------------------------------- |
+| Hero name "hutama"          | `text-headline-lg` | `text-display-sm` (36px)                           | Elemen paling penting di halaman  |
+| Section header              | `text-title-lg`    | `text-headline-sm` (24px)                          | Navigasi hierarchy yang jelas     |
+| Body text                   | `text-body-md`     | `text-body-lg` (16px)                              | Readability, bukan minimum        |
+| Send button                 | `px-4 py-2`        | `px-8 py-3 rounded-full` (lebih besar, pill shape) | CTA harus prominent               |
+| Skill icon container        | `w-10 h-10`        | `w-12 h-12 md:w-16 md:w-16`                        | Grid visual yang lebih expressive |
+| Arrow icon (section header) | `text-base`        | `text-2xl`                                         | Icon sebagai visual anchor        |
+| Footer text                 | `text-sm`          | `text-body-sm` (12px)                              | Eksplisit de-emphasize            |
+| Nav logo "HTMA"             | `text-sm`          | `text-title-md` (16px)                             | Brand presence yang lebih kuat    |
 
 ### 7.3 Responsive Size Scaling
 
@@ -332,10 +337,9 @@ Desktop: hero name → text-display-md/lg (45px-57px)
 ```
 
 **Implementasi Tailwind:**
+
 ```html
-<h1 class="text-[36px] md:text-[45px] lg:text-[57px] leading-tight">
-  hutama
-</h1>
+<h1 class="text-[36px] leading-tight md:text-[45px] lg:text-[57px]">hutama</h1>
 ```
 
 ---
@@ -347,11 +351,13 @@ Desktop: hero name → text-display-md/lg (45px-57px)
 **Containment** = visual grouping — mengelompokkan elemen yang berhubungan ke dalam "wadah" yang jelas secara visual. Ini adalah salah satu pilar paling penting dari M3 Expressive yang sering diabaikan.
 
 **Kenapa penting (data Google):**
+
 - User spot key UI elements **4x lebih cepat** pada desain dengan containment yang jelas
 - Reduces cognitive load — otak langsung tahu elemen mana yang satu kelompok
 - Membantu navigasi tanpa harus membaca semua teks
 
 **Cara implementasi containment:**
+
 1. **Background color berbeda** — Container dengan `bg-surface-container` vs page `bg-surface`
 2. **Border/outline** — `border border-outline-variant` untuk membatasi area
 3. **Shape** — Rounded corners yang konsisten dalam satu grup
@@ -360,17 +366,17 @@ Desktop: hero name → text-display-md/lg (45px-57px)
 
 ### 8.2 Containment Usage di Portfolio
 
-| Elemen | Containment Method | CSS Implementation |
-|--------|-------------------|-------------------|
-| Portfolio card | Background + shape | `bg-surface-container rounded-2xl overflow-hidden` |
-| Skills icon grid | Background container | `bg-surface-container rounded-xl p-2.5` per icon |
-| Hero badge "--web developer" | Background + shape | `bg-primary-container rounded-lg px-3 py-1` |
-| Modal dialog | Elevation + shape + backdrop | `bg-surface-container-high rounded-[28px] shadow-xl` + scrim |
-| Contact form fields | Filled container | `bg-surface-container-highest rounded-t-xs border-b-2 border-outline` |
-| Active sidebar link | Background + pill shape | `bg-primary-container rounded-full px-4` |
-| Navigation bar | Surface + blur | `bg-surface/80 backdrop-blur-md` |
-| Highlighted name "Hutama" | Inline containment | `bg-primary-container rounded-lg px-2 py-0.5 inline` |
-| Section separator | Border containment | `border-t border-outline-variant` |
+| Elemen                       | Containment Method           | CSS Implementation                                                    |
+| ---------------------------- | ---------------------------- | --------------------------------------------------------------------- |
+| Portfolio card               | Background + shape           | `bg-surface-container rounded-2xl overflow-hidden`                    |
+| Skills icon grid             | Background container         | `bg-surface-container rounded-xl p-2.5` per icon                      |
+| Hero badge "--web developer" | Background + shape           | `bg-primary-container rounded-lg px-3 py-1`                           |
+| Modal dialog                 | Elevation + shape + backdrop | `bg-surface-container-high rounded-[28px] shadow-xl` + scrim          |
+| Contact form fields          | Filled container             | `bg-surface-container-highest rounded-t-xs border-b-2 border-outline` |
+| Active sidebar link          | Background + pill shape      | `bg-primary-container rounded-full px-4`                              |
+| Navigation bar               | Surface + blur               | `bg-surface/80 backdrop-blur-md`                                      |
+| Highlighted name "Hutama"    | Inline containment           | `bg-primary-container rounded-lg px-2 py-0.5 inline`                  |
+| Section separator            | Border containment           | `border-t border-outline-variant`                                     |
 
 ### 8.3 Spacing sebagai Containment Signal
 
@@ -399,33 +405,33 @@ M3 Expressive memperkenalkan **physics-based motion** sebagai pengganti time-bas
 
 ### 9.2 Easing Curves
 
-| Type | CSS Cubic Bezier | Penggunaan |
-|------|-----------------|------------|
-| Emphasized | `cubic-bezier(0.2, 0, 0, 1)` | Primary transitions (page enter, modal open) |
-| Emphasized Decelerate | `cubic-bezier(0.05, 0.7, 0.1, 1)` | Enter animations |
-| Emphasized Accelerate | `cubic-bezier(0.3, 0, 0.8, 0.15)` | Exit animations |
-| Standard | `cubic-bezier(0.2, 0, 0, 1)` | Most transitions |
-| Standard Decelerate | `cubic-bezier(0, 0, 0, 1)` | Fade in |
-| Standard Accelerate | `cubic-bezier(0.3, 0, 1, 1)` | Fade out |
+| Type                  | CSS Cubic Bezier                  | Penggunaan                                   |
+| --------------------- | --------------------------------- | -------------------------------------------- |
+| Emphasized            | `cubic-bezier(0.2, 0, 0, 1)`      | Primary transitions (page enter, modal open) |
+| Emphasized Decelerate | `cubic-bezier(0.05, 0.7, 0.1, 1)` | Enter animations                             |
+| Emphasized Accelerate | `cubic-bezier(0.3, 0, 0.8, 0.15)` | Exit animations                              |
+| Standard              | `cubic-bezier(0.2, 0, 0, 1)`      | Most transitions                             |
+| Standard Decelerate   | `cubic-bezier(0, 0, 0, 1)`        | Fade in                                      |
+| Standard Accelerate   | `cubic-bezier(0.3, 0, 1, 1)`      | Fade out                                     |
 
 ### 9.3 Duration Scale
 
-| Token | Duration | Penggunaan |
-|-------|----------|------------|
-| Short 1 | 50ms | Micro-interactions (ripple start) |
-| Short 2 | 100ms | State changes (hover start) |
-| Short 3 | 150ms | Small transitions (icon rotation) |
-| Short 4 | 200ms | Standard hover/focus |
-| Medium 1 | 250ms | Component transitions |
-| Medium 2 | 300ms | Card expansion, modal scale |
-| Medium 3 | 350ms | Navigation transitions |
-| Medium 4 | 400ms | Large element transitions |
-| Long 1 | 450ms | Page transitions |
-| Long 2 | 500ms | Complex animations |
-| Long 3 | 550ms | Full page enter |
-| Long 4 | 600ms | Hero animations |
-| Extra Long 1 | 700ms | Sequence animations |
-| Extra Long 4 | 1000ms | Dramatic reveals (text scramble) |
+| Token        | Duration | Penggunaan                        |
+| ------------ | -------- | --------------------------------- |
+| Short 1      | 50ms     | Micro-interactions (ripple start) |
+| Short 2      | 100ms    | State changes (hover start)       |
+| Short 3      | 150ms    | Small transitions (icon rotation) |
+| Short 4      | 200ms    | Standard hover/focus              |
+| Medium 1     | 250ms    | Component transitions             |
+| Medium 2     | 300ms    | Card expansion, modal scale       |
+| Medium 3     | 350ms    | Navigation transitions            |
+| Medium 4     | 400ms    | Large element transitions         |
+| Long 1       | 450ms    | Page transitions                  |
+| Long 2       | 500ms    | Complex animations                |
+| Long 3       | 550ms    | Full page enter                   |
+| Long 4       | 600ms    | Hero animations                   |
+| Extra Long 1 | 700ms    | Sequence animations               |
+| Extra Long 4 | 1000ms   | Dramatic reveals (text scramble)  |
 
 ### 9.4 Motion/Framer Motion Config Mapping
 
@@ -448,16 +454,16 @@ const m3Tween = {
 
 ### 9.5 Animation Usage di Portfolio
 
-| Elemen | Current Config | M3 Expressive Config |
-|--------|---------------|---------------------|
-| Hero title fade-in | `delay: 0.3-0.9, duration: 0.6-0.7` | `m3Tween.emphasizedDecel` + stagger delay |
-| Hero images fade-in | `delay: 1.2-2.0, duration: 0.7` | `m3Tween.emphasized` |
-| Page wrapper enter | `duration: 0.7, y: 24→0` | `m3Spring.emphasized` dengan `y: 24→0` |
-| Card hover | `duration: 300ms` (CSS) | `200ms ease: [0.2, 0, 0, 1]` + shape morph |
-| Section header hover | `duration: 300ms` (CSS) | `200ms ease: [0.2, 0, 0, 1]` |
-| Custom cursor spring | `damping: 30, stiffness: 700` | Tetap (sudah cocok M3 feel) |
-| Theme toggle | rotation 45°↔180° | Tetap + spring physics |
-| Modal open/close | (perlu cek) | `m3Spring.emphasized` + backdrop fade |
+| Elemen               | Current Config                      | M3 Expressive Config                       |
+| -------------------- | ----------------------------------- | ------------------------------------------ |
+| Hero title fade-in   | `delay: 0.3-0.9, duration: 0.6-0.7` | `m3Tween.emphasizedDecel` + stagger delay  |
+| Hero images fade-in  | `delay: 1.2-2.0, duration: 0.7`     | `m3Tween.emphasized`                       |
+| Page wrapper enter   | `duration: 0.7, y: 24→0`            | `m3Spring.emphasized` dengan `y: 24→0`     |
+| Card hover           | `duration: 300ms` (CSS)             | `200ms ease: [0.2, 0, 0, 1]` + shape morph |
+| Section header hover | `duration: 300ms` (CSS)             | `200ms ease: [0.2, 0, 0, 1]`               |
+| Custom cursor spring | `damping: 30, stiffness: 700`       | Tetap (sudah cocok M3 feel)                |
+| Theme toggle         | rotation 45°↔180°                   | Tetap + spring physics                     |
+| Modal open/close     | (perlu cek)                         | `m3Spring.emphasized` + backdrop fade      |
 
 ---
 
@@ -467,29 +473,29 @@ const m3Tween = {
 
 M3 Expressive menggunakan **tonal surface elevation** bukan box-shadow tradisional:
 
-| Level | Shadow | Surface Color Token | Penggunaan |
-|-------|--------|-------------------|------------|
-| Level 0 | None | `surface` | Page background |
-| Level 1 | `shadow-sm` | `surface-container-low` | Low cards, resting state |
-| Level 2 | `shadow-md` | `surface-container` | Default cards |
-| Level 3 | `shadow-lg` | `surface-container-high` | Elevated cards, modal |
-| Level 4 | `shadow-xl` | `surface-container-highest` | Top-level navigation |
-| Level 5 | `shadow-2xl` | — | Rare, dragged elements |
+| Level   | Shadow       | Surface Color Token         | Penggunaan               |
+| ------- | ------------ | --------------------------- | ------------------------ |
+| Level 0 | None         | `surface`                   | Page background          |
+| Level 1 | `shadow-sm`  | `surface-container-low`     | Low cards, resting state |
+| Level 2 | `shadow-md`  | `surface-container`         | Default cards            |
+| Level 3 | `shadow-lg`  | `surface-container-high`    | Elevated cards, modal    |
+| Level 4 | `shadow-xl`  | `surface-container-highest` | Top-level navigation     |
+| Level 5 | `shadow-2xl` | —                           | Rare, dragged elements   |
 
 **Catatan M3 Expressive:** Shadow dan tonal surface saling melengkapi. Gunakan tonal shift sebagai default, shadow hanya untuk elemen yang benar-benar "mengambang" (modal, dropdown, FAB).
 
 ### 10.2 Elevation Usage di Portfolio
 
-| Elemen | Current | M3 Expressive |
-|--------|---------|---------------|
-| Page background | `bg-custom-white-2` | `bg-surface` (Level 0) |
-| Portfolio card resting | Brutalist shadow | `bg-surface-container` (Level 2), minimal shadow |
-| Portfolio card hover | Shadow shift | `bg-surface-container-high` (Level 3) + `shadow-lg` |
-| Modal | (perlu cek) | `bg-surface-container-high` (Level 3) + `shadow-xl` |
-| Navigation bar | Solid bg | `bg-surface` (Level 0, solid) |
-| Sidebar rail | `bg-custom-black` | `bg-surface-container-highest` (Level 4) |
-| Skill icon container | No elevation | `bg-surface-container` (Level 2) |
-| Gradient masks | `bg-custom-white-2` | `bg-surface` |
+| Elemen                 | Current             | M3 Expressive                                       |
+| ---------------------- | ------------------- | --------------------------------------------------- |
+| Page background        | `bg-custom-white-2` | `bg-surface` (Level 0)                              |
+| Portfolio card resting | Brutalist shadow    | `bg-surface-container` (Level 2), minimal shadow    |
+| Portfolio card hover   | Shadow shift        | `bg-surface-container-high` (Level 3) + `shadow-lg` |
+| Modal                  | (perlu cek)         | `bg-surface-container-high` (Level 3) + `shadow-xl` |
+| Navigation bar         | Solid bg            | `bg-surface` (Level 0, solid)                       |
+| Sidebar rail           | `bg-custom-black`   | `bg-surface-container-highest` (Level 4)            |
+| Skill icon container   | No elevation        | `bg-surface-container` (Level 2)                    |
+| Gradient masks         | `bg-custom-white-2` | `bg-surface`                                        |
 
 ---
 
@@ -499,14 +505,14 @@ M3 Expressive menggunakan **tonal surface elevation** bukan box-shadow tradision
 
 State layers = semi-transparent overlay di atas elemen saat interaksi:
 
-| State | Overlay Opacity | CSS Implementation |
-|-------|----------------|-------------------|
-| Enabled (default) | 0% | — |
-| Hovered | 8% | `hover:bg-primary/8` atau `hover:bg-on-surface/8` |
-| Focused | 10% | `focus-visible:bg-primary/10` |
-| Pressed | 10% | `active:bg-primary/10` |
-| Dragged | 16% | `bg-primary/16` |
-| Disabled | — | `opacity-38` (38% total opacity, M3 standard) |
+| State             | Overlay Opacity | CSS Implementation                                |
+| ----------------- | --------------- | ------------------------------------------------- |
+| Enabled (default) | 0%              | —                                                 |
+| Hovered           | 8%              | `hover:bg-primary/8` atau `hover:bg-on-surface/8` |
+| Focused           | 10%             | `focus-visible:bg-primary/10`                     |
+| Pressed           | 10%             | `active:bg-primary/10`                            |
+| Dragged           | 16%             | `bg-primary/16`                                   |
+| Disabled          | —               | `opacity-38` (38% total opacity, M3 standard)     |
 
 ### 11.2 State Layer Implementation Strategy
 
@@ -514,13 +520,17 @@ Untuk Tailwind, state layers diimplementasikan via pseudo-element atau bg opacit
 
 ```html
 <!-- Approach 1: Background opacity (simpel, recommended) -->
-<button class="bg-primary text-on-primary hover:bg-primary/92 active:bg-primary/90 focus-visible:bg-primary/90">
+<button
+  class="bg-primary text-on-primary hover:bg-primary/92 active:bg-primary/90 focus-visible:bg-primary/90"
+>
   Send
 </button>
 
 <!-- Approach 2: Relative pseudo for complex shapes -->
 <div class="relative overflow-hidden">
-  <div class="absolute inset-0 bg-on-surface/0 hover:bg-on-surface/8 active:bg-on-surface/10 transition-colors" />
+  <div
+    class="bg-on-surface/0 hover:bg-on-surface/8 active:bg-on-surface/10 absolute inset-0 transition-colors"
+  />
   <!-- content -->
 </div>
 ```
@@ -533,8 +543,12 @@ Disabled content: text-on-surface/38
 ```
 
 Tailwind:
+
 ```html
-<button disabled class="bg-on-surface/[0.12] text-on-surface/[0.38] cursor-not-allowed">
+<button
+  disabled
+  class="bg-on-surface/[0.12] text-on-surface/[0.38] cursor-not-allowed"
+>
   Send
 </button>
 ```
@@ -692,6 +706,7 @@ Bottom mask: bg-surface fixed z-[1050] h-[8%]
 ### 13.1 M3 Expressive Dark Mode
 
 M3 Expressive dark mode berbeda dari standard dark mode:
+
 - **Surface** menjadi sangat gelap (`#12140E`) tapi BUKAN pure black
 - **Primary** menjadi lighter shade (`#9DD835`) — lebih vibrant dari light mode
 - **Kontras tetap tinggi** — WCAG AA minimum (4.5:1 untuk teks normal)
@@ -715,23 +730,24 @@ Untuk menghindari duplikasi `dark:` prefix di setiap elemen, gunakan CSS variabl
 
 ```css
 :root {
-  --color-primary: #3E6A00;
-  --color-on-primary: #FFFFFF;
-  --color-surface: #F9FAF0;
-  --color-on-surface: #1A1C17;
+  --color-primary: #3e6a00;
+  --color-on-primary: #ffffff;
+  --color-surface: #f9faf0;
+  --color-on-surface: #1a1c17;
   /* ... semua roles ... */
 }
 
 .dark {
-  --color-primary: #9DD835;
-  --color-on-primary: #1D3700;
-  --color-surface: #12140E;
-  --color-on-surface: #E1E3D9;
+  --color-primary: #9dd835;
+  --color-on-primary: #1d3700;
+  --color-surface: #12140e;
+  --color-on-surface: #e1e3d9;
   /* ... semua roles ... */
 }
 ```
 
 Tailwind config:
+
 ```javascript
 colors: {
   primary: 'var(--color-primary)',
@@ -743,6 +759,7 @@ colors: {
 ```
 
 Maka di komponen cukup tulis:
+
 ```html
 <button class="bg-primary text-on-primary">
   <!-- Otomatis berubah saat dark mode karena CSS variable switch -->
@@ -759,14 +776,14 @@ Maka di komponen cukup tulis:
 
 M3 Expressive tetap mengikuti WCAG guidelines:
 
-| Requirement | Standard | M3 Expressive Approach |
-|-------------|----------|----------------------|
-| Color contrast (text) | WCAG AA 4.5:1 | Tonal palette auto-ensures contrast |
-| Color contrast (large text) | WCAG AA 3:1 | Display/Headline sizes qualify |
-| Focus indicator | Visible | `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` |
-| Touch target | Min 44x44px | M3: min 48x48px untuk interactive elements |
-| Motion | `prefers-reduced-motion` | Disable spring animations, use instant transitions |
-| Screen reader | ARIA labels | Semua interactive elements harus punya label |
+| Requirement                 | Standard                 | M3 Expressive Approach                                                                 |
+| --------------------------- | ------------------------ | -------------------------------------------------------------------------------------- |
+| Color contrast (text)       | WCAG AA 4.5:1            | Tonal palette auto-ensures contrast                                                    |
+| Color contrast (large text) | WCAG AA 3:1              | Display/Headline sizes qualify                                                         |
+| Focus indicator             | Visible                  | `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` |
+| Touch target                | Min 44x44px              | M3: min 48x48px untuk interactive elements                                             |
+| Motion                      | `prefers-reduced-motion` | Disable spring animations, use instant transitions                                     |
+| Screen reader               | ARIA labels              | Semua interactive elements harus punya label                                           |
 
 ### 14.2 Reduced Motion
 
@@ -780,6 +797,7 @@ M3 Expressive tetap mengikuti WCAG guidelines:
 ```
 
 Framer Motion:
+
 ```typescript
 const shouldReduceMotion = useReducedMotion();
 const animationConfig = shouldReduceMotion
@@ -795,7 +813,7 @@ const animationConfig = shouldReduceMotion
 
 ```css
 /* globals.css — Tailwind v4 */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* === Colors (M3 Expressive via CSS Variables) === */
@@ -862,65 +880,65 @@ const animationConfig = shouldReduceMotion
 ```css
 :root {
   --color-primary: #526600;
-  --color-on-primary: #FFFFFF;
-  --color-primary-container: #D0EF67;
-  --color-on-primary-container: #171E00;
-  --color-secondary: #5B6146;
-  --color-on-secondary: #FFFFFF;
-  --color-secondary-container: #E0E6C4;
-  --color-on-secondary-container: #191E08;
-  --color-tertiary: #3A665E;
-  --color-tertiary-container: #BCECE1;
-  --color-on-tertiary-container: #00201B;
-  --color-surface: #FDFCFA;
-  --color-surface-dim: #DADBD1;
-  --color-surface-bright: #FDFCFA;
-  --color-surface-container-lowest: #FFFFFF;
-  --color-surface-container-low: #F7F6F2;
-  --color-surface-container: #F1F1EC;
-  --color-surface-container-high: #EBEBE6;
-  --color-surface-container-highest: #E5E5E0;
-  --color-on-surface: #1B1C17;
-  --color-on-surface-variant: #46483C;
-  --color-outline: #76786B;
-  --color-outline-variant: #C7C8B8;
-  --color-error: #BA1A1A;
-  --color-on-error: #FFFFFF;
-  --color-error-container: #FFDAD6;
-  --color-inverse-surface: #30312B;
-  --color-inverse-on-surface: #F3F1E9;
-  --color-inverse-primary: #B4D34E;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #d0ef67;
+  --color-on-primary-container: #171e00;
+  --color-secondary: #5b6146;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #e0e6c4;
+  --color-on-secondary-container: #191e08;
+  --color-tertiary: #3a665e;
+  --color-tertiary-container: #bcece1;
+  --color-on-tertiary-container: #00201b;
+  --color-surface: #fdfcfa;
+  --color-surface-dim: #dadbd1;
+  --color-surface-bright: #fdfcfa;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f7f6f2;
+  --color-surface-container: #f1f1ec;
+  --color-surface-container-high: #ebebe6;
+  --color-surface-container-highest: #e5e5e0;
+  --color-on-surface: #1b1c17;
+  --color-on-surface-variant: #46483c;
+  --color-outline: #76786b;
+  --color-outline-variant: #c7c8b8;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-inverse-surface: #30312b;
+  --color-inverse-on-surface: #f3f1e9;
+  --color-inverse-primary: #b4d34e;
 }
 
 .dark {
-  --color-primary: #B4D34E;
+  --color-primary: #b4d34e;
   --color-on-primary: #293500;
-  --color-primary-container: #3D4D00;
-  --color-on-primary-container: #D0EF67;
-  --color-secondary: #C4CAA9;
-  --color-on-secondary: #2D331B;
+  --color-primary-container: #3d4d00;
+  --color-on-primary-container: #d0ef67;
+  --color-secondary: #c4caa9;
+  --color-on-secondary: #2d331b;
   --color-secondary-container: #444930;
-  --color-on-secondary-container: #E0E6C4;
-  --color-tertiary: #A1D0C5;
-  --color-tertiary-container: #214E46;
-  --color-on-tertiary-container: #BCECE1;
-  --color-surface: #1B1C17;
+  --color-on-secondary-container: #e0e6c4;
+  --color-tertiary: #a1d0c5;
+  --color-tertiary-container: #214e46;
+  --color-on-tertiary-container: #bcece1;
+  --color-surface: #1b1c17;
   --color-surface-dim: #131410;
-  --color-surface-bright: #3A3A35;
-  --color-surface-container-lowest: #0E0F0B;
-  --color-surface-container-low: #1B1C17;
-  --color-surface-container: #1F201B;
-  --color-surface-container-high: #2A2A25;
+  --color-surface-bright: #3a3a35;
+  --color-surface-container-lowest: #0e0f0b;
+  --color-surface-container-low: #1b1c17;
+  --color-surface-container: #1f201b;
+  --color-surface-container-high: #2a2a25;
   --color-surface-container-highest: #353530;
-  --color-on-surface: #E4E3DA;
-  --color-on-surface-variant: #C7C8B8;
+  --color-on-surface: #e4e3da;
+  --color-on-surface-variant: #c7c8b8;
   --color-outline: #909283;
-  --color-outline-variant: #46483C;
-  --color-error: #FFB4AB;
+  --color-outline-variant: #46483c;
+  --color-error: #ffb4ab;
   --color-on-error: #690005;
-  --color-error-container: #93000A;
-  --color-inverse-surface: #E4E3DA;
-  --color-inverse-on-surface: #30312B;
+  --color-error-container: #93000a;
+  --color-inverse-surface: #e4e3da;
+  --color-inverse-on-surface: #30312b;
   --color-inverse-primary: #526600;
 }
 ```
