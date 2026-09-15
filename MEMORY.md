@@ -131,22 +131,35 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ---
 
-## Git State
+### Session 3 — 2026-09-15
 
-- **Branch aktif:** `feat/portfolio-update`
-- **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (kecuali 3 file baru: `BRAINSTORMING.md`, `DESIGN.md`, `MEMORY.md`)
-- **Belum ada commit baru** di branch ini
+1. **Eksekusi Phase 0 — Runtime Migration (pnpm → Bun)**:
+   - Hapus `pnpm-lock.yaml` dan `pnpm-workspace.yaml`
+   - Update `package.json` (`packageManager`: `bun@1.4.2`, `engines`: `bun >= 1.1.0`, script `lint:fix` pnpm → bun)
+   - Update `.husky/commit-msg` & `.husky/pre-push` ke `bun run`
+   - Generate `bun.lock` (text-based Bun 1.2+ lockfile) via `bun install`
+   - Verifikasi sukses: `bun run typechecks` (0 error), `bun run lint` (0 error), `bun run build` (sukses)
+2. **Commit Phase 0 & Cabang Backup**:
+   - Commit: `71eceea feat: migrate runtime and package manager to bun`
+   - Buat branch baru: `feat/migrate-bun` (mengunci snapshot hasil migrasi Bun murni)
+   - Tetap di branch aktif: `feat/portfolio-update` untuk melanjutkan Phase 1
 
 ---
 
-## Langkah Selanjutnya (Next Session)
+## Git State
 
-> **Semua pertanyaan terbuka sudah terjawab. Siap eksekusi.**
+- **Branch aktif:** `feat/portfolio-update` (ahead 1 commit dari origin)
+- **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
+- **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
+- **Working tree:** Clean
+- **Commit terbaru:** `71eceea` (`feat: migrate runtime and package manager to bun`)
 
-1. Mulai eksekusi **Phase 0 — Runtime Migration** (pnpm → Bun)
-2. Lanjut ke **Phase 1 — Foundation** (package upgrades, M3 Expressive, Tailwind v4, Oxlint, Lefthook)
-3. Lanjut Phase 2–5 sesuai roadmap di `BRAINSTORMING.md` section 13
+---
+
+## Langkah Selanjutnya
+
+1. Eksekusi **Phase 1 — Foundation** (package upgrades Next.js 15, React 19, Tailwind v4, Motion v12, lenis, zod, Oxlint, Lefthook, M3 color palette)
+2. Lanjut Phase 2–5 sesuai roadmap di `BRAINSTORMING.md` section 13
 
 ---
 
