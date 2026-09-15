@@ -10,13 +10,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "eslint src --fix && bun run format",
-    "lint:strict": "eslint --max-warnings=0 src",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix && bun run format",
+    "lint:strict": "oxlint --deny-warnings",
     "typechecks": "tsc --noEmit --incremental false",
     "format": "prettier --write .",
     "format:check": "prettier -c .",
-    "prepare": "husky",
     "commitlint": "commitlint --edit"
   },
   "dependencies": {
@@ -28,8 +27,6 @@
     "@types/react-dom": "^19.0.3",
     "@vercel/analytics": "^1.5.0",
     "clsx": "^2.1.1",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.1.7",
     "framer-motion": "^12.4.3",
     "lenis": "^1.1.20",
     "locomotive-scroll": "5.0.0-beta.21",
@@ -49,27 +46,13 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
     "autoprefixer": "10.4.20",
     "cssnano": "^7.0.7",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unused-imports": "^4.1.4",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.2",
+    "lefthook": "^2.1.14",
+    "oxlint": "^1.83.0",
     "postcss": "8.4.47",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "3.4.13"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "eslint --max-warnings=0 src",
-      "prettier --write ."
-    ],
-    "src/**/*.{json,css,scss,md,mdx}": [
-      "prettier --write ."
-    ]
   }
 }
