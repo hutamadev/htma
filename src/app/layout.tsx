@@ -14,11 +14,14 @@ interface IRootLayoutProps {
 
 export default function RootLayout({ children }: Readonly<IRootLayoutProps>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html
+      lang='en'
+      className={clsx(googleSansFlex.variable, 'antialiased')}
+      suppressHydrationWarning
+    >
       <body
         className={clsx(
-          googleSansFlex.className,
-          googleSansFlex.variable,
+          'font-sans',
           'bg-custom-white-2',
           'dark:bg-custom-black'
         )}

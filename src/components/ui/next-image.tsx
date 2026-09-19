@@ -1,20 +1,15 @@
 import clsx from 'clsx';
 import Image, { ImageProps } from 'next/image';
 
-type NextImageProps = {
+interface NextImageProps extends Omit<ImageProps, 'alt'> {
+  alt: string;
   useSkeleton?: boolean;
   imgClassName?: string;
   blurClassName?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: React.Ref<HTMLImageElement | null>;
-  alt: string;
-} & (
-  | { width: string | number; height: string | number }
-  | { layout: 'fill'; width?: string | number; height?: string | number }
-) &
-  ImageProps;
+}
 
-const NextImage = ({
+export default function NextImage({
   src,
   width,
   height,
@@ -22,26 +17,26 @@ const NextImage = ({
   ref,
   className,
   imgClassName,
+  fill,
   ...rest
-}: NextImageProps) => {
+}: Readonly<NextImageProps>) {
   const widthIsSet = className?.includes('w-') ?? false;
 
   return (
     <figure
-      style={!widthIsSet ? { width: `${width}px` } : undefined}
+      style={!widthIsSet && width ? { width: `${width}px` } : undefined}
       className={className}
     >
       <Image
         className={clsx(imgClassName)}
         src={src}
-        width={width}
-        height={height}
+        width={fill ? undefined : width}
+        height={fill ? undefined : height}
+        fill={fill}
         alt={alt}
         ref={ref}
         {...rest}
       />
     </figure>
   );
-};
-
-export default NextImage;
+}

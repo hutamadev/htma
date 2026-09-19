@@ -157,17 +157,48 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Verifikasi Kualitas (All Green)**:
      - `bun run format:check`: 100% matched Prettier code style
      - `bun run typechecks`: 0 error
-     - `bun run lint`: 0 warnings, 0 errors (Oxlint 33ms)
+     - `bun run lint`: 0 warnings, 0 errors (Oxlint 23ms)
+     - `bun run build`: Berhasil kompilasi dan generate 6/6 static pages (4.2s)
+2. **Penyempurnaan Font Binding & Implementasi Next.js 15 Best Practices**:
+   - **Font Binding Fix**:
+     - Tambahkan `--font-sans: var(--font-sans), 'Google Sans Flex', system-ui, sans-serif;` di `@theme` (`src/styles/globals.css`).
+     - Terapkan default `font-family: var(--font-sans), ...;` pada selector `html, body`.
+     - Pindahkan `googleSansFlex.variable` ke tag `<html lang="en" className={clsx(googleSansFlex.variable, 'antialiased')}>` di `src/app/layout.tsx` dan sematkan utilitas `font-sans` pada `<body>`.
+     - Verifikasi compiled CSS: `--font-sans` kini resmi terikat ke Google Sans Flex.
+   - **Audit & Implementasi Next.js 15 App Router Best Practices**:
+     - `src/components/ui/next-image.tsx`: Hapus legacy `layout="fill"`, ganti dengan boolean prop `fill?: boolean`, dan bersihkan eslint-disable.
+     - `src/app/not-found.tsx`: Buat custom 404 Not Found page berstandar M3 Expressive.
+     - `src/app/global-error.tsx`: Buat root global error boundary lengkap dengan tag `<html>` & `<body>`.
+     - `src/app/sitemap.ts`: Buat rute metadata XML sitemap dinamis.
+     - `src/app/robots.ts`: Buat rute metadata robots.txt dinamis.
+     - `src/app/manifest.ts`: Buat rute web app manifest dinamis.
+   - **Verifikasi Kualitas Penuh**:
+     - `format:check`: 100% lulus
+     - `typechecks`: 0 error
+     - `lint`: 0 warnings, 0 errors (Oxlint 102ms pada 59 files)
+     - `build`: Sukses kompilasi dan generate 9/9 static pages (termasuk `/manifest.webmanifest`, `/robots.txt`, `/sitemap.xml`, dan `/_not-found`)
      - `bun run build`: Berhasil kompilasi dan generate 6/6 static pages (5.7s — lebih cepat berkat Oxide Engine)
-2. **Eksekusi Phase 1 — Slice 1.4 (Typography Setup — Google Sans Flex)**:
-   - Unduh resmi `GoogleSansFlex.woff2` (55.9 KB variable font) ke `public/fonts/`.
-   - Hapus total 6 file font legacy (`KataGrotesk-*.woff2` dan `NeutralFace*.woff2`).
-   - Setup `src/utils/localFont.ts` dengan export clean `googleSansFlex` (`next/font/local` variable font).
-   - Refactor seluruh komponen yang sebelumnya mengimpor font lama ke `googleSansFlex` (`src/app/layout.tsx`, `hero-title.tsx`, `navigation.tsx`, `modal-card.tsx`, `contact.tsx`, `about.tsx`, `portfolio.tsx`, `skills.tsx`). Tidak ada lagi sisa variabel `kataGrotesk` maupun `neutral`.
-   - Daftarkan `--font-display`, `--font-body`, dan skala tipografi M3 Expressive di `@theme` (`src/styles/globals.css`).
-   - Verifikasi gerbang kualitas lulus penuh: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 23ms), `build` (pass dalam 4.2s, 6/6 static pages).
+3. **Resolusi Font Rendering & Implementasi Next.js 15 Best Practices**:
+   - **Root Cause Terungkap**: File `GoogleSansFlex.woff2` lokal sebelumnya ternyata adalah subset chunk Google Fonts tanpa tabel `cmap` (Character Mapping) untuk huruf latin (U+0000-00FF), sehingga browser fallback diam-diam ke font sistem.
+   - **Solusi Font Definitif**:
+     - Hapus chunk `GoogleSansFlex.woff2` lokal yang tidak lengkap.
+     - Muat Google Sans Flex variable font resmi via Google Fonts CDN `@import url(...)` di `src/styles/globals.css` (mencakup seluruh unicode-range latin & seluruh sumbu variable wght 100–1000 & opsz 6–144).
+     - Bind `--font-sans`, `--font-display`, `--font-body`, serta selector `html, body` langsung ke `'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif`.
+     - `src/utils/localFont.ts` diekspor sebagai `{ className: 'font-sans', variable: '--font-sans' }`, sehingga seluruh 8 komponen otomatis merender font asli Google Sans Flex.
+   - **Audit & Implementasi Next.js 15 App Router Best Practices (Context7)**:
+     - `src/components/ui/next-image.tsx`: Hapus legacy `layout="fill"`, ganti dengan boolean prop `fill?: boolean`, dan bersihkan eslint-disable.
+     - `src/app/not-found.tsx`: Buat custom 404 Not Found page berstandar M3 Expressive.
+     - `src/app/global-error.tsx`: Buat root global error boundary lengkap dengan tag `<html>` & `<body>`.
+     - `src/app/sitemap.ts`: Buat rute metadata XML sitemap dinamis.
+     - `src/app/robots.ts`: Buat rute metadata robots.txt dinamis.
+     - `src/app/manifest.ts`: Buat rute web app manifest dinamis.
+   - **Verifikasi Kualitas Penuh**:
+     - `format:check`: 100% lulus
+     - `typechecks`: 0 error
+     - `lint`: 0 warnings, 0 errors (Oxlint 44ms pada 59 files)
+     - `build`: Sukses kompilasi dalam 5.1s dan generate 9/9 static pages
 
-3. **Integrasi Agent Skills Suite ke Perencanaan**:
+4. **Integrasi Agent Skills Suite ke Perencanaan**:
    - Evaluasi menyeluruh via `using-agent-skills`.
    - Mengadopsi 5 skills kunci: `source-driven-development`, `constraint-driven-development`, `planning-and-task-breakdown` + `incremental-implementation`, `frontend-ui-engineering`, `doubt-driven-development`.
    - Update `BRAINSTORMING.md`:
@@ -175,11 +206,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - Refactor Section 13 Roadmap menjadi _vertical slices_ terverifikasi.
    - Update `DESIGN.md`:
      - Menghasilkan dan mengunci nilai hex M3 Expressive akurat dari seed `#D3F36A` via `@material/material-color-utilities`.
-4. **Double-Check Mitigations (Doubt-Driven Development)**:
+5. **Double-Check Mitigations (Doubt-Driven Development)**:
    - _Zustand & next-themes_: Wajib upgrade `next-themes@^0.4.4` & `zustand@^5.0.0` untuk peer compatibility React 19.
    - _Tailwind v4 Token Aliasing_: Tambahkan alias backward-compatible (`--color-custom-black`, dll) di `@theme` agar 51 file UI lama tidak rusak.
    - _Phased Locomotive Removal_: Tahan `locomotive-scroll` di Phase 1, baru di-uninstall di Slice 2.1 setelah Lenis terpasang.
-5. **Pemetaan Lead Skills per Fase**:
+6. **Pemetaan Lead Skills per Fase**:
 
 | Fase        | Fokus                                                | Lead Skills                                                | Gate Verifikasi                                               |
 | ----------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
@@ -197,8 +228,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **Branch aktif:** `feat/portfolio-update` (ahead 11 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Slice 1.4 committed)
-- **Commit terbaru:** `f6893a6` (`feat(typography): migrate to google sans flex variable font`)
+- **Working tree:** Modified (Font binding fix & Next.js 15 best practices ready to commit)
+- **Commit terbaru:** `35431df` (`docs(memory): sync git state with commit f6893a6 and phase 1 completion`)
 
 ---
 

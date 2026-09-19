@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,100..1000&display=swap');
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -54,12 +55,12 @@
   --radius-xl: 28px;
 
   /* M3 Expressive Typography Scale & Font Families */
+  --font-sans:
+    'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif;
   --font-display:
-    var(--font-sans), 'Google Sans Flex', 'Google Sans Text', system-ui,
-    sans-serif;
+    'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif;
   --font-body:
-    var(--font-sans), 'Google Sans Flex', 'Google Sans Text', system-ui,
-    sans-serif;
+    'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif;
 
   --text-display-lg: 57px;
   --text-display-md: 45px;
@@ -166,6 +167,12 @@ html,
 body {
   -ms-scroll-chaining: none;
   overscroll-behavior: none;
+  font-family:
+    'Google Sans Flex',
+    'Google Sans Text',
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 @utility layout {
