@@ -521,7 +521,7 @@ Untuk Tailwind, state layers diimplementasikan via pseudo-element atau bg opacit
 ```html
 <!-- Approach 1: Background opacity (simpel, recommended) -->
 <button
-  class="bg-primary text-on-primary hover:bg-primary/92 active:bg-primary/90 focus-visible:bg-primary/90"
+  class="bg-primary text-on-primary hover:bg-primary/92 focus-visible:bg-primary/90 active:bg-primary/90"
 >
   Send
 </button>
@@ -529,7 +529,7 @@ Untuk Tailwind, state layers diimplementasikan via pseudo-element atau bg opacit
 <!-- Approach 2: Relative pseudo for complex shapes -->
 <div class="relative overflow-hidden">
   <div
-    class="bg-on-surface/0 hover:bg-on-surface/8 active:bg-on-surface/10 absolute inset-0 transition-colors"
+    class="absolute inset-0 bg-on-surface/0 transition-colors hover:bg-on-surface/8 active:bg-on-surface/10"
   />
   <!-- content -->
 </div>
@@ -547,7 +547,7 @@ Tailwind:
 ```html
 <button
   disabled
-  class="bg-on-surface/[0.12] text-on-surface/[0.38] cursor-not-allowed"
+  class="cursor-not-allowed bg-on-surface/[0.12] text-on-surface/[0.38]"
 >
   Send
 </button>

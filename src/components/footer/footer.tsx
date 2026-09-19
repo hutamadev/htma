@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className='w-full py-6'>
       <div
         className={clsx(
-          'flex items-center justify-end gap-x-1 whitespace-nowrap text-xs text-custom-black',
+          'flex items-center justify-end gap-x-1 text-xs whitespace-nowrap text-custom-black',
           'md:text-base',
           'dark:text-custom-green'
         )}

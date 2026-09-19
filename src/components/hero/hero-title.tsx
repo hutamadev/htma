@@ -59,10 +59,10 @@ export default function HeroTitle() {
               {...{
                 className: clsx(
                   neutral.className,
-                  'nameBaffle relative z-[1200] whitespace-nowrap text-base font-bold text-custom-black',
+                  'nameBaffle relative z-[1200] text-base font-bold whitespace-nowrap text-custom-black',
                   'dark:text-custom-green',
                   'md:text-2xl',
-                  'lg:whitespace-normal lg:text-4xl',
+                  'lg:text-4xl lg:whitespace-normal',
                   '2xl:text-5xl'
                 ),
                 initial: { opacity: 0, x: -24 },
@@ -113,10 +113,10 @@ export default function HeroTitle() {
           exit={{ opacity: 0, x: -24 }}
           {...{
             className: clsx(
-              'w-fit whitespace-nowrap rounded bg-custom-black px-1 text-base font-light text-custom-green',
+              'w-fit rounded bg-custom-black px-1 text-base font-light whitespace-nowrap text-custom-green',
               'dark:text-custom-white-2',
               'md:text-lg',
-              'lg:whitespace-normal lg:bg-transparent lg:text-2xl lg:font-thin lg:text-custom-black',
+              'lg:bg-transparent lg:text-2xl lg:font-thin lg:whitespace-normal lg:text-custom-black',
               '2xl:text-3xl'
             ),
           }}

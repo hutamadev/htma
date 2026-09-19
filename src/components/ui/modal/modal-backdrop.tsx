@@ -9,7 +9,7 @@ export default function ModalBackdrop() {
         <button
           type='button'
           aria-label='Close modal'
-          className='fixed left-0 top-0 z-[1250] min-h-full w-full cursor-default border-none bg-slate-800/70 p-0'
+          className='fixed top-0 left-0 z-[1250] min-h-full w-full cursor-default border-none bg-slate-800/70 p-0'
           onClick={showModalHandler}
         />
       )}

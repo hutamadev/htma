@@ -30,7 +30,7 @@ export default function Portfolio() {
     >
       <div
         className={clsx(
-          'relative flex h-full w-fit items-center gap-x-1 bg-transparent pr-2 pt-1 duration-300',
+          'relative flex h-full w-fit items-center gap-x-1 bg-transparent pt-1 pr-2 duration-300',
           'group-hover/portfolio:rounded group-hover/portfolio:bg-custom-black'
         )}
       >

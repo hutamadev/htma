@@ -11,7 +11,7 @@ export default function ModalClose() {
     <div
       className={clsx(
         isModalShow ? '' : '-translate-y-[999px]',
-        'fixed right-0 top-0 z-[1300] flex h-[10vh] w-full items-center justify-center duration-700',
+        'fixed top-0 right-0 z-[1300] flex h-[10vh] w-full items-center justify-center duration-700',
         'lg:h-[20vh]'
       )}
     >

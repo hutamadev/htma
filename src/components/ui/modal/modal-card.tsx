@@ -42,7 +42,7 @@ export default function ModalCard({
           <h1
             className={clsx(
               neutral.className,
-              'text-start text-5xl uppercase text-custom-black',
+              'text-start text-5xl text-custom-black uppercase',
               'md:text-7xl'
             )}
           >

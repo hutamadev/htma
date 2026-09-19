@@ -28,7 +28,7 @@ export default function Navigation() {
   };
 
   return (
-    <header className='nav-height fixed top-0 z-[1090] flex w-full items-center'>
+    <header className='fixed top-0 z-[1090] flex nav-height w-full items-center'>
       <nav className='layout flex justify-center'>
         <div className={clsx('grid-12 gap-1', 'md:gap-6')}>
           <div className='col-start-1 flex w-fit items-center rounded bg-custom-black px-2 py-1'>
@@ -36,7 +36,7 @@ export default function Navigation() {
               href='/'
               className={clsx(
                 neutral.className,
-                'whitespace-nowrap text-lg font-semibold text-custom-green'
+                'text-lg font-semibold whitespace-nowrap text-custom-green'
               )}
             >
               HTMA

@@ -1,6 +1,6 @@
 # MEMORY — Portfolio Website Update (htma.site)
 
-> **Last Updated:** 2026-09-03
+> **Last Updated:** 2026-09-20
 > **Project:** `/home/hutamatr/git-repo(hutamadev)/htma`
 > **Branch Aktif:** `feat/portfolio-update` (dibuat dari `main`)
 
@@ -145,7 +145,20 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Buat branch baru: `feat/migrate-bun` (mengunci snapshot hasil migrasi Bun murni)
    - Tetap di branch aktif: `feat/portfolio-update` untuk melanjutkan Phase 1
 
-### Session 4 — 2026-09-15
+### Session 5 — 2026-09-20
+
+1. **Eksekusi Penuh Phase 1 — Slice 1.3 (Migrasi Tailwind CSS v4 & M3 Expressive Palette)**:
+   - **Upgrade Engine**: `tailwindcss@^4` & `@tailwindcss/postcss@^4` dipasang via Bun.
+   - **Pruning**: `autoprefixer` dan `tailwind.config.js` dihapus total (Tailwind v4 sepenuhnya CSS-first, vendor prefixing & minification ditangani oleh Lightning CSS engine bawaan).
+   - **PostCSS Setup**: `postcss.config.js` dimigrasikan ke `@tailwindcss/postcss: {}`.
+   - **Prettier Plugin**: `.prettierrc.js` disesuaikan untuk Tailwind v4 (`tailwindStylesheet: './src/styles/globals.css'`).
+   - **M3 Expressive @theme**: `src/styles/globals.css` menggunakan `@import 'tailwindcss';`, `@custom-variant dark (&:where(.dark, .dark *));`, serta blok `@theme` lengkap yang memetakan seluruh role M3 Expressive ke CSS variables `:root` dan `.dark` dari seed `#D3F36A`.
+   - **Backward-Compatible Aliases**: Token lama (`custom-black`, `custom-white`, `custom-white-2`, `custom-green`, `custom-blue`, `lime`) dialiaskan di dalam `@theme` ke CSS variables M3 baru, sehingga 51 komponen lama tetap tampil konsisten tanpa perubahan kode.
+   - **Verifikasi Kualitas (All Green)**:
+     - `bun run format:check`: 100% matched Prettier code style
+     - `bun run typechecks`: 0 error
+     - `bun run lint`: 0 warnings, 0 errors (Oxlint 33ms)
+     - `bun run build`: Berhasil kompilasi dan generate 6/6 static pages (5.7s — lebih cepat berkat Oxide Engine)
 
 1. **Integrasi Agent Skills Suite ke Perencanaan**:
    - Evaluasi menyeluruh via `using-agent-skills`.
@@ -155,11 +168,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - Refactor Section 13 Roadmap menjadi _vertical slices_ terverifikasi.
    - Update `DESIGN.md`:
      - Menghasilkan dan mengunci nilai hex M3 Expressive akurat dari seed `#D3F36A` via `@material/material-color-utilities`.
-2. **Double-Check Mitigations (Doubt-Driven Development)**:
+1. **Double-Check Mitigations (Doubt-Driven Development)**:
    - _Zustand & next-themes_: Wajib upgrade `next-themes@^0.4.4` & `zustand@^5.0.0` untuk peer compatibility React 19.
    - _Tailwind v4 Token Aliasing_: Tambahkan alias backward-compatible (`--color-custom-black`, dll) di `@theme` agar 51 file UI lama tidak rusak.
    - _Phased Locomotive Removal_: Tahan `locomotive-scroll` di Phase 1, baru di-uninstall di Slice 2.1 setelah Lenis terpasang.
-3. **Pemetaan Lead Skills per Fase**:
+1. **Pemetaan Lead Skills per Fase**:
 
 | Fase        | Fokus                                                | Lead Skills                                                | Gate Verifikasi                                               |
 | ----------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
@@ -177,8 +190,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **Branch aktif:** `feat/portfolio-update` (ahead 7 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Slice 1.2.1 committed)
-- **Commit terbaru:** `d09644e` (`feat(deps): upgrade supporting packages, ts 6, and next 15.5.25`)
+- **Working tree:** Modified (Tailwind v4 packages, CSS-first `@theme`, `tailwind.config.js` deleted)
+- **Commit terbaru:** `17634b7` (`docs(memory): sync git state with commit d09644e and slice 1.2.1`)
 
 ---
 
@@ -188,8 +201,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Slice 1.1: Core package upgrade (Next 15, React 19, Motion 12) ✅ (Commit `075609a`)
    - Slice 1.2: Tooling overhaul (Oxlint + Lefthook + next.config.ts) ✅ (Commit `61e6c28`)
    - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) ✅ (Commit `d09644e`)
-   - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4)
-   - Slice 1.4: Typography setup
+   - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4 Full Migration) ✅
+   - Slice 1.4: Typography setup (Google Sans Flex variable font)
 2. Lanjut Phase 2–5 sesuai roadmap irisan vertikal.
 
 ---
