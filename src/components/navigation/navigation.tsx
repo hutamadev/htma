@@ -10,7 +10,7 @@ import LoadingSpin from '@components/ui/loading-spin';
 
 import { useStore } from '@store/useStore';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 
 export default function Navigation() {
   const { theme, setTheme } = useTheme();
@@ -35,7 +35,7 @@ export default function Navigation() {
             <Link
               href='/'
               className={clsx(
-                neutral.className,
+                googleSansFlex.className,
                 'text-lg font-semibold whitespace-nowrap text-custom-green'
               )}
             >

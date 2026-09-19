@@ -4,7 +4,7 @@ import { MdArrowForward } from 'react-icons/md';
 
 import NextImage from '@components/ui/next-image';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 import { langSkillsImage, libFrameSkillsImage } from '@utils/skills-image';
 
 export default function Skills() {
@@ -29,7 +29,7 @@ export default function Skills() {
         />
         <h1
           className={clsx(
-            neutral.className,
+            googleSansFlex.className,
             'text-xl text-custom-black',
             'group-hover:text-custom-green',
             'lg:text-2xl',

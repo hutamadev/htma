@@ -3,7 +3,7 @@ import { MdLink } from 'react-icons/md';
 
 import { useStore } from '@store/useStore';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 
 import NextImage from '../next-image';
 // import ArrowSVG from '../svg/ArrowSVG';
@@ -41,7 +41,7 @@ export default function ModalCard({
         <div className={clsx('grid grid-cols-1')}>
           <h1
             className={clsx(
-              neutral.className,
+              googleSansFlex.className,
               'text-start text-5xl text-custom-black uppercase',
               'md:text-7xl'
             )}

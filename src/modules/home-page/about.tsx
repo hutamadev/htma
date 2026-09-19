@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { MdArrowForward } from 'react-icons/md';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 
 export default function About() {
   return (
@@ -25,7 +25,7 @@ export default function About() {
         />
         <h1
           className={clsx(
-            neutral.className,
+            googleSansFlex.className,
             'text-xl font-normal text-custom-black',
             'group-hover:text-custom-green',
             'lg:text-2xl',

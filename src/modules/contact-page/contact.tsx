@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { MdArrowForward } from 'react-icons/md';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 
 import ContactForm from './contact-form';
 
@@ -27,7 +27,7 @@ export default function Contact() {
         />
         <h1
           className={clsx(
-            neutral.className,
+            googleSansFlex.className,
             'text-xl text-custom-black',
             'group-hover:text-custom-green',
             'lg:text-2xl',

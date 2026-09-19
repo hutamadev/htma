@@ -5,7 +5,7 @@ import LoadingSkeleton from '@components/ui/loading-skeleton';
 
 import { useStore } from '@store/useStore';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 
 export default function HeroTitle() {
   const isClient = useStore((state) => state.isClient);
@@ -58,7 +58,7 @@ export default function HeroTitle() {
             <motion.h1
               {...{
                 className: clsx(
-                  neutral.className,
+                  googleSansFlex.className,
                   'nameBaffle relative z-[1200] text-base font-bold whitespace-nowrap text-custom-black',
                   'dark:text-custom-green',
                   'md:text-2xl',
@@ -78,7 +78,7 @@ export default function HeroTitle() {
             </motion.h1>
             {/* <motion.h1
               className={clsx(
-                neutral.className,
+                googleSansFlex.className,
                 'nameBaffle relative z-[1200] whitespace-nowrap text-base font-bold text-custom-black',
                 'dark:text-custom-green',
                 'md:text-2xl',

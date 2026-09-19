@@ -10,7 +10,7 @@ import ArrowSVG from '@components/ui/svg/ArrowSVG';
 
 import { useStore } from '@store/useStore';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 import { portfolioData } from '@utils/portfolio-data';
 
 export default function Portfolio() {
@@ -42,7 +42,7 @@ export default function Portfolio() {
         />
         <h1
           className={clsx(
-            neutral.className,
+            googleSansFlex.className,
             'text-xl text-custom-black',
             'group-hover/portfolio:text-custom-green',
             'lg:text-2xl',

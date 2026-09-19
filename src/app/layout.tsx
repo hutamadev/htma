@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import Layout from '@components/layout/layout-wrapper';
 
-import { kataGrotesk } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 import { ThemeProvider } from '@utils/theme-provider';
 
 import '@styles/globals.css';
@@ -17,7 +17,8 @@ export default function RootLayout({ children }: Readonly<IRootLayoutProps>) {
     <html lang='en' suppressHydrationWarning>
       <body
         className={clsx(
-          kataGrotesk.className,
+          googleSansFlex.className,
+          googleSansFlex.variable,
           'bg-custom-white-2',
           'dark:bg-custom-black'
         )}

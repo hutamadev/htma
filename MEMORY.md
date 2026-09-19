@@ -159,8 +159,15 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - `bun run typechecks`: 0 error
      - `bun run lint`: 0 warnings, 0 errors (Oxlint 33ms)
      - `bun run build`: Berhasil kompilasi dan generate 6/6 static pages (5.7s — lebih cepat berkat Oxide Engine)
+2. **Eksekusi Phase 1 — Slice 1.4 (Typography Setup — Google Sans Flex)**:
+   - Unduh resmi `GoogleSansFlex.woff2` (55.9 KB variable font) ke `public/fonts/`.
+   - Hapus total 6 file font legacy (`KataGrotesk-*.woff2` dan `NeutralFace*.woff2`).
+   - Setup `src/utils/localFont.ts` dengan export clean `googleSansFlex` (`next/font/local` variable font).
+   - Refactor seluruh komponen yang sebelumnya mengimpor font lama ke `googleSansFlex` (`src/app/layout.tsx`, `hero-title.tsx`, `navigation.tsx`, `modal-card.tsx`, `contact.tsx`, `about.tsx`, `portfolio.tsx`, `skills.tsx`). Tidak ada lagi sisa variabel `kataGrotesk` maupun `neutral`.
+   - Daftarkan `--font-display`, `--font-body`, dan skala tipografi M3 Expressive di `@theme` (`src/styles/globals.css`).
+   - Verifikasi gerbang kualitas lulus penuh: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 23ms), `build` (pass dalam 4.2s, 6/6 static pages).
 
-1. **Integrasi Agent Skills Suite ke Perencanaan**:
+3. **Integrasi Agent Skills Suite ke Perencanaan**:
    - Evaluasi menyeluruh via `using-agent-skills`.
    - Mengadopsi 5 skills kunci: `source-driven-development`, `constraint-driven-development`, `planning-and-task-breakdown` + `incremental-implementation`, `frontend-ui-engineering`, `doubt-driven-development`.
    - Update `BRAINSTORMING.md`:
@@ -168,11 +175,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - Refactor Section 13 Roadmap menjadi _vertical slices_ terverifikasi.
    - Update `DESIGN.md`:
      - Menghasilkan dan mengunci nilai hex M3 Expressive akurat dari seed `#D3F36A` via `@material/material-color-utilities`.
-1. **Double-Check Mitigations (Doubt-Driven Development)**:
+4. **Double-Check Mitigations (Doubt-Driven Development)**:
    - _Zustand & next-themes_: Wajib upgrade `next-themes@^0.4.4` & `zustand@^5.0.0` untuk peer compatibility React 19.
    - _Tailwind v4 Token Aliasing_: Tambahkan alias backward-compatible (`--color-custom-black`, dll) di `@theme` agar 51 file UI lama tidak rusak.
    - _Phased Locomotive Removal_: Tahan `locomotive-scroll` di Phase 1, baru di-uninstall di Slice 2.1 setelah Lenis terpasang.
-1. **Pemetaan Lead Skills per Fase**:
+5. **Pemetaan Lead Skills per Fase**:
 
 | Fase        | Fokus                                                | Lead Skills                                                | Gate Verifikasi                                               |
 | ----------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
@@ -190,8 +197,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **Branch aktif:** `feat/portfolio-update` (ahead 9 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Slice 1.3 committed)
-- **Commit terbaru:** `987a207` (`feat(styling): migrate to tailwind css v4 and m3 expressive theme`)
+- **Working tree:** Modified (Slice 1.4 Typography Setup ready to commit)
+- **Commit terbaru:** `5582708` (`docs(memory): sync git state with commit 987a207 and slice 1.3`)
 
 ---
 
@@ -202,8 +209,12 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Slice 1.2: Tooling overhaul (Oxlint + Lefthook + next.config.ts) ✅ (Commit `61e6c28`)
    - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) ✅ (Commit `d09644e`)
    - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4 Full Migration) ✅ (Commit `987a207`)
-   - Slice 1.4: Typography setup (Google Sans Flex variable font)
-2. Lanjut Phase 2–5 sesuai roadmap irisan vertikal.
+   - Slice 1.4: Typography setup (Google Sans Flex variable font) ✅
+2. **Phase 1 — Foundation SELESAI PENUH** 🎉
+3. Lanjut ke **Phase 2 — Core Components & Mechanics**:
+   - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`)
+   - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`)
+   - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any)
 
 ---
 
