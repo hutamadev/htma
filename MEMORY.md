@@ -187,11 +187,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 7 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 9 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Modified (Tailwind v4 packages, CSS-first `@theme`, `tailwind.config.js` deleted)
-- **Commit terbaru:** `17634b7` (`docs(memory): sync git state with commit d09644e and slice 1.2.1`)
+- **Working tree:** Clean (Slice 1.3 committed)
+- **Commit terbaru:** `987a207` (`feat(styling): migrate to tailwind css v4 and m3 expressive theme`)
 
 ---
 
@@ -201,7 +201,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Slice 1.1: Core package upgrade (Next 15, React 19, Motion 12) ✅ (Commit `075609a`)
    - Slice 1.2: Tooling overhaul (Oxlint + Lefthook + next.config.ts) ✅ (Commit `61e6c28`)
    - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) ✅ (Commit `d09644e`)
-   - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4 Full Migration) ✅
+   - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4 Full Migration) ✅ (Commit `987a207`)
    - Slice 1.4: Typography setup (Google Sans Flex variable font)
 2. Lanjut Phase 2–5 sesuai roadmap irisan vertikal.
 
