@@ -6,9 +6,13 @@
 
 ---
 
-## Status Saat Ini: BRAINSTORMING PHASE (Belum ada kode yang diubah)
+## Status Saat Ini: PHASE 2 — CORE COMPONENTS & MECHANICS (Phase 0 & Phase 1 Selesai Penuh)
 
-Belum ada file source code yang diedit. Hanya 3 file dokumentasi yang ada:
+- **Phase 0 — Runtime Migration**: ✅ Selesai (Bun runtime & package manager, `bun.lock` stabil).
+- **Phase 1 — Foundation (Tooling, Next 15, Tailwind v4, M3 Palette, Google Sans Flex)**: ✅ **100% Selesai**.
+- **Phase 2 — Core Components & Mechanics**: 🚀 **Sedang Berjalan** (Memulai Slice 2.1 Locomotive Scroll → Lenis).
+
+Dokumentasi arsitektur & panduan teknis:
 
 - `BRAINSTORMING.md` — rencana detail update ✅ **Confirmed & final**
 - `DESIGN.md` — panduan desain sistem Material 3 Expressive ✅ **Expanded & confirmed**
@@ -145,60 +149,9 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Buat branch baru: `feat/migrate-bun` (mengunci snapshot hasil migrasi Bun murni)
    - Tetap di branch aktif: `feat/portfolio-update` untuk melanjutkan Phase 1
 
-### Session 5 — 2026-09-20
+### Session 4 — 2026-09-15
 
-1. **Eksekusi Penuh Phase 1 — Slice 1.3 (Migrasi Tailwind CSS v4 & M3 Expressive Palette)**:
-   - **Upgrade Engine**: `tailwindcss@^4` & `@tailwindcss/postcss@^4` dipasang via Bun.
-   - **Pruning**: `autoprefixer` dan `tailwind.config.js` dihapus total (Tailwind v4 sepenuhnya CSS-first, vendor prefixing & minification ditangani oleh Lightning CSS engine bawaan).
-   - **PostCSS Setup**: `postcss.config.js` dimigrasikan ke `@tailwindcss/postcss: {}`.
-   - **Prettier Plugin**: `.prettierrc.js` disesuaikan untuk Tailwind v4 (`tailwindStylesheet: './src/styles/globals.css'`).
-   - **M3 Expressive @theme**: `src/styles/globals.css` menggunakan `@import 'tailwindcss';`, `@custom-variant dark (&:where(.dark, .dark *));`, serta blok `@theme` lengkap yang memetakan seluruh role M3 Expressive ke CSS variables `:root` dan `.dark` dari seed `#D3F36A`.
-   - **Backward-Compatible Aliases**: Token lama (`custom-black`, `custom-white`, `custom-white-2`, `custom-green`, `custom-blue`, `lime`) dialiaskan di dalam `@theme` ke CSS variables M3 baru, sehingga 51 komponen lama tetap tampil konsisten tanpa perubahan kode.
-   - **Verifikasi Kualitas (All Green)**:
-     - `bun run format:check`: 100% matched Prettier code style
-     - `bun run typechecks`: 0 error
-     - `bun run lint`: 0 warnings, 0 errors (Oxlint 23ms)
-     - `bun run build`: Berhasil kompilasi dan generate 6/6 static pages (4.2s)
-2. **Penyempurnaan Font Binding & Implementasi Next.js 15 Best Practices**:
-   - **Font Binding Fix**:
-     - Tambahkan `--font-sans: var(--font-sans), 'Google Sans Flex', system-ui, sans-serif;` di `@theme` (`src/styles/globals.css`).
-     - Terapkan default `font-family: var(--font-sans), ...;` pada selector `html, body`.
-     - Pindahkan `googleSansFlex.variable` ke tag `<html lang="en" className={clsx(googleSansFlex.variable, 'antialiased')}>` di `src/app/layout.tsx` dan sematkan utilitas `font-sans` pada `<body>`.
-     - Verifikasi compiled CSS: `--font-sans` kini resmi terikat ke Google Sans Flex.
-   - **Audit & Implementasi Next.js 15 App Router Best Practices**:
-     - `src/components/ui/next-image.tsx`: Hapus legacy `layout="fill"`, ganti dengan boolean prop `fill?: boolean`, dan bersihkan eslint-disable.
-     - `src/app/not-found.tsx`: Buat custom 404 Not Found page berstandar M3 Expressive.
-     - `src/app/global-error.tsx`: Buat root global error boundary lengkap dengan tag `<html>` & `<body>`.
-     - `src/app/sitemap.ts`: Buat rute metadata XML sitemap dinamis.
-     - `src/app/robots.ts`: Buat rute metadata robots.txt dinamis.
-     - `src/app/manifest.ts`: Buat rute web app manifest dinamis.
-   - **Verifikasi Kualitas Penuh**:
-     - `format:check`: 100% lulus
-     - `typechecks`: 0 error
-     - `lint`: 0 warnings, 0 errors (Oxlint 102ms pada 59 files)
-     - `build`: Sukses kompilasi dan generate 9/9 static pages (termasuk `/manifest.webmanifest`, `/robots.txt`, `/sitemap.xml`, dan `/_not-found`)
-     - `bun run build`: Berhasil kompilasi dan generate 6/6 static pages (5.7s — lebih cepat berkat Oxide Engine)
-3. **Resolusi Font Rendering & Implementasi Next.js 15 Best Practices**:
-   - **Root Cause Terungkap**: File `GoogleSansFlex.woff2` lokal sebelumnya ternyata adalah subset chunk Google Fonts tanpa tabel `cmap` (Character Mapping) untuk huruf latin (U+0000-00FF), sehingga browser fallback diam-diam ke font sistem.
-   - **Solusi Font Definitif**:
-     - Hapus chunk `GoogleSansFlex.woff2` lokal yang tidak lengkap.
-     - Muat Google Sans Flex variable font resmi via Google Fonts CDN `@import url(...)` di `src/styles/globals.css` (mencakup seluruh unicode-range latin & seluruh sumbu variable wght 100–1000 & opsz 6–144).
-     - Bind `--font-sans`, `--font-display`, `--font-body`, serta selector `html, body` langsung ke `'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif`.
-     - `src/utils/localFont.ts` diekspor sebagai `{ className: 'font-sans', variable: '--font-sans' }`, sehingga seluruh 8 komponen otomatis merender font asli Google Sans Flex.
-   - **Audit & Implementasi Next.js 15 App Router Best Practices (Context7)**:
-     - `src/components/ui/next-image.tsx`: Hapus legacy `layout="fill"`, ganti dengan boolean prop `fill?: boolean`, dan bersihkan eslint-disable.
-     - `src/app/not-found.tsx`: Buat custom 404 Not Found page berstandar M3 Expressive.
-     - `src/app/global-error.tsx`: Buat root global error boundary lengkap dengan tag `<html>` & `<body>`.
-     - `src/app/sitemap.ts`: Buat rute metadata XML sitemap dinamis.
-     - `src/app/robots.ts`: Buat rute metadata robots.txt dinamis.
-     - `src/app/manifest.ts`: Buat rute web app manifest dinamis.
-   - **Verifikasi Kualitas Penuh**:
-     - `format:check`: 100% lulus
-     - `typechecks`: 0 error
-     - `lint`: 0 warnings, 0 errors (Oxlint 44ms pada 59 files)
-     - `build`: Sukses kompilasi dalam 5.1s dan generate 9/9 static pages
-
-4. **Integrasi Agent Skills Suite ke Perencanaan**:
+1. **Integrasi Agent Skills Suite ke Perencanaan**:
    - Evaluasi menyeluruh via `using-agent-skills`.
    - Mengadopsi 5 skills kunci: `source-driven-development`, `constraint-driven-development`, `planning-and-task-breakdown` + `incremental-implementation`, `frontend-ui-engineering`, `doubt-driven-development`.
    - Update `BRAINSTORMING.md`:
@@ -206,11 +159,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - Refactor Section 13 Roadmap menjadi _vertical slices_ terverifikasi.
    - Update `DESIGN.md`:
      - Menghasilkan dan mengunci nilai hex M3 Expressive akurat dari seed `#D3F36A` via `@material/material-color-utilities`.
-5. **Double-Check Mitigations (Doubt-Driven Development)**:
+2. **Double-Check Mitigations (Doubt-Driven Development)**:
    - _Zustand & next-themes_: Wajib upgrade `next-themes@^0.4.4` & `zustand@^5.0.0` untuk peer compatibility React 19.
    - _Tailwind v4 Token Aliasing_: Tambahkan alias backward-compatible (`--color-custom-black`, dll) di `@theme` agar 51 file UI lama tidak rusak.
    - _Phased Locomotive Removal_: Tahan `locomotive-scroll` di Phase 1, baru di-uninstall di Slice 2.1 setelah Lenis terpasang.
-6. **Pemetaan Lead Skills per Fase**:
+3. **Pemetaan Lead Skills per Fase**:
 
 | Fase        | Fokus                                                | Lead Skills                                                | Gate Verifikasi                                               |
 | ----------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
@@ -223,27 +176,53 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ---
 
+### Session 5 — 2026-09-20
+
+1. **Phase 1 — Slice 1.3 (Migrasi Tailwind CSS v4 & M3 Expressive Palette)**:
+   - **Upgrade Engine**: `tailwindcss@4.3.3` & `@tailwindcss/postcss@4.3.3` dipasang via Bun.
+   - **Pruning**: `autoprefixer` dan `tailwind.config.js` dihapus total (Tailwind v4 sepenuhnya CSS-first, vendor prefixing & minification ditangani oleh Lightning CSS engine bawaan).
+   - **PostCSS Setup**: `postcss.config.js` dimigrasikan ke `@tailwindcss/postcss: {}`.
+   - **Prettier Plugin**: `.prettierrc.js` disesuaikan untuk Tailwind v4 (`tailwindStylesheet: './src/styles/globals.css'`).
+   - **M3 Expressive @theme**: `src/styles/globals.css` menggunakan `@import 'tailwindcss';`, `@custom-variant dark (&:where(.dark, .dark *));`, serta blok `@theme` lengkap yang memetakan seluruh role M3 Expressive ke CSS variables `:root` dan `.dark` dari seed `#D3F36A`.
+   - **Backward-Compatible Aliases**: Token lama (`custom-black`, `custom-white`, `custom-white-2`, `custom-green`, `custom-blue`, `lime`) dialiaskan di dalam `@theme` ke CSS variables M3 baru, sehingga 51 komponen lama tetap tampil konsisten tanpa perubahan kode.
+   - **Verifikasi Kualitas**: `bun run format:check` (pass), `bun run typechecks` (0 error), `bun run lint` (0 error, Oxlint 33ms), `bun run build` (pass 5.7s, 6/6 static pages). Commit `987a207`.
+2. **Phase 1 — Slice 1.4 (Typography Setup — Google Sans Flex & Next.js 15 Best Practices)**:
+   - **Resolusi Font Google Sans Flex**:
+     - Hapus total 6 file font legacy (`KataGrotesk-*.woff2` & `NeutralFace*.woff2`) dan file slicing rusak.
+     - Muat Google Sans Flex variable font resmi via Google Fonts CDN `@import url(...)` di `src/styles/globals.css` (mencakup seluruh unicode-range latin & seluruh sumbu variable `wght 100–1000` & `opsz 6–144`).
+     - Bind `--font-sans`, `--font-display`, `--font-body`, serta selector `html, body` langsung ke `'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif`.
+     - `src/utils/localFont.ts` diekspor sebagai `{ className: 'font-sans', variable: '--font-sans' }`, dan seluruh 8 komponen direfactor ke nama bersih `googleSansFlex` tanpa menyisakan variabel lama.
+   - **Implementasi Best Practices Next.js 15 App Router (Context7 Audit)**:
+     - `src/components/ui/next-image.tsx`: Hapus legacy `layout="fill"`, ganti dengan boolean prop `fill?: boolean`, bersihkan eslint suppression.
+     - `src/app/not-found.tsx`: Buat custom 404 Not Found page berstandar M3 Expressive.
+     - `src/app/global-error.tsx`: Buat root global error boundary lengkap dengan tag `<html>` & `<body>`.
+     - Metadata routes dinamis native TypeScript: `src/app/sitemap.ts`, `src/app/robots.ts`, `src/app/manifest.ts`.
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 44ms), `build` (pass 5.1s, 9/9 static pages). Commit `f6893a6` & `4694f6e`.
+3. **Phase 2 — Slice 2.1 (Locomotive Scroll → Native Lenis Migration)**:
+   - **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering` (diaktifkan).
+   - Refactor `src/components/ui/page-wrapper.tsx` menggunakan `Lenis` native dengan konfigurasi identik (`lerp: 0.06`, `smoothWheel: true`), loop `requestAnimationFrame`, serta cleanup lifecycle `lenis.destroy()` dan `cancelAnimationFrame(rafId)` saat unmount untuk mencegah memory leak.
+   - Import default styles `lenis/dist/lenis.css` ke dalam `src/styles/globals.css`.
+   - Hapus paket `locomotive-scroll` dari `package.json` dan `bun.lock` (1 package removed).
+   - Update `BRAINSTORMING.md` dan `MEMORY.md` menandai Phase 1 selesai penuh (100%).
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 32ms), `build` (pass 7.4s, 9/9 static pages).
+
+---
+
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 13 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 14 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Font fix & Next.js 15 best practices committed)
-- **Commit terbaru:** `4694f6e` (`fix(font): resolve google sans flex rendering and implement next 15 best practices`)
+- **Working tree:** Modified (Slice 2.1 completed, ready to commit)
+- **Commit terbaru:** `6b47ff1` (`docs(memory): sync git state with commit 4694f6e`)
 
 ---
 
 ## Langkah Selanjutnya
 
-1. Eksekusi **Phase 1 — Foundation** di branch `feat/portfolio-update` slice-by-slice:
-   - Slice 1.1: Core package upgrade (Next 15, React 19, Motion 12) ✅ (Commit `075609a`)
-   - Slice 1.2: Tooling overhaul (Oxlint + Lefthook + next.config.ts) ✅ (Commit `61e6c28`)
-   - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) ✅ (Commit `d09644e`)
-   - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4 Full Migration) ✅ (Commit `987a207`)
-   - Slice 1.4: Typography setup (Google Sans Flex variable font) ✅ (Commit `f6893a6`)
-2. **Phase 1 — Foundation SELESAI PENUH** 🎉
-3. Lanjut ke **Phase 2 — Core Components & Mechanics**:
-   - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`)
+1. **Phase 1 — Foundation SELESAI PENUH** ✅ (Semua slice 1.1–1.4 terverifikasi dan ter-commit)
+2. Eksekusi **Phase 2 — Core Components & Mechanics**:
+   - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`) ✅
    - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`)
    - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any)
 

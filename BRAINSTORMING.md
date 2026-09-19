@@ -1257,45 +1257,52 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 
 ---
 
-### Phase 1 — Foundation (Dependencies, Tooling & Design Tokens)
+### Phase 1 — Foundation (Dependencies, Tooling & Design Tokens) — ✅ SELESAI
 
 - **Lead Skill**: `source-driven-development` + `incremental-implementation`
 - **Objective**: Membangun fondasi runtime, linter, css tokens, dan font tanpa merusak compile.
+- **Status**: ✅ **100% SELESAI** (Semua slice terverifikasi lulus gerbang kualitas)
 
-- **Slice 1.1 — Package Upgrade & Peer Resolution (Mitigasi)**:
+- **Slice 1.1 — Package Upgrade & Peer Resolution (Mitigasi)**: ✅ SELESAI
   - Action:
     - Upgrade core: Next.js 15, React 19, `motion@^12`, `lenis`, `zod`, `@hookform/resolvers`, `@material/material-color-utilities`.
     - Upgrade pendukung (hasil double-check): `next-themes@^0.4.4` (peer React 19 support) & `zustand@^5.0.0` (concurrent safe).
     - Hapus `baffle` dari dependencies.
     - **PENTING (Mitigasi)**: JANGAN hapus `locomotive-scroll` di Phase 1 ini agar `src/components/ui/page-wrapper.tsx` tidak langsung crash saat dev/build. `locomotive-scroll` baru dicabut di Slice 2.1 setelah Lenis aktif.
-  - Verifikasi: `bun install` berhasil 0 peer conflicts, dry-run compile pass.
-- **Slice 1.2 — Tooling Overhaul (Oxlint & Lefthook)**:
+  - Verifikasi: `bun install` berhasil 0 peer conflicts, dry-run compile pass. Commit `075609a`.
+- **Slice 1.2 — Tooling Overhaul (Oxlint & Lefthook)**: ✅ SELESAI
   - Action: Setup `.oxlintrc.json`, hapus artifacts ESLint (`.eslintrc.js`, `.eslintignore`, paket eslint). Setup `next.config.ts` dengan `eslint: { ignoreDuringBuilds: true }`. Setup `lefthook.yml` (ganti Husky).
-  - Verifikasi: `bun run lint` (Oxlint) berjalan 0 warnings/errors, `bun run typechecks` lulus.
-- **Slice 1.2.1 — Supporting Packages Maintenance (Update & Deprecations Pruning)**:
+  - Verifikasi: `bun run lint` (Oxlint) berjalan 0 warnings/errors, `bun run typechecks` lulus. Commit `61e6c28`.
+- **Slice 1.2.1 — Supporting Packages Maintenance (Update & Deprecations Pruning)**: ✅ SELESAI
   - Action:
     - Update paket utama & pendukung ke versi LATEST yang terbukti aman & stabil:
       - React: `react@^19.3.0`, `react-dom@^19.3.0`, `@types/react@^19.3.0`, `@types/react-dom@^19.3.0`.
       - Motion: `motion@^13.3.0`, `framer-motion@^13.3.0`.
       - Form & Validation: `zod@4.6.5`, `@hookform/resolvers@5.9.1`, `react-hook-form@^7.88.0`.
-      - Tooling & Utilities: `@commitlint/*@^21.2.2`, `prettier@^3.9.6`, `prettier-plugin-tailwindcss@^0.8.1`, `postcss@8.5.28`, `autoprefixer@10.6.1`, `cssnano@^9.0.4`, `@material/material-color-utilities@^0.4.0`, `@vercel/analytics@^2.0.1`, `sharp@^0.35.4`, `react-icons@^5.7.0`, `react-hot-toast@^2.6.0`, `lenis@^1.3.26`, `locomotive-scroll@5.0.1`, `next-themes@^0.4.6`, `zustand@^5.0.15`, `@types/node@^26.5.1`.
+      - Tooling & Utilities: `@commitlint/*@^21.2.2`, `prettier@^3.9.6`, `prettier-plugin-tailwindcss@^0.8.1`, `postcss@8.5.28`, `cssnano@^9.0.4`, `@material/material-color-utilities@^0.4.0`, `@vercel/analytics@^2.0.1`, `sharp@^0.35.4`, `react-icons@^5.7.0`, `react-hot-toast@^2.6.0`, `lenis@^1.3.26`, `locomotive-scroll@5.0.1`, `next-themes@^0.4.6`, `zustand@^5.0.15`, `@types/node@^26.5.1`.
     - Modernisasi `tsconfig.json` (`target: es2022`, `moduleResolution: bundler`, path aliases `./src/*`) & deklarasi CSS module di `types.d.ts`.
     - Audit & eliminasi total paket usang/deprekasi: `eslint`, `eslint-config-next`, `@typescript-eslint/*`, `eslint-config-prettier`, `eslint-plugin-*`, `husky`, `lint-staged`.
     - Perampingan [`commitlint.config.js`](<file:///home/hutamatr/git-repo(hutamadev)/htma/commitlint.config.js>) (menghapus redundant defaults & tipe monorepo tak terpakai).
     - **PENTING (Mitigasi Doubt-Driven & Penahanan Terkalibrasi)**:
-      - _TypeScript_: Di-upgrade ke `typescript@6.0.3` (TS 6 terbukti 100% kompatibel dengan Next.js 15 config loader dan compile build, sedangkan TS 7 ditahan karena perubahan compiler API).
-      - _Next.js_: Terkunci pada versi rilis penuh terbaru `next@15.5.25` (Next 16 ditahan karena Turbopack breaking changes).
-      - _Tailwind_: Tahan pada `tailwindcss@3.4.13` sampai masuk gerbang **Slice 1.3** khusus migrasi CSS `@theme`.
+      - _TypeScript_: Di-upgrade ke `typescript@6.0.3` (TS 6 terbukti 100% kompatibel dengan Next.js 15 config loader dan compile build).
+      - _Next.js_: Terkunci pada versi rilis penuh terbaru `next@15.5.25`.
       - _Baffle_: Tahan `baffle@^0.3.6` secara temporer (sampai Slice 2.2 native scramble hook) agar `src/components/hero/hero.tsx` tidak crash pada instalasi baru.
-  - Verifikasi: `bun install` 0 peer conflicts, `bun run lint` (0 error), `bun run typechecks` (pass), `bun run build` (pass, 6/6 static pages).
-- **Slice 1.3 — M3 Expressive Palette & Backward-Compatible Aliases**:
+  - Verifikasi: `bun install` 0 peer conflicts, `bun run lint` (0 error), `bun run typechecks` (pass), `bun run build` (pass, 6/6 static pages). Commit `d09644e`.
+- **Slice 1.3 — M3 Expressive Palette & Backward-Compatible Aliases (Tailwind v4 Full Migration)**: ✅ SELESAI
   - Action:
-    - Tulis CSS variables M3 resmi dari seed `#D3F36A` ke `src/styles/globals.css`.
-    - **PENTING (Mitigasi Tailwind v4)**: Sediakan alias token lama di `@theme` (`--color-custom-black`, `--color-custom-green`, `--color-custom-white`) yang memetakan ke token M3 baru agar 51 file komponen tidak langsung _broken styling_ sebelum giliran refactor di Phase 3.
-  - Verifikasi: Token CSS terdaftar dan style lama tetap render dengan palet M3 baru.
-- **Slice 1.4 — Typography Setup**:
-  - Action: Setup Google Sans Flex variable font (6 variable axes). Hapus file font lama (Kata Grotesk & Neutral Face).
-  - Verifikasi: `bun run build` sukses, font ter-load.
+    - Upgrade penuh ke `tailwindcss@4.3.3` & `@tailwindcss/postcss@4.3.3`.
+    - Hapus total `tailwind.config.js` dan `autoprefixer` (beralih ke 100% CSS-first `@theme` + Lightning CSS).
+    - Sediakan alias token lama di `@theme` (`--color-custom-black`, `--color-custom-green`, `--color-custom-white`, dll) yang memetakan ke token M3 baru agar 51 file komponen tidak broken styling.
+    - Sediakan CSS variables M3 resmi dari seed `#D3F36A` di `:root` dan `.dark`.
+  - Verifikasi: `bun run format:check` (pass), `bun run lint` (0 error), `bun run typechecks` (pass), `bun run build` (pass, 6/6 static pages). Commit `987a207`.
+- **Slice 1.4 — Typography Setup (Google Sans Flex)**: ✅ SELESAI
+  - Action:
+    - Setup Google Sans Flex variable font via Google Fonts CDN resmi (`@import` di `globals.css`), mencakup seluruh unicode-range dan variable axes (`wght 100-1000`, `opsz 6-144`).
+    - Hapus total 6 file font legacy (`KataGrotesk-*.woff2` & `NeutralFace*.woff2`).
+    - Refactor seluruh komponen ke export bersih `googleSansFlex` di `src/utils/localFont.ts` tanpa meninggalkan variabel lama.
+    - Bind `--font-sans`, `--font-display`, `--font-body`, serta selector `html, body` langsung ke `'Google Sans Flex'`.
+    - Implementasi best practices Next.js 15 App Router: fix prop `fill` di `next-image.tsx`, custom `not-found.tsx`, root `global-error.tsx`, dan metadata routes dinamis (`sitemap.ts`, `robots.ts`, `manifest.ts`).
+  - Verifikasi: `bun run build` menghasilkan 9/9 static pages/routes, `bun run lint` (0 error), `bun run typechecks` (0 error). Commit `f6893a6` & `4694f6e`.
 
 ---
 
