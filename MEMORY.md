@@ -194,11 +194,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 9 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 11 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Modified (Slice 1.4 Typography Setup ready to commit)
-- **Commit terbaru:** `5582708` (`docs(memory): sync git state with commit 987a207 and slice 1.3`)
+- **Working tree:** Clean (Slice 1.4 committed)
+- **Commit terbaru:** `f6893a6` (`feat(typography): migrate to google sans flex variable font`)
 
 ---
 
@@ -209,7 +209,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Slice 1.2: Tooling overhaul (Oxlint + Lefthook + next.config.ts) ✅ (Commit `61e6c28`)
    - Slice 1.2.1: Supporting packages maintenance (Update & Deprecations Pruning) ✅ (Commit `d09644e`)
    - Slice 1.3: M3 color palette generation & backward aliases (Tailwind v4 Full Migration) ✅ (Commit `987a207`)
-   - Slice 1.4: Typography setup (Google Sans Flex variable font) ✅
+   - Slice 1.4: Typography setup (Google Sans Flex variable font) ✅ (Commit `f6893a6`)
 2. **Phase 1 — Foundation SELESAI PENUH** 🎉
 3. Lanjut ke **Phase 2 — Core Components & Mechanics**:
    - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`)
