@@ -204,7 +204,15 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Import default styles `lenis/dist/lenis.css` ke dalam `src/styles/globals.css`.
    - Hapus paket `locomotive-scroll` dari `package.json` dan `bun.lock` (1 package removed).
    - Update `BRAINSTORMING.md` dan `MEMORY.md` menandai Phase 1 selesai penuh (100%).
-   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 32ms), `build` (pass 7.4s, 9/9 static pages).
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 32ms), `build` (pass 7.4s, 9/9 static pages). Commit `ef733db`.
+4. **Phase 2 — Slice 2.2 (Native `useTextScramble` Hook — Eliminasi `baffle`)**:
+   - **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering` (diaktifkan).
+   - Buat `src/hooks/useTextScramble.ts` native React/TS hook dengan pengelolaan lifecycle ketat (`intervalsRef` & `timeoutsRef` dibersihkan otomatis pada unmount) untuk mencegah memory leak.
+   - Refactor `src/components/hero/hero.tsx` untuk memanggil `useTextScramble` dengan efek visual dan timing yang identik (`characters: 'xxxxxxxxxxxx'`, `speed: 100`, `revealDuration: 1000`, `revealDelay: 100`).
+   - Hapus file wrapper `src/hooks/useBaffle.ts`.
+   - Hapus deklarasi modul `declare module 'baffle';` dari `types.d.ts`.
+   - Uninstall dependensi `baffle` dari `package.json` dan `bun.lock` (1 package removed).
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 28ms), `build` (pass 6.8s, 9/9 static pages).
 
 ---
 
@@ -213,8 +221,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **Branch aktif:** `feat/portfolio-update` (ahead 15 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Slice 2.1 committed)
-- **Commit terbaru:** `ef733db` (`refactor(scroll): replace locomotive-scroll with native lenis`)
+- **Working tree:** Modified (Slice 2.2 completed, ready to commit)
+- **Commit terbaru:** `e5f6bea` (`docs(memory): sync git state with commit ef733db`)
 
 ---
 
@@ -223,7 +231,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 1. **Phase 1 — Foundation SELESAI PENUH** ✅ (Semua slice 1.1–1.4 terverifikasi dan ter-commit)
 2. Eksekusi **Phase 2 — Core Components & Mechanics**:
    - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`) ✅ (Commit `ef733db`)
-   - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`)
+   - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`) ✅
    - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any)
 
 ---

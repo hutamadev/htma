@@ -12,7 +12,6 @@
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
         "@vercel/analytics": "^2.0.1",
-        "baffle": "^0.3.6",
         "clsx": "^2.1.1",
         "framer-motion": "^13.3.0",
         "lenis": "^1.3.26",
@@ -275,8 +274,6 @@
     "argparse": ["argparse@2.0.1", "", {}, "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="],
 
     "argue-cli": ["argue-cli@3.2.0", "", {}, "sha512-VipTB0gXgGIFO2Rg9yEVN5wLt2AurJcZqDbgmYSwPwsykhLrQhs240/bfceev4w68lI8JshoOJIk9uW7tFzROw=="],
-
-    "baffle": ["baffle@0.3.6", "", {}, "sha512-EAae8dURqcjcuQOXdU69vvLX50NobtFyPwhCZGd40sz220E+4b47X8I24Uuj44bYoIY7ieNdgrtvhFdZM5/qag=="],
 
     "baseline-browser-mapping": ["baseline-browser-mapping@2.11.23", "", { "bin": { "baseline-browser-mapping": "dist/cli.cjs" } }, "sha512-le521dGVfxM7yRX0EikCoSz+rOK+hHzdDt/E7mG1jOJB/6WAAUuwVroLwaB7ApaUsz5Q0kFlDXLSA9MheUIfRQ=="],
 

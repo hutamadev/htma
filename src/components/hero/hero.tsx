@@ -5,14 +5,14 @@ import { useEffect } from 'react';
 
 import { useStore } from '@store/useStore';
 
-import useBaffle from '@hooks/useBaffle';
+import useTextScramble from '@hooks/useTextScramble';
 
 import HeroImages from './hero-images';
 import HeroSocials from './hero-socials';
 import HeroTitle from './hero-title';
 
 export default function Hero() {
-  const { newBaffle } = useBaffle('.nameBaffle');
+  const { scramble } = useTextScramble('.nameBaffle');
 
   const clientHandler = useStore((state) => state.clientHandler);
 
@@ -23,7 +23,7 @@ export default function Hero() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      newBaffle();
+      scramble();
     }, 2700);
 
     return () => clearTimeout(timer);

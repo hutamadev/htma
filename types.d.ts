@@ -1,5 +1,4 @@
 declare module '*.css';
-declare module 'baffle';
 
 interface Inputs {
   from_name: string;
