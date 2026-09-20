@@ -240,11 +240,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 20 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 21 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Modified (Slice 2.4 completed, ready to commit)
-- **Commit terbaru:** `2c56188` (`perf(cursor): optimize custom cursor with pointermove and raf throttle`)
+- **Working tree:** Clean (Slice 2.4 committed)
+- **Commit terbaru:** `a8d20c7` (`feat(navigation): apply m3 surface styling and sun moon theme toggle`)
 
 ---
 
@@ -255,7 +255,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`) ✅ (Commit `ef733db`)
    - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`) ✅ (Commit `c4380aa`)
    - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any) ✅ (Commit `2c56188`)
-   - Slice 2.4: Layout & Navigation (solid `bg-surface`, Sun/Moon icon toggle) ✅
+   - Slice 2.4: Layout & Navigation (solid `bg-surface`, Sun/Moon icon toggle) ✅ (Commit `a8d20c7`)
 3. Lanjut ke **Phase 3 — Sections (Home Page)**:
    - Slice 3.1: Hero Section (M3 Expressive typography hierarchy & layout alignment)
    - Slice 3.2: About Section (M3 section header & surface card containment)
