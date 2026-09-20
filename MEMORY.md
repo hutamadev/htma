@@ -218,11 +218,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 15 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 17 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Modified (Slice 2.2 completed, ready to commit)
-- **Commit terbaru:** `e5f6bea` (`docs(memory): sync git state with commit ef733db`)
+- **Working tree:** Clean (Slice 2.2 committed)
+- **Commit terbaru:** `c4380aa` (`refactor(hero): replace baffle with native useTextScramble hook`)
 
 ---
 
@@ -231,7 +231,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 1. **Phase 1 — Foundation SELESAI PENUH** ✅ (Semua slice 1.1–1.4 terverifikasi dan ter-commit)
 2. Eksekusi **Phase 2 — Core Components & Mechanics**:
    - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`) ✅ (Commit `ef733db`)
-   - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`) ✅
+   - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`) ✅ (Commit `c4380aa`)
    - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any)
 
 ---
