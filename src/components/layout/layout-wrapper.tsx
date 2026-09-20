@@ -15,8 +15,7 @@ export default function Layout({ children }: Readonly<ILayoutProps>) {
     <>
       <div
         className={clsx(
-          'visible fixed top-0 z-[1030] h-[8%] w-full bg-custom-white-2 mask-top',
-          'dark:bg-custom-black'
+          'visible fixed top-0 z-[1030] h-[8%] w-full bg-surface mask-top'
         )}
       ></div>
       <Navigation />
@@ -33,8 +32,7 @@ export default function Layout({ children }: Readonly<ILayoutProps>) {
       </main>
       <div
         className={clsx(
-          'visible fixed bottom-0 z-[1050] h-[8%] w-full bg-custom-white-2 mask-bottom',
-          'dark:bg-custom-black'
+          'visible fixed bottom-0 z-[1050] h-[8%] w-full bg-surface mask-bottom'
         )}
       ></div>
     </>

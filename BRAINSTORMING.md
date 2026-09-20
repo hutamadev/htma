@@ -1306,10 +1306,11 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 
 ---
 
-### Phase 2 — Core Components & Mechanics
+### Phase 2 — Core Components & Mechanics — ✅ SELESAI
 
 - **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering` (aktif)
 - **Objective**: Mengganti engine scroll, text scramble, dan cursor dengan performa tinggi & hasil visual identik.
+- **Status**: ✅ **100% SELESAI** (Seluruh slice 2.1–2.4 terverifikasi lulus gerbang kualitas)
 
 - **Slice 2.1 — Lenis Smooth Scroll & Locomotive Cleanup**: ✅ SELESAI
   - Action: Implementasi Lenis di `src/components/ui/page-wrapper.tsx` dengan rAF loop dan lifecycle cleanup. Hapus `locomotive-scroll` dari `package.json` dan `bun.lock`.
@@ -1319,10 +1320,10 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
   - Verifikasi: Efek decoding scramble identik visualnya dengan Baffle.js. Commit `c4380aa`.
 - **Slice 2.3 — Cursor Optimization**: ✅ SELESAI
   - Action: Refactor `src/hooks/useCursorPosition.ts` (`pointermove`, `passive: true`, `requestAnimationFrame` throttle, coarse pointer detection, hapus tipe `any`, dan tambahkan `aria-hidden="true"` pada `custom-cursor.tsx`).
-  - Verifikasi: Performa 60fps tanpa frame drop, strict types `PointerEvent`, 0 linter warning.
-- **Slice 2.4 — Layout & Navigation**:
-  - Action: Update `src/components/layout/layout-wrapper.tsx` & `src/components/navigation/navigation.tsx` (solid `bg-surface`, Sun/Moon icon toggle ganti `MdGraphicEq`).
-  - Verifikasi: Toggle theme smooth, layout vertical tetap terkunci.
+  - Verifikasi: Performa 60fps tanpa frame drop, strict types `PointerEvent`, 0 linter warning. Commit `2c56188`.
+- **Slice 2.4 — Layout & Navigation (M3 Surface & Sun/Moon Toggle)**: ✅ SELESAI
+  - Action: Update `src/components/layout/layout-wrapper.tsx` & `src/components/navigation/navigation.tsx` (solid `bg-surface`, Sun/Moon icon toggle `MdLightMode`/`MdDarkMode` menggantikan `MdGraphicEq`, eliminasi rotated text, logo M3 `rounded-xl`, WCAG AA `aria-label`).
+  - Verifikasi: Toggle theme smooth, layout vertical tetap terkunci, build static 9/9 pages lulus penuh.
 
 ---
 

@@ -6,11 +6,12 @@
 
 ---
 
-## Status Saat Ini: PHASE 2 — CORE COMPONENTS & MECHANICS (Phase 0 & Phase 1 Selesai Penuh)
+## Status Saat Ini: PHASE 3 — SECTIONS (HOME PAGE) (Phase 0, 1, & 2 Selesai Penuh)
 
 - **Phase 0 — Runtime Migration**: ✅ Selesai (Bun runtime & package manager, `bun.lock` stabil).
 - **Phase 1 — Foundation (Tooling, Next 15, Tailwind v4, M3 Palette, Google Sans Flex)**: ✅ **100% Selesai**.
-- **Phase 2 — Core Components & Mechanics**: 🚀 **Sedang Berjalan** (Memulai Slice 2.1 Locomotive Scroll → Lenis).
+- **Phase 2 — Core Components & Mechanics**: ✅ **100% Selesai** (Slices 2.1, 2.2, 2.3, 2.4).
+- **Phase 3 — Sections (Home Page)**: 🚀 **Siap Dimulai** (Slice 3.1 Hero Section).
 
 Dokumentasi arsitektur & panduan teknis:
 
@@ -223,28 +224,46 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - Sesuaikan centering offset ke 12px (`clientX - 12`, `clientY - 12`) menyesuaikan ukuran kursor 24px (`h-6 w-6`).
    - Sempurnakan `src/components/ui/custom-cursor.tsx`: Tambahkan atribut `aria-hidden="true"` agar elemen visual dekoratif diabaikan oleh screen reader (WCAG AA accessibility).
    - Sempurnakan `.cursor` di `src/styles/globals.css`: Reset anchor coordinates ke `left: 0; top: 0;` dan sembunyikan otomatis pada touch devices via `@media (pointer: coarse) { display: none; }`.
-   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 33ms), `build` (pass 5.9s, 9/9 static pages).
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 33ms), `build` (pass 5.9s, 9/9 static pages). Commit `2c56188`.
+6. **Phase 2 — Slice 2.4 (Layout & Navigation: M3 Surface & Sun/Moon Toggle)**:
+   - **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering` (diaktifkan).
+   - Refactor `src/components/navigation/navigation.tsx`:
+     - Ganti icon equalizer `MdGraphicEq` dan rotated text dengan icon **Sun/Moon** modern (`MdLightMode` & `MdDarkMode`) dalam M3 rounded-full icon button.
+     - Tambahkan `aria-label="Switch to light/dark mode"` untuk kepatuhan aksesibilitas WCAG AA.
+     - Perbarui logo badge "HTMA" dengan M3 `rounded-xl`, tracking, dan contrast hover states.
+     - Tetapkan header background solid `bg-surface` dengan `border-b border-outline-variant/30`.
+   - Refactor `src/components/layout/layout-wrapper.tsx`:
+     - Ganti `bg-custom-white-2 dark:bg-custom-black` pada `mask-top` dan `mask-bottom` dengan semantic M3 token `bg-surface`.
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 24ms), `build` (pass 3.8s, 9/9 static pages).
 
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 19 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 20 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Slice 2.3 committed)
+- **Working tree:** Modified (Slice 2.4 completed, ready to commit)
 - **Commit terbaru:** `2c56188` (`perf(cursor): optimize custom cursor with pointermove and raf throttle`)
 
 ---
 
 ## Langkah Selanjutnya
 
-1. **Phase 1 — Foundation SELESAI PENUH** ✅ (Semua slice 1.1–1.4 terverifikasi dan ter-commit)
-2. Eksekusi **Phase 2 — Core Components & Mechanics**:
+1. **Phase 1 — Foundation SELESAI PENUH** ✅
+2. **Phase 2 — Core Components & Mechanics SELESAI PENUH** ✅:
    - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`) ✅ (Commit `ef733db`)
    - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`) ✅ (Commit `c4380aa`)
    - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any) ✅ (Commit `2c56188`)
-   - Slice 2.4: Layout & Navigation (solid `bg-surface`, Sun/Moon icon toggle)
+   - Slice 2.4: Layout & Navigation (solid `bg-surface`, Sun/Moon icon toggle) ✅
+3. Lanjut ke **Phase 3 — Sections (Home Page)**:
+   - Slice 3.1: Hero Section (M3 Expressive typography hierarchy & layout alignment)
+   - Slice 3.2: About Section (M3 section header & surface card containment)
+   - Slice 3.3: Skills Section (M3 section header, grid spacing, skill chips)
+   - Slice 3.4: Portfolio Section (M3 elevated card, eliminasi brutalist offset shadow, overlay)
+   - Slice 3.5: Modal Dialog (M3 expressive bottom-sheet/dialog, full rounded-3xl)
+   - Slice 3.6: Sidebar / Navigation Rail (M3 expressive active pill indicators)
+   - Slice 3.7: Footer (M3 expressive typography & copyright alignment)
 
 ---
 
