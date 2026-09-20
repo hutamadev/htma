@@ -18,6 +18,7 @@ export default function CustomCursor() {
         translateX: cursorXSpring,
         translateY: cursorYSpring,
       }}
-    ></motion.div>
+      aria-hidden='true'
+    />
   );
 }

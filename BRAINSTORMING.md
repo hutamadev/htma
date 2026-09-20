@@ -1308,27 +1308,27 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 
 ### Phase 2 — Core Components & Mechanics
 
-- **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering`
+- **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering` (aktif)
 - **Objective**: Mengganti engine scroll, text scramble, dan cursor dengan performa tinggi & hasil visual identik.
 
-- **Slice 2.1 — Lenis Smooth Scroll & Locomotive Cleanup**:
-  - Action: Implementasi Lenis di `src/components/page-wrapper.tsx`. Setelah Lenis terbukti bekerja identik, hapus `locomotive-scroll` dari `package.json` dan jalankan `bun install`.
-  - Verifikasi: Parity check visual & feel scroll identik 100% dengan sebelumnya. Tidak ada crash runtime.
-- **Slice 2.2 — Native Text Scramble Hook**:
-  - Action: Buat `src/hooks/useTextScramble.ts` (native rAF) menggantikan Baffle.js.
-  - Verifikasi: Efek decoding scramble identik visualnya dengan Baffle.js.
-- **Slice 2.3 — Cursor Optimization**:
-  - Action: Refactor `src/hooks/useCursorPosition.ts` (pointermove, passive listener, rAF throttle, hapus `any`).
-  - Verifikasi: Performa 60fps tanpa frame drop, type-safe.
+- **Slice 2.1 — Lenis Smooth Scroll & Locomotive Cleanup**: ✅ SELESAI
+  - Action: Implementasi Lenis di `src/components/ui/page-wrapper.tsx` dengan rAF loop dan lifecycle cleanup. Hapus `locomotive-scroll` dari `package.json` dan `bun.lock`.
+  - Verifikasi: Parity check visual & feel scroll identik 100%. Commit `ef733db`.
+- **Slice 2.2 — Native Text Scramble Hook (Baffle.js Cleanup)**: ✅ SELESAI
+  - Action: Buat `src/hooks/useTextScramble.ts` (native rAF & timer cleanup), refactor `src/components/hero/hero.tsx`, hapus `useBaffle.ts`, shim `baffle` di `types.d.ts`, dan uninstall paket `baffle`.
+  - Verifikasi: Efek decoding scramble identik visualnya dengan Baffle.js. Commit `c4380aa`.
+- **Slice 2.3 — Cursor Optimization**: ✅ SELESAI
+  - Action: Refactor `src/hooks/useCursorPosition.ts` (`pointermove`, `passive: true`, `requestAnimationFrame` throttle, coarse pointer detection, hapus tipe `any`, dan tambahkan `aria-hidden="true"` pada `custom-cursor.tsx`).
+  - Verifikasi: Performa 60fps tanpa frame drop, strict types `PointerEvent`, 0 linter warning.
 - **Slice 2.4 — Layout & Navigation**:
-  - Action: Update `src/components/layout-wrapper.tsx` & `src/components/navigation.tsx` (solid `bg-surface`, Sun/Moon icon toggle).
+  - Action: Update `src/components/layout/layout-wrapper.tsx` & `src/components/navigation/navigation.tsx` (solid `bg-surface`, Sun/Moon icon toggle ganti `MdGraphicEq`).
   - Verifikasi: Toggle theme smooth, layout vertical tetap terkunci.
 
 ---
 
 ### Phase 3 — Sections (Home Page)
 
-- **Lead Skill**: `frontend-ui-engineering`
+- **Lead Skill**: `frontend-ui-engineering` + `impeccable`
 - **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Containment, Elevation).
 
 - **Slice 3.1 — Hero Section**: M3 typography hierarchy & layout alignment.

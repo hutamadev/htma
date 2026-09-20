@@ -212,16 +212,27 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Hapus file wrapper `src/hooks/useBaffle.ts`.
    - Hapus deklarasi modul `declare module 'baffle';` dari `types.d.ts`.
    - Uninstall dependensi `baffle` dari `package.json` dan `bun.lock` (1 package removed).
-   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 28ms), `build` (pass 6.8s, 9/9 static pages).
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 28ms), `build` (pass 6.8s, 9/9 static pages). Commit `c4380aa`.
+5. **Phase 2 — Slice 2.3 (Custom Cursor Optimization)**:
+   - **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering` (diaktifkan).
+   - Refactor `src/hooks/useCursorPosition.ts`:
+     - Ganti event `mousemove` ke `pointermove` dengan `{ passive: true }`.
+     - Pisahkan event capture dari state update menggunakan `requestAnimationFrame` throttle (maksimal 1 update per frame, menghemat cycle pada mouse 1000Hz+).
+     - Hapus total tipe `any` dan supresi linter; gunakan `PointerEvent` yang type-safe.
+     - Tambahkan guard `window.matchMedia('(pointer: coarse)').matches` agar event listener tidak dipasang pada perangkat layar sentuh/mobile.
+     - Sesuaikan centering offset ke 12px (`clientX - 12`, `clientY - 12`) menyesuaikan ukuran kursor 24px (`h-6 w-6`).
+   - Sempurnakan `src/components/ui/custom-cursor.tsx`: Tambahkan atribut `aria-hidden="true"` agar elemen visual dekoratif diabaikan oleh screen reader (WCAG AA accessibility).
+   - Sempurnakan `.cursor` di `src/styles/globals.css`: Reset anchor coordinates ke `left: 0; top: 0;` dan sembunyikan otomatis pada touch devices via `@media (pointer: coarse) { display: none; }`.
+   - **Verifikasi Kualitas**: `format:check` (pass), `typechecks` (0 error), `lint` (0 error, Oxlint 33ms), `build` (pass 5.9s, 9/9 static pages).
 
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 17 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 18 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Slice 2.2 committed)
+- **Working tree:** Modified (Slice 2.3 completed, ready to commit)
 - **Commit terbaru:** `c4380aa` (`refactor(hero): replace baffle with native useTextScramble hook`)
 
 ---
@@ -232,7 +243,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 2. Eksekusi **Phase 2 — Core Components & Mechanics**:
    - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`) ✅ (Commit `ef733db`)
    - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`) ✅ (Commit `c4380aa`)
-   - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any)
+   - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any) ✅
+   - Slice 2.4: Layout & Navigation (solid `bg-surface`, Sun/Moon icon toggle)
 
 ---
 

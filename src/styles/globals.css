@@ -318,8 +318,8 @@ body {
 .cursor {
   pointer-events: none;
   position: fixed;
-  left: 0.25rem;
-  top: 0.25rem;
+  left: 0;
+  top: 0;
   z-index: 1350;
   height: 1.5rem;
   width: 1.5rem;
@@ -332,9 +332,8 @@ body {
   background-color: var(--color-custom-green);
 }
 
-@media screen and (max-width: 768px) {
+@media (pointer: coarse), screen and (max-width: 768px) {
   .cursor {
-    height: 0;
-    width: 0;
+    display: none;
   }
 }
