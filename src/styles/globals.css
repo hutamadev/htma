@@ -314,7 +314,15 @@ body {
   scrollbar-width: none;
 }
 
-/* Custom Cursor */
+/* Custom Cursor (Robbie Tilton Model + M3 Expressive) */
+@media (pointer: fine) {
+  *,
+  html,
+  body {
+    cursor: none !important;
+  }
+}
+
 .cursor {
   pointer-events: none;
   position: fixed;
@@ -324,16 +332,34 @@ body {
   height: 1.5rem;
   width: 1.5rem;
   border-radius: 9999px;
-  background-color: var(--color-custom-white-2);
+  background-color: var(--color-surface);
   mix-blend-mode: difference;
+  will-change: transform, opacity;
+  transform-origin: center center;
 }
 
 .dark .cursor {
-  background-color: var(--color-custom-green);
+  background-color: var(--color-primary);
+}
+
+/* Magnetic Parallax for interactive elements (Independent CSS translate property) */
+a,
+button,
+[role='button'],
+.magnetic-item {
+  translate: var(--parallax-x, 0px) var(--parallax-y, 0px);
+  will-change: translate;
+  transition: translate 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
 @media (pointer: coarse), screen and (max-width: 768px) {
   .cursor {
-    display: none;
+    display: none !important;
+  }
+  a,
+  button,
+  [role='button'],
+  .magnetic-item {
+    translate: none !important;
   }
 }

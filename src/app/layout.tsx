@@ -19,13 +19,7 @@ export default function RootLayout({ children }: Readonly<IRootLayoutProps>) {
       className={clsx(googleSansFlex.variable, 'antialiased')}
       suppressHydrationWarning
     >
-      <body
-        className={clsx(
-          'font-sans',
-          'bg-custom-white-2',
-          'dark:bg-custom-black'
-        )}
-      >
+      <body className='bg-surface font-sans text-on-surface'>
         <div id='modal-card'></div>
         <div id='modal-backdrop'></div>
         <div id='modal-close'></div>

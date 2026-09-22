@@ -12,21 +12,22 @@ export default function About() {
     >
       <div
         className={clsx(
-          'relative flex h-full w-fit items-center gap-x-2 rounded-xl bg-transparent px-3 py-1 transition-colors duration-200',
-          'group-hover/about:bg-primary-container'
+          'section-header magnetic-item group/header relative flex h-full w-fit cursor-pointer items-center gap-x-2 rounded-xl bg-transparent px-3 py-1.5 transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+          'ml-1 origin-left sm:ml-1.5',
+          'group-hover/about:bg-primary-container hover:scale-[1.03]'
         )}
       >
         <MdArrowForward
           className={clsx(
-            'text-2xl text-primary transition-transform duration-200',
-            'group-hover/about:-rotate-45'
+            'text-2xl text-primary transition-transform duration-300',
+            'group-hover/about:-rotate-45 group-hover/header:-rotate-45'
           )}
         />
         <h2
           className={clsx(
             googleSansFlex.className,
-            'text-headline-sm font-medium text-on-surface transition-colors duration-200',
-            'group-hover/about:text-on-primary-container',
+            'text-headline-sm font-medium text-on-surface transition-colors duration-300',
+            'group-hover/about:text-on-primary-container group-hover/header:text-on-primary-container',
             'dark:text-primary dark:group-hover/about:text-on-primary-container'
           )}
         >
