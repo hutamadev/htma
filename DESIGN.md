@@ -517,7 +517,7 @@ M3 Expressive meniadakan ketergantungan pada layer opasitas elevasi numerik (+1 
 | **Navigation Bar**   | `bg-transparent` (Session 6)   | —                           | None (logo & toggle punya background solid sendiri) |
 | **Portfolio Cards**  | `bg-surface-container`         | `bg-surface-container-high` | Resting: `none`, Hover: `shadow-lg`                 |
 | **Modal Dialog**     | `bg-surface-container-high`    | —                           | `shadow-2xl` + Scrim `bg-on-surface/32`             |
-| **Sidebar Rail**     | `bg-surface-container-highest` | —                           | None                                                |
+| **Sidebar Rail**     | `bg-surface-container-highest` | —                           | None (Slice 3.5)                                    |
 | **Skill Containers** | `bg-surface-container-low`     | `bg-surface-container`      | Resting: `none`, Hover: subtle scale                |
 | **Gradient Masks**   | `bg-surface`                   | —                           | None (fade gradient)                                |
 
@@ -718,26 +718,37 @@ Close button (M3 Icon Button):
 
 ### 12.8 Sidebar / Navigation Rail (M3 Navigation Rail)
 
+Nilai di bawah sudah diterapkan di Slice 3.5:
+
 ```
-Rail container (desktop):
-  bg-surface-container-highest rounded-t-[28px]
+Rail container (desktop, lg:):
+  bg-surface-container-highest (light #E5E5E0, dark #353530)
+  rounded-t-[28px] (M3 Extra Large top shape)
 Active link (M3 Active Indicator):
-  bg-primary-container text-on-primary-container rounded-full px-4
+  bg-primary-container text-on-primary-container rounded-full px-4 py-1.5
 Inactive link:
-  text-on-surface-variant
-  hover: bg-on-surface/8 rounded-full
+  text-on-surface-variant hover:bg-on-surface/8 rounded-full
+Link typography: text-label-lg, rotate-90, transition-colors duration-200
 Scroll-to-top FAB (M3 Small FAB):
   bg-primary-container text-on-primary-container rounded-xl p-2
-  hover: shadow-md bg-primary-container/92
-  dark: bg-primary text-on-primary
+  hover: -translate-y-1 shadow-md
+  focus-visible: outline-2 outline-primary
+  aria-label: "Scroll back to top"
+  data-no-magnetic (opt-out magnetic parallax — lihat catatan di bawah)
 ```
+
+**Catatan cascade (penting):** rule magnetic parallax di `globals.css` adalah CSS
+unlayered, sehingga selalu menang atas utility `translate-*` Tailwind di
+`@layer utilities`. Elemen yang butuh `translate` sendiri harus memakai atribut
+opt-out `data-no-magnetic`, dan selector magnetic memakai `:not([data-no-magnetic])`.
+FAB scroll-top memakai mekanisme ini untuk slide-out `translate-y-[999px]`.
 
 ### 12.9 Footer
 
 ```
-Text: text-body-sm text-on-surface-variant
-Brain icon: text-tertiary
-Separator: border-t border-outline-variant (opsional)
+Text: text-body-sm text-on-surface-variant (light #46483C, dark #C7C8B8)
+Brain icon: text-tertiary (light #3A665E, dark #A1D0C5)
+Separator: TIDAK ditambahkan — Portfolio sudah pakai border-b border-outline-variant
 ```
 
 ### 12.10 Contact Form (M3 Filled Text Fields & Filled Button)

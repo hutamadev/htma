@@ -822,14 +822,18 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 - Scroll-to-top button di bawah
 - Desktop sidebar punya `bg-custom-black` rounded-t-full
 
-**Perubahan M3:**
+**Perubahan M3 (Slice 3.5 — SELESAI):**
 
-- Sidebar background → M3 **Navigation Rail** style:
-  - `bg-surface` dengan `border-l border-outline-variant` (atau tanpa border, cukup elevation)
-  - `rounded-t-full` → `rounded-t-[28px]` (M3 large shape) pada desktop
-- Active link → M3 **Active Indicator**: `bg-primary-container text-on-primary-container rounded-full px-4`
-- Inactive link → `text-on-surface-variant`
-- Scroll-to-top button → M3 **FAB (Small)**: `bg-primary-container text-on-primary-container rounded-xl`
+- Rail container (desktop) → `rounded-t-[28px]` (M3 Extra Large top shape) + `bg-surface-container-highest` (light `#E5E5E0`, dark `#353530`). Varian `dark:` dihapus karena CSS variable sudah auto-switch.
+- Active link → M3 **Active Indicator**: `bg-primary-container text-on-primary-container rounded-full px-4 py-1.5`
+- Inactive link → `text-on-surface-variant` + state layer `hover:bg-on-surface/8`, radius `rounded-full`, `transition-colors`
+- Tipografi link → `text-label-lg`
+- Animasi underline lama (`.menu-link`) **dihapus** dari `globals.css` — digantikan state layer M3. Class itu hanya dipakai di sini, jadi tidak ada orphan.
+- Scroll-to-top button → M3 **FAB (Small)**: `bg-primary-container text-on-primary-container rounded-xl p-2`, hover `-translate-y-1` + `shadow-md`, plus `focus-visible:outline-2` dan `aria-label="Scroll back to top"`.
+
+**Catatan teknis penting (temuan Slice 3.5):**
+
+- Rule magnetic parallax di `globals.css` bersifat **unlayered**, sehingga mengalahkan utility `translate-*` Tailwind yang berada di `@layer utilities` (unlayered selalu menang atas layered di CSS cascade layers). Akibatnya mekanisme sembunyi FAB (`translate-y-[999px]`) sempat mati dan FAB selalu terlihat. Fix: elemen yang butuh `translate` sendiri diberi atribut opt-out `data-no-magnetic`, dan selector magnetic memakai `:not([data-no-magnetic])`.
 
 **Yang TIDAK berubah:**
 
@@ -847,11 +851,11 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 - Simple text: "© Created with 🧠 by htma, {year}"
 - Teks `text-custom-black` / `text-custom-green`
 
-**Perubahan M3:**
+**Perubahan M3 (Slice 3.5 — SELESAI):**
 
-- Teks → `text-on-surface-variant` (subtle, secondary importance)
-- Icon brain → warna `tertiary` (M3 tertiary role untuk decorative elements)
-- Mungkin tambah subtle `border-t border-outline-variant` di atas footer
+- Teks → `text-body-sm` (12px) `text-on-surface-variant` (light `#46483C`, dark `#C7C8B8`). Varian `dark:` dan `md:text-base` dihapus — token surface sudah auto-switch.
+- Icon brain → `text-tertiary` (light `#3A665E`, dark `#A1D0C5`), menggantikan hardcoded `text-red-400` yang tidak mengikuti tema.
+- **Tidak** ditambah `border-t border-outline-variant`: Portfolio sudah memakai `border-b border-outline-variant`, sehingga dua garis akan berdempetan. (Keputusan berbeda dari draf awal dokumen.)
 
 **Yang TIDAK berubah:**
 
@@ -1173,10 +1177,11 @@ scramble({
 - **`use()` hook**: Suspend pada promise, bisa mengganti beberapa `useEffect` patterns
 - **Server Components by default**: Mengurangi client-side JS
 
-### 10.9 Scroll-to-Top Button (`scroll-top.tsx`)
+### 10.9 Scroll-to-Top Button (`scroll-top.tsx`) — ✅ SELESAI (Slice 3.5)
 
-- Saat ini pakai `window.addEventListener('scroll', handleScroll)` tanpa throttle
-- Fix: Tambah `passive: true` dan `requestAnimationFrame` throttle (atau gunakan `IntersectionObserver` sebagai trigger visibility)
+- Sebelumnya: `window.addEventListener('scroll', handleScroll)` tanpa opsi apa pun, dan `setScrollPosition(window.scrollY)` dipanggil pada setiap event scroll → re-render tiap event.
+- Fix: listener memakai `{ passive: true }`, dan state diganti dari offset mentah menjadi **boolean** `isVisible` (`window.scrollY > window.innerHeight / 4`). Set boolean yang sama adalah no-op bagi React, sehingga re-render hanya terjadi saat status visibilitas benar-benar berubah.
+- Efek samping yang ditemukan: karena rule magnetic parallax unlayered mengeset properti `translate` pada semua `button`, mekanisme sembunyi `translate-y-[999px]` tidak pernah aktif. FAB diberi opt-out `data-no-magnetic` (lihat Section 8.7).
 
 ---
 
@@ -1358,7 +1363,8 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 - **Slice 3.2 — About Section (SELESAI)**: M3 section header hover state layer, surface card containment, dan copywriting natural tanpa AI-isms. Commit `623127b`.
 - **Slice 3.3 — Skills Section (SELESAI)**: M3 Surface Container Low cards dengan optical weight balancing, kontras dark mode bersih, dan magnetic hover feedback.
 - **Slice 3.4 — Portfolio Section & Modal (SELESAI)**: M3 Filled Card (`bg-surface-container`, radius 24px) mengikuti referensi desain card (light & dark) — anatomi thumbnail `16/9` di atas + content `p-6` `text-left`, shape morphing hover (`24px → 28px → 16px`), Basic Dialog native `<dialog>` dengan Scrim `bg-on-surface/32`. Grid diperbaiki dari bento span hardcoded (invalid `md:grid-rows-[10]`) menjadi `md:grid-cols-2` + auto rows. Field `description` ditambahkan ke `IPortfolio` + `portfolio-data.ts`.
-- **Slice 3.5 — Sidebar & Footer**: Navigation Rail dengan Active Indicator pill, Small FAB scroll-top dengan magnetic hover attraction, dan footer tertiary accent.
+- **Slice 3.5 — Sidebar & Footer (SELESAI)**: Navigation Rail M3 (`bg-surface-container-highest`, `rounded-t-[28px]`), Active Indicator pill `bg-primary-container`, inactive `text-on-surface-variant` + state layer, Small FAB scroll-top `rounded-xl`, footer `text-body-sm text-on-surface-variant` + brain `text-tertiary`. Animasi underline `.menu-link` lama dihapus dari `globals.css` (digantikan state layer M3).
+- **Phase 3 SELESAI PENUH.** Temuan penting Slice 3.5: rule magnetic parallax unlayered mengalahkan utility `translate-*` Tailwind → mekanisme sembunyi FAB sempat mati; diperbaiki dengan opt-out `data-no-magnetic`.
 - Verifikasi: `bun run typechecks`, `bun run lint`, `bun run build` sukses, visual responsive di desktop & mobile.
 
 **Pekerjaan tambahan di luar slice (Session 6) — sudah selesai:**

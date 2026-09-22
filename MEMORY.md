@@ -11,12 +11,14 @@
 - **Phase 0 — Runtime Migration**: ✅ Selesai (Bun runtime & package manager, `bun.lock` stabil).
 - **Phase 1 — Foundation (Tooling, Next 15, Tailwind v4, M3 Palette, Google Sans Flex)**: ✅ **100% Selesai**.
 - **Phase 2 — Core Components & Mechanics**: ✅ **100% Selesai** (Slices 2.1, 2.2, 2.3, 2.4).
-- **Phase 3 — Sections (Home Page)**: 🔄 **Sedang Berjalan**
+- **Phase 3 — Sections (Home Page)**: ✅ **100% Selesai**
   - Slice 3.1 Hero — ✅ Selesai (commit `7b2ba93`)
   - Slice 3.2 About — ✅ Selesai (commit `623127b`)
   - Slice 3.3 Skills — ✅ Selesai
-  - Slice 3.4 Portfolio Section & Modal — ✅ Selesai (kode; **belum di-commit** atas instruksi user)
-  - Slice 3.5 Sidebar & Footer — ⏳ Belum mulai
+  - Slice 3.4 Portfolio Section & Modal — ✅ Selesai (commit `8e8b307`, `8ab9fde`)
+  - Slice 3.5 Sidebar & Footer — ✅ Selesai
+- **Phase 4 — Contact Page**: ⏳ Berikutnya
+- **Phase 5 — Polish, SEO & Launch**: ⏳ Belum mulai
 
 Dokumentasi arsitektur & panduan teknis:
 
@@ -273,6 +275,16 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - Offset centering di `useCursorPosition.ts` dibaca dari `offsetWidth` elemen `.cursor` (bukan hardcode `-12`) agar tidak drift saat ukuran diubah.
    - Catatan: pendekatan `@property --cursor-size` dicoba tapi tidak resolve ke px di dev (Lightning CSS), sehingga `offsetWidth` dipilih.
 
+8. **Slice 3.5 — Sidebar & Footer** (keputusan user: rail `bg-surface-container-highest`, buang underline, perf fix digabung):
+   - **Sidebar rail**: `lg:rounded-t-full lg:bg-custom-black` / `dark:lg:bg-custom-green` → `lg:rounded-t-[28px] lg:bg-surface-container-highest`. Varian `dark:` dihapus (token auto-switch).
+   - **Sidebar links**: active jadi M3 Active Indicator `bg-primary-container text-on-primary-container rounded-full px-4 py-1.5`; inactive `text-on-surface-variant hover:bg-on-surface/8`; tipografi `text-label-lg`.
+   - **`globals.css`**: blok `.menu-link` (animasi underline, ~48 baris) dihapus — sudah diverifikasi hanya dipakai `sidebar-link.tsx`.
+   - **Scroll-top FAB**: `rounded bg-custom-black` → `rounded-xl bg-primary-container text-on-primary-container`, hover `-translate-y-1 shadow-md`, plus `focus-visible:outline-2` dan `aria-label`.
+   - **Footer**: teks `text-body-sm text-on-surface-variant`, brain `text-tertiary` (sebelumnya hardcoded `text-red-400`). `border-t` **tidak** ditambahkan (Portfolio sudah `border-b`).
+   - **BUG DITEMUKAN & DIPERBAIKI**: rule magnetic parallax di `globals.css` bersifat unlayered → mengalahkan utility `translate-*` Tailwind di `@layer utilities` (unlayered selalu menang atas layered). Akibatnya `translate-y-[999px]` pada FAB tidak pernah aktif dan FAB **selalu terlihat** sejak Session 6. Fix: atribut opt-out `data-no-magnetic` + selector `:not([data-no-magnetic])`.
+   - **Perf fix scroll listener**: `setScrollPosition(window.scrollY)` tiap event → state diganti boolean `isVisible`; listener pakai `{ passive: true }`.
+   - **Verifikasi runtime**: light mode rail `#E5E5E0` / active `#D0EF67`+`#171E00` / inactive+footer `#46483C` / brain `#3A665E`; dark mode rail `#353530` / active `#3D4D00`+`#D0EF67` / brain `#A1D0C5`. Siklus FAB terverifikasi: top `translate: 0px 999px` (di luar viewport) → scroll 2000 `translate: none` (terlihat) → klik → `scrollY: 0` (tersembunyi lagi).
+
 ---
 
 ## Git State
@@ -307,16 +319,16 @@ D  src/components/ui/svg/ArrowSVG.tsx
 
 1. **Phase 1 — Foundation SELESAI PENUH** ✅
 2. **Phase 2 — Core Components & Mechanics SELESAI PENUH** ✅ (Slices 2.1–2.4)
-3. **Phase 3 — Sections (Home Page)**:
+3. **Phase 3 — Sections (Home Page)** — ✅ **SELESAI PENUH**:
    - Slice 3.1: Hero Section ✅ (commit `7b2ba93`)
    - Slice 3.2: About Section ✅ (commit `623127b`)
    - Slice 3.3: Skills Section ✅
-   - Slice 3.4: Portfolio Section & Modal ✅ (kode; belum di-commit)
-   - Slice 3.5: **Sidebar & Footer** ⏳ — berikutnya
-4. **Phase 4 — Contact Page** (Zod + M3 Text Fields)
-5. **Phase 5 — Polish, SEO & Launch** (Lighthouse 90+)
+   - Slice 3.4: Portfolio Section & Modal ✅ (commit `8e8b307`, `8ab9fde`)
+   - Slice 3.5: Sidebar & Footer ✅
+4. **Phase 4 — Contact Page** ⏳ — berikutnya (Zod + M3 Text Fields)
+5. **Phase 5 — Polish, SEO & Launch** ⏳ (Lighthouse 90+)
 
-**Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`.
+**Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
 ---
 
