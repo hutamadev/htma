@@ -621,7 +621,7 @@ Title text: text-headline-sm text-on-surface (heading font)
 Separator: border-outline-variant
 Body text: text-body-lg text-on-surface leading-relaxed
   dark: text-on-surface (auto via dark mode palette)
-Highlighted "Hutama": bg-primary-container text-on-primary-container rounded-lg px-2 py-0.5
+Name "Hutama": font-semibold text-on-surface (natural inline, tanpa background color)
 ```
 
 ### 12.5 Skills Section

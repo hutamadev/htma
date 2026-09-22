@@ -7,54 +7,44 @@ export default function About() {
   return (
     <section
       className={clsx(
-        'group flex cursor-default flex-col gap-y-6 border-y border-y-custom-black/50 py-6',
-        'dark:border-y-custom-white-2/50'
+        'group/about flex cursor-default flex-col gap-y-6 border-y border-outline-variant py-8'
       )}
     >
       <div
         className={clsx(
-          'relative flex h-full w-fit items-center gap-x-1 bg-transparent pt-1 pr-2 duration-300',
-          'group-hover:rounded group-hover:bg-custom-black'
+          'relative flex h-full w-fit items-center gap-x-2 rounded-xl bg-transparent px-3 py-1 transition-colors duration-200',
+          'group-hover/about:bg-primary-container'
         )}
       >
         <MdArrowForward
           className={clsx(
-            'relative -top-1 text-3xl text-custom-green duration-500',
-            'group-hover:-rotate-45'
+            'text-2xl text-primary transition-transform duration-200',
+            'group-hover/about:-rotate-45'
           )}
         />
-        <h1
+        <h2
           className={clsx(
             googleSansFlex.className,
-            'text-xl font-normal text-custom-black',
-            'group-hover:text-custom-green',
-            'lg:text-2xl',
-            'dark:text-custom-green'
+            'text-headline-sm font-medium text-on-surface transition-colors duration-200',
+            'group-hover/about:text-on-primary-container',
+            'dark:text-primary dark:group-hover/about:text-on-primary-container'
           )}
         >
           about
-        </h1>
+        </h2>
       </div>
-      <article
-        className={clsx(
-          'flex flex-col gap-y-4 leading-relaxed text-custom-black',
-          'dark:text-custom-white-2'
-        )}
-      >
-        <p className={clsx('text-sm', 'md:text-base')}>
-          Hello, I'm{' '}
-          <span className='rounded bg-custom-black px-1 py-px text-custom-green'>
-            Hutama
-          </span>
-          , a web developer who creates beautiful and functional websites. With
-          a focus on simplicity and user experience, I specialize in
-          transforming ideas into visually appealing and easy-to-use digital
-          interfaces.
+      <article className='flex flex-col gap-y-4 leading-relaxed text-on-surface'>
+        <p className='text-body-md md:text-body-lg'>
+          Hi, I'm <strong className='font-semibold'>Hutama</strong>, a web
+          developer who builds clean, fast, and responsive websites. I enjoy
+          turning visual designs into functional code, making sure each
+          interface is intuitive, accessible, and comfortable to use.
         </p>
-        <p className={clsx('text-sm', 'md:text-base')}>
-          Continual growth and learning are important to me as a web developer.
-          I stay up to date with the latest industry trends and tools, embracing
-          new technologies to deliver modern and forward-thinking solutions.
+        <p className='text-body-md md:text-body-lg'>
+          I pay close attention to the details, from writing maintainable code
+          under the hood to refining layouts and interaction feel. Since the web
+          evolves constantly, I keep learning and working with modern tools to
+          deliver solid, dependable products.
         </p>
       </article>
     </section>

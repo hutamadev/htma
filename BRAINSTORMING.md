@@ -706,10 +706,10 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 **Perubahan M3:**
 
 - Section header → M3 style: icon warna `primary`, teks warna `on-surface`
-- Hover effect → M3 state layer: `hover:bg-primary/8` (8% opacity overlay)
+- Hover effect → M3 container highlight: `group-hover/about:bg-primary-container rounded-xl`
 - Border separator → `border-outline-variant` (lebih subtle, M3 guideline)
-- Highlighted name "Hutama" → `bg-primary-container text-on-primary-container rounded-md px-1.5 py-0.5`
-- Paragraf teks → `text-on-surface` dengan `Body Large` type scale
+- Name "Hutama" → `font-semibold text-on-surface` (tampilan natural tanpa background color)
+- Paragraf teks → `text-on-surface` dengan `text-body-md md:text-body-lg leading-relaxed`
 
 **Yang TIDAK berubah:**
 
