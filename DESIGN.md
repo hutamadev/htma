@@ -49,6 +49,31 @@ Riset di balik M3 Expressive:
 
 ---
 
+## 2. 5 Pilar Resmi M3 Expressive
+
+Berdasarkan dokumentasi dan riset resmi Google Material Design 3 (`m3.material.io`), M3 Expressive dibangun di atas 5 pilar utama:
+
+1. **Vibrant Color (Dynamic Tonal Palettes):**
+   - Palet HCT (Hue, Chroma, Tone) dengan kontras yang lebih tajam dan hidup.
+   - _Primary Container_ dan _Secondary Container_ dipakai lebih ekspresif dan prominent untuk menarik atensi visual seketika.
+
+2. **Contrasting Shapes & Shape Morphing:**
+   - Skala shape yang luas (dari `rounded-none` hingga `rounded-full`) dengan sudut kurva lebih besar (16px hingga 28px).
+   - Transisi bentuk adaptif (_shape morphing_) saat elemen menerima interaksi (hover, focus, pressed).
+
+3. **Intuitive Motion Physics:**
+   - Menggantikan durasi waktu dan kurva bezier statis dengan **Spring Physics System**.
+   - Memisahkan animasi menjadi dua spesifikasi: **Spatial Specs** (dengan overshoot/bounce terkalibrasi) dan **Effects Specs** (tanpa bounce untuk opasitas dan warna).
+
+4. **Tone-Based Containment:**
+   - Mengelompokkan konten secara visual (_visual grouping_) menggunakan **Tone-based Surface Containers** (`surface-container-lowest` hingga `surface-container-highest`) alih-alih bayangan box-shadow tebal.
+   - Data eye-tracking Google membuktikan pengguna menemukan elemen kunci 4x lebih cepat pada containment yang jelas.
+
+5. **Flexible & Expressive Typography:**
+   - Dukungan penuh font variabel dengan kontras ukuran ekstrem antara teks judul (_Display/Headline_) dan teks isi (_Body/Label_).
+
+---
+
 ## 3. Perbedaan M3 Standard vs M3 Expressive
 
 | Aspek                | M3 Standard             | M3 Expressive                                            |
@@ -392,110 +417,108 @@ Section separator:   py-8 / py-12   (breathing room antar section)
 
 ---
 
-## 9. Motion & Animation
+## 9. Motion & Animation (Motion Physics System)
 
-### 9.1 M3 Expressive Motion Principles
+### 9.1 M3 Expressive Motion Physics Principles
 
-M3 Expressive memperkenalkan **physics-based motion** sebagai pengganti time-based easing tradisional:
+Berdasarkan dokumentasi resmi `m3.material.io/styles/motion/overview/specs` dan `m3.material.io/blog/m3-expressive-motion-theming`, M3 Expressive resmi beralih dari kurva durasi/easing statis warisan lama ke **Motion Physics System (Spring Tokens)**.
 
-- **Spring physics** untuk transisi natural (sudah ada via Framer Motion)
-- **Shape morphing** pada interaksi (border-radius transition)
-- **Emphasized easing** untuk enter/exit animations
-- **Staggered animations** untuk list/grid items
+Sistem ini membagi animasi menjadi dua spesifikasi utama:
 
-### 9.2 Easing Curves
+1. **Spatial Animation Specs:**
+   - Digunakan untuk menganimasikan perubahan fisik: posisi (_position_), ukuran (_scale_), dan bentuk (_shape morphing / border-radius_).
+   - Karakteristik: Menggunakan pegas (_spring_) dengan **overshoot/bounce terkalibrasi** yang memantul lembut ke posisi akhir.
 
-| Type                  | CSS Cubic Bezier                  | Penggunaan                                   |
-| --------------------- | --------------------------------- | -------------------------------------------- |
-| Emphasized            | `cubic-bezier(0.2, 0, 0, 1)`      | Primary transitions (page enter, modal open) |
-| Emphasized Decelerate | `cubic-bezier(0.05, 0.7, 0.1, 1)` | Enter animations                             |
-| Emphasized Accelerate | `cubic-bezier(0.3, 0, 0.8, 0.15)` | Exit animations                              |
-| Standard              | `cubic-bezier(0.2, 0, 0, 1)`      | Most transitions                             |
-| Standard Decelerate   | `cubic-bezier(0, 0, 0, 1)`        | Fade in                                      |
-| Standard Accelerate   | `cubic-bezier(0.3, 0, 1, 1)`      | Fade out                                     |
+2. **Effects Animation Specs:**
+   - Digunakan untuk menganimasikan atribut visual murni: warna (_color_) dan opasitas (_opacity / alpha_).
+   - Karakteristik: Menggunakan pegas **tanpa pantulan (No Bouncy)** agar tidak terjadi kedipan atau artefak warna.
 
-### 9.3 Duration Scale
+### 9.2 Motion Velocity Tokens & Specs
 
-| Token        | Duration | Penggunaan                        |
-| ------------ | -------- | --------------------------------- |
-| Short 1      | 50ms     | Micro-interactions (ripple start) |
-| Short 2      | 100ms    | State changes (hover start)       |
-| Short 3      | 150ms    | Small transitions (icon rotation) |
-| Short 4      | 200ms    | Standard hover/focus              |
-| Medium 1     | 250ms    | Component transitions             |
-| Medium 2     | 300ms    | Card expansion, modal scale       |
-| Medium 3     | 350ms    | Navigation transitions            |
-| Medium 4     | 400ms    | Large element transitions         |
-| Long 1       | 450ms    | Page transitions                  |
-| Long 2       | 500ms    | Complex animations                |
-| Long 3       | 550ms    | Full page enter                   |
-| Long 4       | 600ms    | Hero animations                   |
-| Extra Long 1 | 700ms    | Sequence animations               |
-| Extra Long 4 | 1000ms   | Dramatic reveals (text scramble)  |
+| Kecepatan (_Speed_) | Target Komponen                                                    | Karakter Spatial (Bounce)              | Karakter Effect (No Bounce)            |
+| :------------------ | :----------------------------------------------------------------- | :------------------------------------- | :------------------------------------- |
+| **Fast**            | Elemen kecil & interaksi mikro (button press, switch, icon toggle) | `dampingRatio: 0.6`, `stiffness: 1400` | `dampingRatio: 1.0`, `stiffness: 3800` |
+| **Default**         | Komponen konten, kartu (_cards_), dialog modal, sheet              | `dampingRatio: 0.6`, `stiffness: 700`  | `dampingRatio: 1.0`, `stiffness: 1600` |
+| **Slow**            | Transisi halaman penuh, full screen enter, hero entrance           | `dampingRatio: 0.6`, `stiffness: 300`  | `dampingRatio: 1.0`, `stiffness: 800`  |
 
-### 9.4 Motion/Framer Motion Config Mapping
+### 9.3 Motion / Framer Motion Implementation Mapping
+
+Implementasi langsung ke engine `motion` (v12/v13) di Next.js:
 
 ```typescript
-// M3 Expressive spring config (untuk Framer Motion)
-const m3Spring = {
-  emphasized: { type: 'spring', stiffness: 400, damping: 30 },
-  standard: { type: 'spring', stiffness: 300, damping: 25 },
-  gentle: { type: 'spring', stiffness: 200, damping: 20 },
-};
+// M3 Expressive Official Spring Motion Specs
+export const m3Motion = {
+  // Spatial: position, scale, layout, border-radius (with natural overshoot)
+  spatial: {
+    fast: { type: 'spring', stiffness: 1400, damping: 22 },
+    default: { type: 'spring', stiffness: 700, damping: 16 },
+    slow: { type: 'spring', stiffness: 300, damping: 10 },
+  },
+  // Effects: opacity, background color (no bounce, clean settling)
+  effect: {
+    fast: { type: 'spring', stiffness: 3800, damping: 120 },
+    default: { type: 'spring', stiffness: 1600, damping: 80 },
+    slow: { type: 'spring', stiffness: 800, damping: 55 },
+  },
+} as const;
 
-// M3 Expressive tween config
-const m3Tween = {
-  emphasized: { duration: 0.5, ease: [0.2, 0, 0, 1] },
-  emphasizedDecel: { duration: 0.4, ease: [0.05, 0.7, 0.1, 1] },
-  emphasizedAccel: { duration: 0.3, ease: [0.3, 0, 0.8, 0.15] },
-  standard: { duration: 0.3, ease: [0.2, 0, 0, 1] },
-};
+// CSS Transition Fallbacks (untuk transisi non-JS / utility CSS murni)
+export const m3Easing = {
+  emphasized: 'cubic-bezier(0.2, 0, 0, 1)',
+  emphasizedDecel: 'cubic-bezier(0.05, 0.7, 0.1, 1)',
+  emphasizedAccel: 'cubic-bezier(0.3, 0, 0.8, 0.15)',
+} as const;
 ```
 
-### 9.5 Animation Usage di Portfolio
+### 9.4 Animation Usage di Portfolio
 
-| Elemen               | Current Config                      | M3 Expressive Config                       |
-| -------------------- | ----------------------------------- | ------------------------------------------ |
-| Hero title fade-in   | `delay: 0.3-0.9, duration: 0.6-0.7` | `m3Tween.emphasizedDecel` + stagger delay  |
-| Hero images fade-in  | `delay: 1.2-2.0, duration: 0.7`     | `m3Tween.emphasized`                       |
-| Page wrapper enter   | `duration: 0.7, y: 24→0`            | `m3Spring.emphasized` dengan `y: 24→0`     |
-| Card hover           | `duration: 300ms` (CSS)             | `200ms ease: [0.2, 0, 0, 1]` + shape morph |
-| Section header hover | `duration: 300ms` (CSS)             | `200ms ease: [0.2, 0, 0, 1]`               |
-| Custom cursor spring | `damping: 30, stiffness: 700`       | Tetap (sudah cocok M3 feel)                |
-| Theme toggle         | rotation 45°↔180°                   | Tetap + spring physics                     |
-| Modal open/close     | (perlu cek)                         | `m3Spring.emphasized` + backdrop fade      |
+| Elemen                   | Target Properti      | M3 Expressive Motion Token       | Implementasi                                  |
+| :----------------------- | :------------------- | :------------------------------- | :-------------------------------------------- |
+| **Hero Title Reveal**    | y, opacity           | Spatial Default + Effect Default | `m3Motion.spatial.default` + stagger          |
+| **Hero Images Reveal**   | scale, opacity       | Spatial Slow + Effect Slow       | `m3Motion.spatial.slow`                       |
+| **Page Wrapper Enter**   | y, opacity           | Spatial Default + Effect Default | `m3Motion.spatial.default`                    |
+| **Portfolio Card Hover** | scale, border-radius | Spatial Fast                     | `m3Motion.spatial.fast` (hover scale & morph) |
+| **Modal Open/Close**     | scale, opacity       | Spatial Default + Effect Default | `m3Motion.spatial.default` + backdrop fade    |
+| **Theme Toggle**         | rotate, scale        | Spatial Fast                     | `m3Motion.spatial.fast`                       |
+| **Custom Cursor**        | x, y                 | Spring (High Stiffness)          | `damping: 30, stiffness: 700` (rAF throttle)  |
 
 ---
 
-## 10. Elevation & Surface
+## 10. Elevation & Surface (Tone-Based Surfaces Model)
 
-### 10.1 M3 Expressive Elevation Model
+### 10.1 Pergeseran Resmi: Tone-Based Surfaces vs Elevasi Legacy
 
-M3 Expressive menggunakan **tonal surface elevation** bukan box-shadow tradisional:
+Berdasarkan dokumentasi resmi `m3.material.io/blog/tone-based-surface-color-m3`:
 
-| Level   | Shadow       | Surface Color Token         | Penggunaan               |
-| ------- | ------------ | --------------------------- | ------------------------ |
-| Level 0 | None         | `surface`                   | Page background          |
-| Level 1 | `shadow-sm`  | `surface-container-low`     | Low cards, resting state |
-| Level 2 | `shadow-md`  | `surface-container`         | Default cards            |
-| Level 3 | `shadow-lg`  | `surface-container-high`    | Elevated cards, modal    |
-| Level 4 | `shadow-xl`  | `surface-container-highest` | Top-level navigation     |
-| Level 5 | `shadow-2xl` | —                           | Rare, dragged elements   |
+> _"Tone-based surface color roles have replaced the previous 'surfaces at +1 to +5 elevation' approach. The new color roles are not tied to elevation, and offer more flexibility and support for containment."_
 
-**Catatan M3 Expressive:** Shadow dan tonal surface saling melengkapi. Gunakan tonal shift sebagai default, shadow hanya untuk elemen yang benar-benar "mengambang" (modal, dropdown, FAB).
+M3 Expressive meniadakan ketergantungan pada layer opasitas elevasi numerik (+1 s/d +5) maupun bayangan box-shadow tebal. Kontainer dan grouping visual sepenuhnya dikendalikan oleh **5 Peran Warna Surface Container**:
 
-### 10.2 Elevation Usage di Portfolio
+| Peran Token M3                | Tailwind Token                 | Karakteristik & Peran                           | Penggunaan di Portfolio                              |
+| :---------------------------- | :----------------------------- | :---------------------------------------------- | :--------------------------------------------------- |
+| **Surface**                   | `bg-surface`                   | Kanvas dasar halaman (background utama)         | Body background, header container                    |
+| **Surface Container Lowest**  | `bg-surface-container-lowest`  | Kontras paling rendah / permukaan paling murni  | Area kontras tinggi di light mode (misal inner card) |
+| **Surface Container Low**     | `bg-surface-container-low`     | Grouping subtle tanpa distraksi                 | Skill icon resting container                         |
+| **Surface Container**         | `bg-surface-container`         | **Default container** untuk komponen terisolasi | Portfolio card resting state, about card             |
+| **Surface Container High**    | `bg-surface-container-high`    | Container dengan hierarki lebih tinggi          | Portfolio card hover state, Modal Dialog             |
+| **Surface Container Highest** | `bg-surface-container-highest` | Hierarki permukaan tertinggi                    | Sidebar Navigation Rail, Filled Input background     |
 
-| Elemen                 | Current             | M3 Expressive                                       |
-| ---------------------- | ------------------- | --------------------------------------------------- |
-| Page background        | `bg-custom-white-2` | `bg-surface` (Level 0)                              |
-| Portfolio card resting | Brutalist shadow    | `bg-surface-container` (Level 2), minimal shadow    |
-| Portfolio card hover   | Shadow shift        | `bg-surface-container-high` (Level 3) + `shadow-lg` |
-| Modal                  | (perlu cek)         | `bg-surface-container-high` (Level 3) + `shadow-xl` |
-| Navigation bar         | Solid bg            | `bg-surface` (Level 0, solid)                       |
-| Sidebar rail           | `bg-custom-black`   | `bg-surface-container-highest` (Level 4)            |
-| Skill icon container   | No elevation        | `bg-surface-container` (Level 2)                    |
-| Gradient masks         | `bg-custom-white-2` | `bg-surface`                                        |
+### 10.2 Peran Bayangan (Shadow) di M3 Expressive
+
+- **Surface shift sebagai fondasi utama:** Perbedaan kedalaman dan grouping dicapai 90% melalui pergeseran token `surface-container`.
+- **Shadow murni sebagai aksen floating:** Box-shadow (`shadow-md`, `shadow-xl`) HANYA digunakan saat elemen benar-benar melayang di atas konten lain (_overlapping scrim_), seperti pada **Modal Dialog**, **Floating Action Button (FAB)**, atau saat kartu di-hover secara aktif.
+
+### 10.3 Mapping Surface di Portfolio
+
+| Elemen               | State Resting                  | State Hover / Active        | Shadow Accent                                    |
+| :------------------- | :----------------------------- | :-------------------------- | :----------------------------------------------- |
+| **Page Background**  | `bg-surface`                   | —                           | None                                             |
+| **Navigation Bar**   | `bg-surface`                   | —                           | None (border subtle `border-outline-variant/30`) |
+| **Portfolio Cards**  | `bg-surface-container`         | `bg-surface-container-high` | Resting: `none`, Hover: `shadow-lg`              |
+| **Modal Dialog**     | `bg-surface-container-high`    | —                           | `shadow-2xl` + Scrim `bg-on-surface/32`          |
+| **Sidebar Rail**     | `bg-surface-container-highest` | —                           | None                                             |
+| **Skill Containers** | `bg-surface-container-low`     | `bg-surface-container`      | Resting: `none`, Hover: subtle scale             |
+| **Gradient Masks**   | `bg-surface`                   | —                           | None (fade gradient)                             |
 
 ---
 
@@ -572,9 +595,11 @@ Theme toggle: MdLightMode / MdDarkMode, text-on-surface hover:bg-on-surface/8 ro
 ```
 Title "hello, I'm": text-title-lg text-on-surface / dark:text-primary
 Name "hutama": text-display-sm font-bold text-on-surface / dark:text-primary (heading font)
-Badge "--web developer": bg-primary-container text-on-primary-container rounded-lg px-3 py-1
-Social button: bg-secondary-container text-on-secondary-container rounded-full px-6 py-3
-  hover: bg-secondary-container/92
+Badge "--web developer" (M3 Assist Chip):
+  Container: bg-primary-container text-on-primary-container rounded-lg px-3 py-1 text-label-md
+Social button (M3 Filled Tonal Button):
+  Container: bg-secondary-container text-on-secondary-container rounded-full px-6 py-3
+  State layer: hover:bg-secondary-container/92 active:scale-95 transition-all
 SVG illustrations: text-on-surface / dark:text-primary
 ```
 
@@ -604,47 +629,56 @@ Highlighted "Hutama": bg-primary-container text-on-primary-container rounded-lg 
 ```
 Separator: border-outline-variant
 Subheading: text-title-md text-on-surface-variant
-Icon container: bg-surface-container rounded-xl p-2.5
-  hover: bg-surface-container-high scale-105 transition-all duration-200
+Icon container (M3 Surface Container Low):
+  bg-surface-container-low rounded-xl p-2.5
+  hover: bg-surface-container scale-105 transition-all duration-200
   Tailwind: flex items-center justify-center w-12 md:w-16 2xl:w-[4.5rem]
 ```
 
-### 12.6 Portfolio Cards
+### 12.6 Portfolio Cards (M3 Filled / Elevated Card)
 
 ```
-Card container: bg-surface-container rounded-2xl overflow-hidden
-  transition: all 300ms cubic-bezier(0.2, 0, 0, 1)
+Card container (M3 Filled Card):
+  bg-surface-container rounded-2xl overflow-hidden
+  motion: m3Motion.spatial.fast (scale & shape morphing)
   hover: rounded-[28px] shadow-lg scale-[1.02] bg-surface-container-high
   active: scale-[0.98] rounded-xl
-Bottom overlay: bg-surface/90 backdrop-blur-sm rounded-xl m-2 p-3
+Bottom overlay:
+  bg-surface/90 backdrop-blur-sm rounded-xl m-2 p-3
   flex justify-between items-center
 Title: text-title-sm font-semibold text-on-surface
-Arrow icon: bg-primary text-on-primary rounded-full p-1.5 w-7 h-7
+Arrow icon (M3 Icon Button):
+  bg-primary text-on-primary rounded-full p-1.5 w-7 h-7
 GitHub link: text-primary / dark:text-primary
 ```
 
-### 12.7 Modal / Dialog
+### 12.7 Modal / Dialog (M3 Basic Dialog)
 
 ```
-Backdrop: bg-on-surface/32 (M3 scrim)
-  transition: opacity 300ms
-Dialog container: bg-surface-container-high rounded-[28px] p-6
-  shadow-xl max-w-2xl w-full
+Backdrop: bg-on-surface/32 (M3 official scrim)
+  transition: m3Motion.effect.default (opacity fade)
+Dialog container:
+  bg-surface-container-high rounded-[28px] p-6 shadow-2xl max-w-2xl w-full
   enter: scale(0.92) → scale(1), opacity 0→1
   exit: scale(1) → scale(0.95), opacity 1→0
-  transition: m3Spring.emphasized
-Close button: bg-surface-container-highest text-on-surface rounded-full p-2
+  motion: m3Motion.spatial.default (spring overshoot)
+Close button:
+  bg-surface-container-highest text-on-surface rounded-full p-2
   hover: bg-on-surface/8
 ```
 
-### 12.8 Sidebar / Navigation Rail
+### 12.8 Sidebar / Navigation Rail (M3 Navigation Rail)
 
 ```
-Rail container (desktop): bg-surface-container-highest rounded-t-[28px]
-Active link: bg-primary-container text-on-primary-container rounded-full px-4
-Inactive link: text-on-surface-variant
+Rail container (desktop):
+  bg-surface-container-highest rounded-t-[28px]
+Active link (M3 Active Indicator):
+  bg-primary-container text-on-primary-container rounded-full px-4
+Inactive link:
+  text-on-surface-variant
   hover: bg-on-surface/8 rounded-full
-Scroll-to-top FAB: bg-primary-container text-on-primary-container rounded-xl p-2
+Scroll-to-top FAB (M3 Small FAB):
+  bg-primary-container text-on-primary-container rounded-xl p-2
   hover: shadow-md bg-primary-container/92
   dark: bg-primary text-on-primary
 ```
@@ -657,20 +691,20 @@ Brain icon: text-tertiary
 Separator: border-t border-outline-variant (opsional)
 ```
 
-### 12.10 Contact Form (M3 Expressive Text Fields)
+### 12.10 Contact Form (M3 Filled Text Fields & Filled Button)
 
 ```
 Filled Text Field:
   Container: bg-surface-container-highest rounded-t-xs border-b-2 border-outline p-3
-    focus: border-b-primary
+    focus-within: border-b-primary
   Label: text-label-lg text-on-surface-variant
-    focus: text-primary text-label-sm (float up)
-  Input text: text-body-lg text-on-surface
+    focus-within: text-primary text-label-sm (float up)
+  Input text: text-body-lg text-on-surface bg-transparent outline-none
 
-Send Button (Filled):
-  bg-primary text-on-primary rounded-full px-8 py-3
-  hover: shadow-md bg-primary/92
-  disabled: bg-on-surface/[0.12] text-on-surface/[0.38]
+Send Button (M3 Filled Button):
+  bg-primary text-on-primary rounded-full px-8 py-3 font-medium text-label-lg
+  hover: shadow-md bg-primary/92 active:scale-95 transition-all
+  disabled: bg-on-surface/[0.12] text-on-surface/[0.38] cursor-not-allowed
   loading: spinner inside button
 
 Error State:

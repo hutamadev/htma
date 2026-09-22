@@ -3,7 +3,7 @@
 > **Branch:** `feat/portfolio-update`
 > **Tanggal:** 2026-08-30
 > **Runtime & Package Manager:** Bun (full)
-> **Constraint Utama:** Layout vertical tetap dipertahankan. Tidak ada perubahan data portfolio (foto, list project, detail project tetap sama). Desain di-upgrade ke **Material You 3 (M3)** design system dari Google. Menerapkan standar kode dari **Global Rules (AGENTS.md)** dan menggunakan **Better T Stack** sebagai fondasi project.
+> **Constraint Utama:** Layout vertical tetap dipertahankan. Tidak ada perubahan data portfolio (foto, list project, detail project tetap sama). Desain di-upgrade ke **Material 3 Expressive (M3 Expressive)** design system dari Google (`m3.material.io`). Menerapkan standar kode dari **Global Rules (AGENTS.md)** dan menggunakan **Better T Stack** sebagai fondasi project.
 
 ---
 
@@ -30,24 +30,23 @@
 
 ### Tech Stack
 
-| Layer           | Teknologi            | Versi         |
-| --------------- | -------------------- | ------------- |
-| Framework       | Next.js (App Router) | 14.2.30       |
-| React           | React                | 18.3.1        |
-| Styling         | Tailwind CSS         | 3.4.13        |
-| Animation       | Framer Motion        | 10.18.0       |
-| Smooth Scroll   | Locomotive Scroll    | 5.0.0-beta.21 |
-| Text Scramble   | Baffle.js            | 0.3.6         |
-| State           | Zustand              | 4.5.7         |
-| Form            | React Hook Form      | 7.59.0        |
-| Email           | EmailJS              | 4.4.1         |
-| Icons           | React Icons          | 5.5.0         |
-| Theme           | next-themes          | 0.3.0         |
-| Analytics       | @vercel/analytics    | 1.5.0         |
-| Image           | sharp                | 0.33.5        |
-| Utility         | clsx                 | 2.1.1         |
-| Package Manager | pnpm                 | (current)     |
-| Runtime         | Node.js              | >= 18         |
+| Layer           | Teknologi Awal       | Status Aktual (Phase 0–2 Selesai)     | Catatan Migrasi                            |
+| --------------- | -------------------- | ------------------------------------- | ------------------------------------------ |
+| Framework       | Next.js 14.2.30      | **Next.js 15.5.25** (App Router)      | Turbopack stable, React 19 native support  |
+| React           | React 18.3.1         | **React 19.3.0**                      | Concurrent features, React 19 types        |
+| Styling         | Tailwind CSS 3.4.13  | **Tailwind CSS v4.3.3**               | CSS-first `@theme`, Lightning CSS          |
+| Animation       | Framer Motion 10     | **Motion / Framer Motion 13.3.0**     | M3 Expressive Spring Motion Physics specs  |
+| Smooth Scroll   | Locomotive Scroll 5  | **Lenis 1.3.26**                      | Native rAF loop, 3.7x lebih ringan         |
+| Text Scramble   | Baffle.js 0.3.6      | **Native useTextScramble Hook**       | Zero-dependency, TypeScript native         |
+| State           | Zustand 4.5.7        | **Zustand 5.0.15**                    | Concurrent-safe                            |
+| Form            | React Hook Form 7.59 | **React Hook Form 7.88.0**            | Integrasi Zod schema validation            |
+| Form Validation | —                    | **Zod 4.6.5** + `@hookform/resolvers` | Strict client validation & types inference |
+| Linter          | ESLint + plugins     | **Oxlint 1.83.0**                     | Rust-based, 50-100x lebih cepat            |
+| Git Hooks       | Husky + lint-staged  | **Lefthook 2.1.14**                   | Single yaml, zero dependency               |
+| Typography      | Local woff2 fonts    | **Google Sans Flex** (Variable Font)  | Full axes (`wght 100-1000`, `opsz 6-144`)  |
+| Design System   | Custom ad-hoc tokens | **Material 3 Expressive**             | Dynamic HCT palette, Tone-based surfaces   |
+| Package Manager | pnpm                 | **Bun 1.4.2** (`bun.lock`)            | Fast native package manager                |
+| Runtime         | Node.js >= 18        | **Bun >= 1.1.0**                      | Single unified runtime                     |
 
 ### Struktur Layout (Vertical — TIDAK BERUBAH)
 
@@ -498,43 +497,42 @@ Semua penggunaan `'use client'` sudah tepat. Tidak ada yang perlu diubah.
 
 ---
 
-## 5. Material You 3 — Strategi Penerapan
+## 5. Material 3 Expressive — Strategi Penerapan
 
-Material You 3 (M3) bukan berarti harus pakai Material Design Components library (MUI/Material Web). Yang kita ambil adalah **design language & principles**-nya, lalu diterapkan di atas Tailwind CSS yang sudah ada.
+Material 3 Expressive (M3 Expressive) bukan berarti harus mengimpor library komponen eksternal yang berat (seperti MUI atau Material Web Components). Yang kita ambil adalah **desain sistem, token matematika resmi, dan prinsip interaksinya** dari `m3.material.io`, lalu diterapkan 100% menggunakan Tailwind CSS utility classes dan CSS variables.
 
-### Prinsip M3 yang Akan Diterapkan
+### Prinsip M3 Expressive yang Diterapkan
 
-#### 2.1 Dynamic Color (Tonal Palette)
+#### 5.1 Dynamic Color & Tone-Based Surfaces
 
-- Satu **seed color** di-generate menjadi palet tonal (Primary, Secondary, Tertiary, Neutral, Error).
-- Light mode dan dark mode punya mapping warna berbeda dari palet tonal yang sama.
-- Ini menggantikan sistem warna hardcoded saat ini.
+- **Seed Color:** Satu seed `#D3F36A` di-generate via `@material/material-color-utilities` ke dalam color space HCT resmi Google.
+- **Tone-based Surfaces:** Menggantikan sistem elevasi lama. Kontainer menggunakan 5 tingkatan kontras: `surface-container-lowest`, `surface-container-low`, `surface-container` (default), `surface-container-high`, dan `surface-container-highest`.
+- Light mode dan Dark mode memiliki pemetaan matematis yang mempertahankan rasio kontras WCAG AA (min 4.5:1).
 
-#### 2.2 Shape System
+#### 5.2 Shape System & Shape Morphing
 
-- M3 menggunakan rounded corners dengan skala konsisten: `0px` (none), `8px` (extra-small), `12px` (small), `16px` (medium), `28px` (large), `full` (extra-large).
-- Saat ini komponen memakai `rounded` (4px) dan `rounded-sm` (2px) — terlalu kecil untuk M3. Akan di-upgrade ke skala M3.
+- M3 Expressive memperluas skala bentuk: `0px` (none), `4px` (xs), `8px` (sm), `12px` (md), `16px` (lg), `28px` (xl), dan `full` (pill).
+- **Shape morphing:** Komponen utama (seperti portfolio cards) bertransisi ke kurva yang lebih membulat saat hover (`rounded-2xl` 16px → `rounded-[28px]` 28px) untuk memberikan sensasi responsif yang hidup.
 
-#### 2.3 Elevation & Surface
+#### 5.3 Intentional Containment (Menggantikan Bayangan Brutalist)
 
-- M3 menghilangkan box-shadow tradisional dan menggantinya dengan **tonal elevation** (surface color berubah opacity berdasarkan level elevasi).
-- Portfolio cards saat ini pakai `shadow-[0.25rem_0.25rem_#24282C]` (brutalist offset shadow). Ini akan diganti ke **M3 surface tint elevation**.
+- Mengelompokkan elemen secara visual (_containment_) menggunakan warna permukaan yang kontras alih-alih bayangan hitam brutalist (`shadow-[0.25rem_0.25rem_#24282C]`).
+- Riset Google membuktikan containment yang tegas mempercepat penemuan elemen penting hingga 4x lebih cepat.
 
-#### 2.4 State Layers
+#### 5.4 State Layers & Interaction Feedback
 
-- Hover, focus, pressed, dragged memiliki opacity overlay yang konsisten.
-- Hover: 8% opacity overlay, Focused: 10%, Pressed: 10%, Dragged: 16%.
+- Lapisan state layer semi-transparan yang konsisten di atas komponen: Hover (8%), Focused (10%), Pressed (10%), Dragged (16%).
 
-#### 2.5 Motion
+#### 5.5 Motion Physics System (Spring Physics)
 
-- M3 menggunakan **emphasized easing** (`cubic-bezier(0.2, 0, 0, 1)`) untuk masuk dan `cubic-bezier(0.2, 0, 0, 1)` untuk keluar.
-- Duration: small (150ms), medium (300ms), large (500ms).
-- Framer Motion transition configs akan disesuaikan ke easing M3.
+- Mengikuti pedoman resmi `m3.material.io/styles/motion/overview/specs`:
+  - **Spatial Specs:** Animasi perubahan posisi, skala, dan bentuk menggunakan spring physics dengan overshoot lembut (`dampingRatio: 0.6`, `stiffness: 700` default).
+  - **Effects Specs:** Animasi perubahan warna dan opasitas menggunakan spring tanpa pantulan (`dampingRatio: 1.0`, `stiffness: 1600` default).
 
-#### 2.6 Typography Scale
+#### 5.6 Expressive Typography Scale & Optical Sizing
 
-- M3 punya 5 roles: Display, Headline, Title, Body, Label — masing-masing 3 sizes (Large, Medium, Small).
-- Kita map ini ke Tailwind utility classes.
+- Menggunakan **Google Sans Flex** dengan dukungan penuh sumbu variabel (`wght 100-1000`, `opsz 6-144`).
+- Skala hierarki M3 resmi: Display (Large/Medium/Small), Headline, Title, Body, dan Label.
 
 ---
 
@@ -760,20 +758,15 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 **Perubahan M3:**
 
 - Card style → M3 **Filled Card** / **Elevated Card**:
-  - Hapus brutalist offset shadow
-  - Ganti ke: `bg-surface-container rounded-2xl overflow-hidden` (M3 large shape: 28px)
-  - Elevation via `shadow-md` atau M3 tonal surface tint
-  - Hover: `hover:shadow-lg hover:scale-[1.02]` + state layer 8%
-  - Active/pressed: `active:scale-[0.98]` (bukan translate shadow trick)
-- Card bottom overlay → `bg-surface/90 backdrop-blur-sm` dengan `rounded-xl m-2 p-3`
-- Arrow icon → M3 **Icon Button** style: `bg-primary text-on-primary rounded-full p-1`
-- GitHub link di bawah → teks `on-surface-variant`, link `primary`
-- Border separator → `border-outline-variant`
-
-**Yang TIDAK berubah:**
-
-- 7 portfolio items (data, foto, judul, URL, repo — semua TETAP)
-- Grid bento layout positions
+  - Hapus brutalist offset shadow murni.
+  - Ganti ke: `bg-surface-container rounded-2xl overflow-hidden` (M3 Large shape: 16px).
+  - **Shape morphing:** `hover:rounded-[28px]` (M3 Extra Large shape: 28px) dengan spring motion `m3Motion.spatial.fast`.
+  - Hover: `hover:shadow-lg hover:scale-[1.02] bg-surface-container-high`.
+  - Active/pressed: `active:scale-[0.98]`.
+- Card bottom overlay → `bg-surface/90 backdrop-blur-sm rounded-xl m-2 p-3` (M3 Medium shape).
+- Arrow icon → M3 **Icon Button** style: `bg-primary text-on-primary rounded-full p-1.5`.
+- GitHub link di bawah → teks `on-surface-variant`, link `primary`.
+- Border separator → `border-outline-variant`.
 - Click → modal behavior
 - Modal portal system
 
@@ -788,12 +781,13 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Modal → M3 **Dialog** / **Bottom Sheet** style:
-  - `bg-surface-container-high rounded-[28px]` (M3 extra large shape)
-  - Padding: `p-6`
-  - Backdrop: `bg-on-surface/32` (M3 scrim: 32% opacity)
-  - Close button: M3 icon button `rounded-full`
-- Animasi: scale dari 0.9 → 1 dengan M3 emphasized easing
+- Modal → M3 **Basic Dialog** style:
+  - Container: `bg-surface-container-high rounded-[28px] p-6 shadow-2xl` (M3 Extra Large shape: 28px).
+  - Backdrop/Scrim: `bg-on-surface/32` (M3 official scrim opacity).
+  - Close button: M3 icon button `rounded-full` dengan hover state layer.
+- Animasi:
+  - Scale dialog: 0.92 → 1 via `m3Motion.spatial.default` (spring overshoot natural).
+  - Fade backdrop: opacity 0 → 1 via `m3Motion.effect.default`.
 
 **Yang TIDAK berubah:**
 
@@ -1174,19 +1168,23 @@ scramble({
 
 ### Perubahan M3
 
-#### 11.1 Form Fields → M3 Text Fields
+#### 11.1 Form Fields → M3 Filled Text Fields
 
-- Saat ini: `border-b-2` underlined input (mirip M2 actually)
-- M3: **Outlined Text Field** → `border border-outline rounded-xs` dengan floating label
-- Atau **Filled Text Field** → `bg-surface-container-highest rounded-t-xs border-b-2 border-primary`
-- **Recommended: Filled Text Field** (lebih cocok dengan estetika M3, lebih mudah diimplementasi tanpa library)
+- Menggunakan spesifikasi resmi **M3 Filled Text Field**:
+  - Background container: `bg-surface-container-highest`
+  - Shape: `rounded-t-xs` (radius 4px di atas, flat di bawah)
+  - Active indicator: border bawah `border-b-2 border-outline`, saat fokus bertransisi menjadi `border-b-primary`
+  - Input text: `text-body-lg text-on-surface bg-transparent outline-none`
+  - Label: `text-label-lg text-on-surface-variant`, saat fokus/terisi mengecil ke `text-label-sm text-primary`
 
 #### 11.2 Send Button → M3 Filled Button
 
-- `bg-primary text-on-primary rounded-full px-6 py-3`
-- Disabled: `bg-on-surface/12 text-on-surface/38`
-- Hover state layer: `hover:bg-primary/92` (shadow + tint)
-- Loading: Spinner di dalam button (bukan text "Sending...")
+- Menggunakan spesifikasi resmi **M3 Filled Button**:
+  - Pill shape: `rounded-full px-8 py-3 font-medium text-label-lg`
+  - Color role: `bg-primary text-on-primary`
+  - Motion & state: `hover:shadow-md active:scale-95 transition-all` dengan `m3Motion.spatial.fast`
+  - Disabled state: `bg-on-surface/[0.12] text-on-surface/[0.38] cursor-not-allowed`
+  - Loading state: spinner indikator progres di dalam button
 
 #### 11.3 Input Labels
 
@@ -1327,17 +1325,17 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 
 ---
 
-### Phase 3 — Sections (Home Page)
+### Phase 3 — Sections (Home Page) — 🔄 IN-PROGRESS (SEDANG BERJALAN)
 
 - **Lead Skill**: `frontend-ui-engineering` + `impeccable`
-- **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Containment, Elevation).
+- **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Tone-based containment, Spring motion).
 
-- **Slice 3.1 — Hero Section**: M3 typography hierarchy & layout alignment.
-- **Slice 3.2 — About Section**: M3 section header & surface card containment.
-- **Slice 3.3 — Skills Section**: M3 expressive chips/cards dengan state layers (hover/focus).
-- **Slice 3.4 — Portfolio Section & Modal**: Elevated cards (hapus brutalist offset shadow), dialog modal M3.
-- **Slice 3.5 — Sidebar & Footer**: Navigation rail M3 & footer alignment.
-- Verifikasi: `bun run build` sukses, visual responsive di desktop & mobile.
+- **Slice 3.1 — Hero Section (IN-PROGRESS)**: M3 typography hierarchy (`text-display-sm`), Assist Chip badge (`bg-primary-container text-on-primary-container`), Filled Tonal Button socials, dan spring motion specs.
+- **Slice 3.2 — About Section**: M3 section header hover state layer & surface card containment.
+- **Slice 3.3 — Skills Section**: M3 Surface Container Low (`bg-surface-container-low`) dengan subtle scale & transition.
+- **Slice 3.4 — Portfolio Section & Modal**: M3 Filled Card (`bg-surface-container`) dengan shape morphing hover (`rounded-2xl` → `rounded-[28px]`), Basic Dialog (`bg-surface-container-high rounded-[28px]`), dan Scrim resmi (`bg-on-surface/32`).
+- **Slice 3.5 — Sidebar & Footer**: Navigation Rail dengan Active Indicator pill (`bg-primary-container text-on-primary-container rounded-full`), Small FAB scroll-top, dan footer tertiary accent.
+- Verifikasi: `bun run typechecks`, `bun run lint`, `bun run build` sukses, visual responsive di desktop & mobile.
 
 ---
 
