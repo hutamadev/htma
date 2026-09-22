@@ -1,17 +1,22 @@
 # MEMORY — Portfolio Website Update (htma.site)
 
-> **Last Updated:** 2026-09-20
+> **Last Updated:** 2026-09-23
 > **Project:** `/home/hutamatr/git-repo(hutamadev)/htma`
 > **Branch Aktif:** `feat/portfolio-update` (dibuat dari `main`)
 
 ---
 
-## Status Saat Ini: PHASE 3 — SECTIONS (HOME PAGE) (Phase 0, 1, & 2 Selesai Penuh)
+## Status Saat Ini: PHASE 3 — SECTIONS (HOME PAGE) — 🔄 SEDANG BERJALAN
 
 - **Phase 0 — Runtime Migration**: ✅ Selesai (Bun runtime & package manager, `bun.lock` stabil).
 - **Phase 1 — Foundation (Tooling, Next 15, Tailwind v4, M3 Palette, Google Sans Flex)**: ✅ **100% Selesai**.
 - **Phase 2 — Core Components & Mechanics**: ✅ **100% Selesai** (Slices 2.1, 2.2, 2.3, 2.4).
-- **Phase 3 — Sections (Home Page)**: 🚀 **Siap Dimulai** (Slice 3.1 Hero Section).
+- **Phase 3 — Sections (Home Page)**: 🔄 **Sedang Berjalan**
+  - Slice 3.1 Hero — ✅ Selesai (commit `7b2ba93`)
+  - Slice 3.2 About — ✅ Selesai (commit `623127b`)
+  - Slice 3.3 Skills — ✅ Selesai
+  - Slice 3.4 Portfolio Section & Modal — ✅ Selesai (kode; **belum di-commit** atas instruksi user)
+  - Slice 3.5 Sidebar & Footer — ⏳ Belum mulai
 
 Dokumentasi arsitektur & panduan teknis:
 
@@ -83,33 +88,33 @@ Dokumentasi arsitektur & panduan teknis:
 
 ## Keputusan yang Sudah Final
 
-| #   | Keputusan                     | Detail                                                                                                        |
-| --- | ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| 1   | Layout vertical               | TETAP 100%, tidak berubah                                                                                     |
-| 2   | Design system                 | Material 3 Expressive — ambil prinsipnya, panduan lengkap ada di DESIGN.md                                    |
-| 3   | Seed color                    | `#D3F36A` → generate M3 tonal palette (via `@material/material-color-utilities`, replace estimasi)            |
-| 4   | Basic color tone              | Tetap sama (gelap/terang/hijau), hanya dihaluskan ke M3 Expressive                                            |
-| 5   | Data portfolio                | TIDAK BERUBAH (foto, list, judul, URL, repo semua tetap)                                                      |
-| 6   | `locomotive-scroll` → `lenis` | Hapus locomotive, ganti lenis. Hasil scroll HARUS sama persis                                                 |
-| 7   | `baffle` → native hook        | Hapus baffle.js, buat `useTextScramble` native. Hasil HARUS SAMA PERSIS                                       |
-| 8   | Custom cursor                 | Tetap dipertahankan, improve performance (pointermove, passive, rAF, fix `any`)                               |
-| 9   | Runtime                       | Bun (full) — ganti Node.js                                                                                    |
-| 10  | Package manager               | Bun — ganti pnpm                                                                                              |
-| 11  | Halaman contact               | Ikut di-update (M3 Expressive text fields, Zod validation)                                                    |
-| 12  | Global Rules                  | Diterapkan (strict TS, no `any`, immutability, input validation, zero hardcoded secrets)                      |
-| 13  | Better T Stack                | Diterapkan sebagai fondasi (tsconfig strict, full Oxlint untuk linter, tetap single app)                      |
-| 14  | Deployment                    | Tetap Vercel                                                                                                  |
-| 15  | Linter                        | Full menggunakan Oxlint (50-100x lebih cepat, native support Next.js/React/TS)                                |
-| 16  | Font                          | Full M3 Expressive — **Google Sans Flex** (fallback: **Google Sans Text**). Hapus Kata Grotesk & Neutral Face |
-| 17  | Portfolio card                | Full M3 Expressive elevated card — hapus brutalist offset shadow                                              |
-| 18  | Theme toggle icon             | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq`                                     |
-| 19  | Navbar background             | Solid `bg-surface` — tanpa `backdrop-blur`                                                                    |
-| 20  | Tailwind v4                   | Migrasi config JS → CSS-based `@theme`                                                                        |
-| 21  | Framer Motion                 | `framer-motion` & `motion` di-upgrade ke v13 (`^13.3.0`)                                                      |
-| 22  | React 19 + Next.js 15         | `react@^19.3.0` + `next@^15.5.25` (LTS stabil, Next 16 ditahan)                                               |
-| 23  | Bun lockfile                  | **Commit `bun.lockb`** ke git (reproducible builds)                                                           |
-| 24  | Monorepo                      | **Tetap single app** — tidak convert ke Turborepo                                                             |
-| 25  | Git hooks                     | **Migrasi ke Lefthook** (ganti Husky + lint-staged)                                                           |
+| #   | Keputusan                     | Detail                                                                                                                                                                                  |
+| --- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Layout vertical               | TETAP 100%, tidak berubah                                                                                                                                                               |
+| 2   | Design system                 | Material 3 Expressive — ambil prinsipnya, panduan lengkap ada di DESIGN.md                                                                                                              |
+| 3   | Seed color                    | `#D3F36A` → generate M3 tonal palette (via `@material/material-color-utilities`, replace estimasi)                                                                                      |
+| 4   | Basic color tone              | Tetap sama (gelap/terang/hijau), hanya dihaluskan ke M3 Expressive                                                                                                                      |
+| 5   | Data portfolio                | Data existing TIDAK BERUBAH (foto, list, judul, URL, repo semua tetap). Field `description` **ditambahkan** di Session 6 untuk copywriting card — tidak ada nilai lama yang diubah      |
+| 6   | `locomotive-scroll` → `lenis` | Hapus locomotive, ganti lenis. Hasil scroll HARUS sama persis                                                                                                                           |
+| 7   | `baffle` → native hook        | Hapus baffle.js, buat `useTextScramble` native. Hasil HARUS SAMA PERSIS                                                                                                                 |
+| 8   | Custom cursor                 | Tetap dipertahankan, improve performance (pointermove, passive, rAF, fix `any`)                                                                                                         |
+| 9   | Runtime                       | Bun (full) — ganti Node.js                                                                                                                                                              |
+| 10  | Package manager               | Bun — ganti pnpm                                                                                                                                                                        |
+| 11  | Halaman contact               | Ikut di-update (M3 Expressive text fields, Zod validation)                                                                                                                              |
+| 12  | Global Rules                  | Diterapkan (strict TS, no `any`, immutability, input validation, zero hardcoded secrets)                                                                                                |
+| 13  | Better T Stack                | Diterapkan sebagai fondasi (tsconfig strict, full Oxlint untuk linter, tetap single app)                                                                                                |
+| 14  | Deployment                    | Tetap Vercel                                                                                                                                                                            |
+| 15  | Linter                        | Full menggunakan Oxlint (50-100x lebih cepat, native support Next.js/React/TS)                                                                                                          |
+| 16  | Font                          | Full M3 Expressive — **Google Sans Flex** (fallback: **Google Sans Text**). Hapus Kata Grotesk & Neutral Face                                                                           |
+| 17  | Portfolio card                | Full M3 Expressive elevated card — hapus brutalist offset shadow                                                                                                                        |
+| 18  | Theme toggle icon             | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq`                                                                                                               |
+| 19  | Navbar background             | Awalnya solid `bg-surface` tanpa `backdrop-blur`. **Di-supersede Session 6**: header jadi `bg-transparent` + `pointer-events-none`, logo & toggle tetap solid via `pointer-events-auto` |
+| 20  | Tailwind v4                   | Migrasi config JS → CSS-based `@theme`                                                                                                                                                  |
+| 21  | Framer Motion                 | `framer-motion` & `motion` di-upgrade ke v13 (`^13.3.0`)                                                                                                                                |
+| 22  | React 19 + Next.js 15         | `react@^19.3.0` + `next@^15.5.25` (LTS stabil, Next 16 ditahan)                                                                                                                         |
+| 23  | Bun lockfile                  | **Commit `bun.lockb`** ke git (reproducible builds)                                                                                                                                     |
+| 24  | Monorepo                      | **Tetap single app** — tidak convert ke Turborepo                                                                                                                                       |
+| 25  | Git hooks                     | **Migrasi ke Lefthook** (ganti Husky + lint-staged)                                                                                                                                     |
 
 ---
 
@@ -129,11 +134,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## File Project yang Sudah Dibuat/Dimodifikasi
 
-| File                    | Aksi                         | Detail                                                            |
-| ----------------------- | ---------------------------- | ----------------------------------------------------------------- |
-| `htma/BRAINSTORMING.md` | Created (S1), Confirmed (S2) | Rencana detail update portfolio — final                           |
-| `htma/DESIGN.md`        | Created (S1), Expanded (S2)  | Panduan M3 Expressive — tambah 3 section baru (15 sections total) |
-| `htma/MEMORY.md`        | Created (S1), Updated (S2)   | File ini                                                          |
+| File                    | Aksi                                       | Detail                                                            |
+| ----------------------- | ------------------------------------------ | ----------------------------------------------------------------- |
+| `htma/BRAINSTORMING.md` | Created (S1), Confirmed (S2), Updated (S6) | Rencana detail update portfolio — final                           |
+| `htma/DESIGN.md`        | Created (S1), Expanded (S2), Updated (S6)  | Panduan M3 Expressive — tambah 3 section baru (15 sections total) |
+| `htma/MEMORY.md`        | Created (S1), Updated (S2), Updated (S6)   | File ini                                                          |
 
 ---
 
@@ -238,32 +243,80 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ---
 
+### Session 6 — 2026-09-23
+
+1. **Penyelesaian Slice 3.3 (Skills Section)** — M3 Surface Container Low cards, optical weight balancing, magnetic hover feedback.
+2. **Custom Cursor — Smooth Fluid Shrink + Magnetic Parallax** (commit `f69acd5`):
+   - Kursor dot menyusut fluid ke dalam elemen interaktif (`scale 1 → 0`, `opacity 1 → 0`) via spring M3 (`stiffness: 350, damping: 26`).
+   - Magnetic parallax pada elemen hover (`translate(var(--parallax-x), var(--parallax-y))` maks 3.5px).
+   - Umpan balik tekanan `scale(0.85)` saat `mousedown`.
+3. **Two-Stage Section Header Interaction** (commit `b681783`):
+   - Tahap 1: kursor masuk area section → pill judul aktif (`bg-primary-container`), panah `-rotate-45`, kursor dot tetap bebas.
+   - Tahap 2: kursor ke pill judul → dot menyusut masuk ke pill.
+   - Diterapkan di `about.tsx`, `skills.tsx`, dan kemudian `portfolio.tsx`.
+4. **Header Transparan + Hero Diperlebar** (commit `5cc2e39`):
+   - Header: `bg-surface` + `border-b` → `bg-transparent` + `pointer-events-none`. Logo & toggle `pointer-events-auto`.
+   - Tombol toggle diberi `bg-surface-container-high` + `shadow-sm` agar tetap kontras.
+   - Gradient mask atas (`mask-top`) dihapus dari `layout-wrapper.tsx` — konten scroll dari ujung atas viewport.
+   - Hero grid: `lg:col-start-2 lg:col-end-5` → `lg:col-start-1 lg:col-end-5` (4 kolom).
+5. **Dokumentasi sinkron** (commit `6611c43`) — update `BRAINSTORMING.md` Section 8.3/8.4/8.5/8.9 dan `DESIGN.md` Section 12.3/12.11.
+6. **Slice 3.4 — Portfolio Section & Modal** (kode selesai, **belum di-commit**):
+   - Card → **M3 Filled Card** mengikuti referensi desain card (light & dark): `bg-surface-container`, radius `24px` → hover `28px` → active `16px`, thumbnail `rounded-[inherit]` rasio `16/9`, content `p-6` + `text-left`.
+   - **Bug ditemukan**: `<button>` punya `text-align: center` bawaan UA stylesheet → judul/deskripsi jadi center. Diperbaiki dengan `text-left`.
+   - **Grid diperbaiki**: `md:grid-rows-[10]` (CSS invalid, baris pertama jadi 10px) + bento span hardcoded membuat card terhimpit (gambar 55px, teks 5 baris) → diganti `md:grid-cols-2` + auto rows, card index 0 `md:col-span-2`.
+   - **Modal** → M3 Basic Dialog: elemen native `<dialog open inert>` (lolos rule `jsx-a11y(prefer-tag-over-role)`), radius 28px, scrim `bg-on-surface/32`, tombol Demo `bg-primary` / Repository `bg-secondary-container`, close button `h-11 w-11 rounded-full`.
+   - **Copywriting**: field `description` ditambahkan ke `IPortfolio` (`types.d.ts`) + `portfolio-data.ts` untuk 7 project.
+   - **Cleanup**: `src/components/ui/svg/ArrowSVG.tsx` dihapus (tidak ada caller setelah bottom-bar card lama diganti).
+   - **Verifikasi**: `lint` ✅ `typechecks` ✅ `format:check` ✅ `build` 9/9 ✅, plus verifikasi runtime via CDP (resting/hover/pressed, modal open/close, cursor merge).
+7. **Ukuran Custom Cursor 24px → 40px**:
+   - Token `--cursor-size: 2.5rem` di `:root` (disamakan tombol toggle tema `h-10 w-10`).
+   - Offset centering di `useCursorPosition.ts` dibaca dari `offsetWidth` elemen `.cursor` (bukan hardcode `-12`) agar tidak drift saat ukuran diubah.
+   - Catatan: pendekatan `@property --cursor-size` dicoba tapi tidak resolve ke px di dev (Lightning CSS), sehingga `offsetWidth` dipilih.
+
+---
+
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 21 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 30 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** Clean (Slice 2.4 committed)
-- **Commit terbaru:** `a8d20c7` (`feat(navigation): apply m3 surface styling and sun moon theme toggle`)
+- **Working tree:** **DIRTY** — Slice 3.4 + cursor resize belum di-commit (atas instruksi user)
+- **Commit terbaru:** `6611c43` (`docs: update BRAINSTORMING.md and DESIGN.md for cursor and header changes`)
+
+### File belum di-commit
+
+```
+ M BRAINSTORMING.md
+ M DESIGN.md
+ M MEMORY.md
+ M src/components/ui/card-base.tsx
+ M src/components/ui/modal/modal-backdrop.tsx
+ M src/components/ui/modal/modal-card.tsx
+ M src/components/ui/modal/modal-close.tsx
+D  src/components/ui/svg/ArrowSVG.tsx
+ M src/hooks/useCursorPosition.ts
+ M src/modules/home-page/portfolio.tsx
+ M src/styles/globals.css
+ M src/utils/portfolio-data.ts
+ M types.d.ts
+```
 
 ---
 
 ## Langkah Selanjutnya
 
 1. **Phase 1 — Foundation SELESAI PENUH** ✅
-2. **Phase 2 — Core Components & Mechanics SELESAI PENUH** ✅:
-   - Slice 2.1: Migrasi Smooth Scroll (`locomotive-scroll` → `lenis`) ✅ (Commit `ef733db`)
-   - Slice 2.2: Native `useTextScramble` hook (eliminasi `baffle`) ✅ (Commit `c4380aa`)
-   - Slice 2.3: Custom cursor optimization (pointermove, rAF, no any) ✅ (Commit `2c56188`)
-   - Slice 2.4: Layout & Navigation (solid `bg-surface`, Sun/Moon icon toggle) ✅ (Commit `a8d20c7`)
-3. Lanjut ke **Phase 3 — Sections (Home Page)**:
-   - Slice 3.1: Hero Section (M3 Expressive typography hierarchy & layout alignment)
-   - Slice 3.2: About Section (M3 section header & surface card containment)
-   - Slice 3.3: Skills Section (M3 section header, grid spacing, skill chips)
-   - Slice 3.4: Portfolio Section (M3 elevated card, eliminasi brutalist offset shadow, overlay)
-   - Slice 3.5: Modal Dialog (M3 expressive bottom-sheet/dialog, full rounded-3xl)
-   - Slice 3.6: Sidebar / Navigation Rail (M3 expressive active pill indicators)
-   - Slice 3.7: Footer (M3 expressive typography & copyright alignment)
+2. **Phase 2 — Core Components & Mechanics SELESAI PENUH** ✅ (Slices 2.1–2.4)
+3. **Phase 3 — Sections (Home Page)**:
+   - Slice 3.1: Hero Section ✅ (commit `7b2ba93`)
+   - Slice 3.2: About Section ✅ (commit `623127b`)
+   - Slice 3.3: Skills Section ✅
+   - Slice 3.4: Portfolio Section & Modal ✅ (kode; belum di-commit)
+   - Slice 3.5: **Sidebar & Footer** ⏳ — berikutnya
+4. **Phase 4 — Contact Page** (Zod + M3 Text Fields)
+5. **Phase 5 — Polish, SEO & Launch** (Lighthouse 90+)
+
+**Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`.
 
 ---
 
@@ -272,7 +325,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - Baca `BRAINSTORMING.md` untuk rencana lengkap (semua Q&A sudah terjawab di section 14)
 - Baca `DESIGN.md` untuk aturan spesifik Material 3 Expressive (15 sections)
 - Baca `MEMORY.md` (file ini) untuk status & 25 keputusan final
-- Jangan ubah data portfolio (foto, list, detail)
+- Data portfolio existing jangan diubah (foto, list, judul, URL, repo). Field `description` sudah ditambahkan di Session 6
 - Layout vertical WAJIB tetap
 - Scroll effect & text scramble effect HARUS sama persis setelah migrasi
 - Ikuti Global Rules (AGENTS.md): strict TS, no `any`, functional, immutable, validasi input
@@ -280,5 +333,9 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - Linter: **Oxlint** (hapus seluruh artifak ESLint saat migrasi)
 - Git hooks: **Lefthook** (hapus Husky + lint-staged saat migrasi)
 - Font: **Google Sans Flex** variable font (fallback: **Google Sans Text**). Hapus Kata Grotesk & Neutral Face
-- Navbar: solid background (tanpa backdrop-blur)
-- Theme toggle: Sun/Moon icons (bukan MdGraphicEq)
+- Navbar: **transparan** (`bg-transparent` + `pointer-events-none`), logo & toggle tetap solid via `pointer-events-auto` (diubah Session 6, menggantikan keputusan solid `bg-surface` sebelumnya)
+- Gradient mask: hanya **bottom mask** yang tersisa; top mask dihapus Session 6
+- Theme toggle: Sun/Moon icons (bukan MdGraphicEq), dibungkus `bg-surface-container-high` + `shadow-sm`
+- Custom cursor: 40px (`--cursor-size: 2.5rem`), smooth fluid shrink + magnetic parallax; offset centering dibaca dari `offsetWidth`
+- Portfolio card: radius 24px, thumbnail `16/9` atas, content `p-6` `text-left` (WAJIB override `text-align: center` bawaan `<button>`)
+- **Working tree saat ini DIRTY** — Slice 3.4 belum di-commit atas instruksi user. Commit dulu sebelum lanjut Slice 3.5.

@@ -1,6 +1,6 @@
 # DESIGN SYSTEM — Material 3 Expressive (htma.site)
 
-> **Last Updated:** 2026-09-03
+> **Last Updated:** 2026-09-23
 > **Referensi Utama:** [Material 3 Expressive — Google Research](https://design.google/library/expressive-material-design-google-research)
 > **Docs Resmi:** [m3.material.io](https://m3.material.io/)
 > **Constraint:** Layout vertical TETAP dipertahankan. Data portfolio TIDAK berubah. Implementasi via Tailwind CSS utility classes, BUKAN library MUI/Material Web.
@@ -205,7 +205,7 @@ M3 Expressive mendorong penggunaan warna yang **lebih berani** dibanding M3 stan
 **Implementasi di portfolio:**
 
 - Section header hover → `bg-primary-container` (bukan `bg-primary/8`)
-- Portfolio card overlay → `bg-primary-container/90 backdrop-blur-sm`
+- Portfolio card → `bg-surface-container` (resting) / `bg-surface-container-high` (hover), thumbnail full-bleed di atas, teks di bawah. Bottom-bar overlay lama sudah dihapus.
 - Active sidebar link → `bg-primary-container text-on-primary-container rounded-full`
 - Hero badge "--web developer" → `bg-primary-container text-on-primary-container`
 
@@ -257,7 +257,8 @@ M3 Expressive memperluas type scale dengan emphasis pada **kontras ukuran** yang
 | Section header ("about", "skills", etc) | `text-xl` / `text-2xl` (Neutral Face) | `text-headline-sm` (heading font)                       |
 | About body text                         | `text-sm` / `text-base`               | `text-body-lg`                                          |
 | Skill subheading ("Main", "Library")    | `text-base`                           | `text-title-md`                                         |
-| Portfolio card title                    | `text-sm font-semibold`               | `text-title-sm`                                         |
+| Portfolio card title                    | `text-sm font-semibold`               | `text-title-lg` (22px)                                  |
+| Portfolio card description              | —                                     | `text-body-md` (14px) `text-on-surface-variant`         |
 | Footer text                             | `text-xs` / `text-base`               | `text-body-sm`                                          |
 | Contact form label                      | `text-sm font-medium`                 | `text-label-lg`                                         |
 | Navigation logo "HTMA"                  | `text-lg font-semibold`               | `text-title-md font-semibold`                           |
@@ -305,19 +306,19 @@ Shape morphing = border-radius berubah saat interaksi. Implementasi CSS:
 
 ### 6.3 Shape Usage di Portfolio
 
-| Elemen                    | Current            | M3 Expressive                                     |
-| ------------------------- | ------------------ | ------------------------------------------------- |
-| Navigation logo           | `rounded` (4px)    | `rounded-xl` (12px)                               |
-| Portfolio card            | `rounded` (4px)    | `rounded-2xl` (16px), hover: `rounded-3xl` (28px) |
-| Modal dialog              | Unknown            | `rounded-[28px]` (Extra Large)                    |
-| Social button             | `rounded-3xl`      | `rounded-full` (pill)                             |
-| Skill icon container      | `rounded-sm` (2px) | `rounded-xl` (12px)                               |
-| Input fields              | Border-bottom only | `rounded-t-xs` (4px top) filled style             |
-| Send button               | `rounded` (4px)    | `rounded-full` (pill)                             |
-| Scroll-to-top             | `rounded` (4px)    | `rounded-xl` (12px)                               |
-| Active sidebar link       | `rounded` (4px)    | `rounded-full` (pill)                             |
-| Sidebar rail (desktop)    | `rounded-t-full`   | `rounded-t-[28px]` (Extra Large top)              |
-| Highlighted name "Hutama" | `rounded` (4px)    | `rounded-lg` (8px)                                |
+| Elemen                    | Current            | M3 Expressive                                                       |
+| ------------------------- | ------------------ | ------------------------------------------------------------------- |
+| Navigation logo           | `rounded` (4px)    | `rounded-xl` (12px)                                                 |
+| Portfolio card            | `rounded` (4px)    | `rounded-[24px]`, hover: `rounded-[28px]`, active: `rounded-[16px]` |
+| Modal dialog              | Unknown            | `rounded-[28px]` (Extra Large)                                      |
+| Social button             | `rounded-3xl`      | `rounded-full` (pill)                                               |
+| Skill icon container      | `rounded-sm` (2px) | `rounded-xl` (12px)                                                 |
+| Input fields              | Border-bottom only | `rounded-t-xs` (4px top) filled style                               |
+| Send button               | `rounded` (4px)    | `rounded-full` (pill)                                               |
+| Scroll-to-top             | `rounded` (4px)    | `rounded-xl` (12px)                                                 |
+| Active sidebar link       | `rounded` (4px)    | `rounded-full` (pill)                                               |
+| Sidebar rail (desktop)    | `rounded-t-full`   | `rounded-t-[28px]` (Extra Large top)                                |
+| Highlighted name "Hutama" | `rounded` (4px)    | `rounded-lg` (8px)                                                  |
 
 ---
 
@@ -391,17 +392,17 @@ Desktop: hero name → text-display-md/lg (45px-57px)
 
 ### 8.2 Containment Usage di Portfolio
 
-| Elemen                       | Containment Method           | CSS Implementation                                                    |
-| ---------------------------- | ---------------------------- | --------------------------------------------------------------------- |
-| Portfolio card               | Background + shape           | `bg-surface-container rounded-2xl overflow-hidden`                    |
-| Skills icon grid             | Background container         | `bg-surface-container rounded-xl p-2.5` per icon                      |
-| Hero badge "--web developer" | Background + shape           | `bg-primary-container rounded-lg px-3 py-1`                           |
-| Modal dialog                 | Elevation + shape + backdrop | `bg-surface-container-high rounded-[28px] shadow-xl` + scrim          |
-| Contact form fields          | Filled container             | `bg-surface-container-highest rounded-t-xs border-b-2 border-outline` |
-| Active sidebar link          | Background + pill shape      | `bg-primary-container rounded-full px-4`                              |
-| Navigation bar               | Surface + blur               | `bg-surface/80 backdrop-blur-md`                                      |
-| Highlighted name "Hutama"    | Inline containment           | `bg-primary-container rounded-lg px-2 py-0.5 inline`                  |
-| Section separator            | Border containment           | `border-t border-outline-variant`                                     |
+| Elemen                       | Containment Method           | CSS Implementation                                                       |
+| ---------------------------- | ---------------------------- | ------------------------------------------------------------------------ |
+| Portfolio card               | Background + shape           | `bg-surface-container rounded-[24px] overflow-hidden`                    |
+| Skills icon grid             | Background container         | `bg-surface-container rounded-xl p-2.5` per icon                         |
+| Hero badge "--web developer" | Background + shape           | `bg-primary-container rounded-lg px-3 py-1`                              |
+| Modal dialog                 | Elevation + shape + backdrop | `bg-surface-container-high rounded-xl (28px) shadow-2xl` + scrim         |
+| Contact form fields          | Filled container             | `bg-surface-container-highest rounded-t-xs border-b-2 border-outline`    |
+| Active sidebar link          | Background + pill shape      | `bg-primary-container rounded-full px-4`                                 |
+| Navigation bar               | Transparent (Session 6)      | `bg-transparent pointer-events-none` + logo/toggle `pointer-events-auto` |
+| Highlighted name "Hutama"    | Inline containment           | `bg-primary-container rounded-lg px-2 py-0.5 inline`                     |
+| Section separator            | Border containment           | `border-t border-outline-variant`                                        |
 
 ### 8.3 Spacing sebagai Containment Signal
 
@@ -510,15 +511,15 @@ M3 Expressive meniadakan ketergantungan pada layer opasitas elevasi numerik (+1 
 
 ### 10.3 Mapping Surface di Portfolio
 
-| Elemen               | State Resting                  | State Hover / Active        | Shadow Accent                                    |
-| :------------------- | :----------------------------- | :-------------------------- | :----------------------------------------------- |
-| **Page Background**  | `bg-surface`                   | —                           | None                                             |
-| **Navigation Bar**   | `bg-surface`                   | —                           | None (border subtle `border-outline-variant/30`) |
-| **Portfolio Cards**  | `bg-surface-container`         | `bg-surface-container-high` | Resting: `none`, Hover: `shadow-lg`              |
-| **Modal Dialog**     | `bg-surface-container-high`    | —                           | `shadow-2xl` + Scrim `bg-on-surface/32`          |
-| **Sidebar Rail**     | `bg-surface-container-highest` | —                           | None                                             |
-| **Skill Containers** | `bg-surface-container-low`     | `bg-surface-container`      | Resting: `none`, Hover: subtle scale             |
-| **Gradient Masks**   | `bg-surface`                   | —                           | None (fade gradient)                             |
+| Elemen               | State Resting                  | State Hover / Active        | Shadow Accent                                       |
+| :------------------- | :----------------------------- | :-------------------------- | :-------------------------------------------------- |
+| **Page Background**  | `bg-surface`                   | —                           | None                                                |
+| **Navigation Bar**   | `bg-transparent` (Session 6)   | —                           | None (logo & toggle punya background solid sendiri) |
+| **Portfolio Cards**  | `bg-surface-container`         | `bg-surface-container-high` | Resting: `none`, Hover: `shadow-lg`                 |
+| **Modal Dialog**     | `bg-surface-container-high`    | —                           | `shadow-2xl` + Scrim `bg-on-surface/32`             |
+| **Sidebar Rail**     | `bg-surface-container-highest` | —                           | None                                                |
+| **Skill Containers** | `bg-surface-container-low`     | `bg-surface-container`      | Resting: `none`, Hover: subtle scale                |
+| **Gradient Masks**   | `bg-surface`                   | —                           | None (fade gradient)                                |
 
 ---
 
@@ -585,9 +586,15 @@ Detail implementasi setiap komponen portfolio menggunakan M3 Expressive + Tailwi
 ### 12.1 Navigation Bar
 
 ```
-Container: bg-surface (solid, tanpa backdrop-blur)
-Logo box: bg-primary-container text-on-primary-container rounded-xl px-3 py-1.5
-Theme toggle: MdLightMode / MdDarkMode, text-on-surface hover:bg-on-surface/8 rounded-full p-2
+Container: bg-transparent + pointer-events-none (Session 6)
+  Konten scroll tembus dari ujung atas; logo & toggle dibungkus pointer-events-auto
+Logo box: bg-custom-black text-custom-green (light) / dark:bg-custom-green dark:text-custom-black
+  rounded-xl px-3 py-1.5 text-title-md font-semibold
+Theme toggle: MdLightMode / MdDarkMode
+  h-10 w-10 rounded-full bg-surface-container-high text-on-surface shadow-sm
+  hover: bg-surface-container-highest
+  focus-visible: outline-2 outline-primary
+  aria-label: "Switch to light/dark mode"
 ```
 
 ### 12.2 Hero Section
@@ -601,6 +608,7 @@ Social button (M3 Filled Tonal Button):
   Container: bg-secondary-container text-on-secondary-container rounded-full px-6 py-3
   State layer: hover:bg-secondary-container/92 active:scale-95 transition-all
 SVG illustrations: text-on-surface / dark:text-primary
+Grid: lg:col-start-1 lg:col-end-5 (4 kolom, Session 6 — sebelumnya mulai kolom 2)
 ```
 
 ### 12.3 Section Headers (About, Skills, Portfolio, Contact)
@@ -653,21 +661,37 @@ Icon container (M3 Surface Container Low):
   Tailwind: flex items-center justify-center w-12 md:w-16 2xl:w-[4.5rem]
 ```
 
-### 12.6 Portfolio Cards (M3 Filled / Elevated Card)
+### 12.6 Portfolio Cards (M3 Filled Card — mengikuti referensi desain)
+
+Nilai di bawah diukur dari referensi card (light & dark) dan divalidasi di runtime:
 
 ```
 Card container (M3 Filled Card):
-  bg-surface-container rounded-2xl overflow-hidden
+  bg-surface-container rounded-[24px] overflow-hidden h-full
   motion: m3Motion.spatial.fast (scale & shape morphing)
-  hover: rounded-[28px] shadow-lg scale-[1.02] bg-surface-container-high
-  active: scale-[0.98] rounded-xl
-Bottom overlay:
-  bg-surface/90 backdrop-blur-sm rounded-xl m-2 p-3
-  flex justify-between items-center
-Title: text-title-sm font-semibold text-on-surface
-Arrow icon (M3 Icon Button):
-  bg-primary text-on-primary rounded-full p-1.5 w-7 h-7
-GitHub link: text-primary / dark:text-primary
+  hover: rounded-[28px] bg-surface-container-high shadow-lg
+  active: rounded-[16px] scale-[0.98]
+
+Anatomi (thumbnail atas → teks bawah):
+  Thumbnail: rounded-[inherit] (24px), aspect-[16/9], object-cover
+  Content block: p-6 (padding 24px) + text-left
+    (button UA default text-align:center WAJIB di-override text-left)
+    Title:  text-title-lg font-medium text-on-surface
+    Desc:   mt-2 text-body-md text-on-surface-variant
+
+Grid:
+  ul: grid-cols-1 md:grid-cols-2, gap-4
+  li: auto rows (tinggi ikut konten — tidak ada card terhimpit)
+  card index 0: md:col-span-2 (featured, lebih lebar)
+  Semua card: rasio gambar konsisten 16:9
+
+Interaksi kursor:
+  Kursor dot menyusut fluid ke dalam card (scale 1→0, opacity 1→0)
+  Magnetic parallax via .magnetic-item + button (maks 3.5px)
+  Card menyala bg-surface-container-high sebagai penanda kursor masuk
+
+Dark mode: bg-surface-container (#1F201B), desc text-on-surface-variant (#C7C8B8)
+GitHub link: text-primary underline / text-on-surface-variant
 ```
 
 ### 12.7 Modal / Dialog (M3 Basic Dialog)
@@ -675,13 +699,20 @@ GitHub link: text-primary / dark:text-primary
 ```
 Backdrop: bg-on-surface/32 (M3 official scrim)
   transition: m3Motion.effect.default (opacity fade)
-Dialog container:
-  bg-surface-container-high rounded-[28px] p-6 shadow-2xl max-w-2xl w-full
+Dialog container (native <dialog>):
+  bg-surface-container-high rounded-xl (28px) p-6 shadow-2xl max-w-5xl w-full
+  max-h-[90vh] overflow-y-auto
   enter: scale(0.92) → scale(1), opacity 0→1
-  exit: scale(1) → scale(0.95), opacity 1→0
+  exit: scale(1) → scale(0.92), opacity 1→0
   motion: m3Motion.spatial.default (spring overshoot)
-Close button:
-  bg-surface-container-highest text-on-surface rounded-full p-2
+  a11y: elemen <dialog open inert> + aria-label (bukan role="dialog")
+Inner content panel:
+  bg-surface-container rounded-lg p-4
+Buttons (M3 Filled Button / Filled Tonal Button):
+  Demo: bg-primary text-on-primary rounded-full px-4 py-3
+  Repository: bg-secondary-container text-on-secondary-container rounded-full
+Close button (M3 Icon Button):
+  bg-surface-container-highest text-on-surface rounded-full h-11 w-11
   hover: bg-on-surface/8
 ```
 
@@ -751,8 +782,8 @@ Mengadopsi model interaksi kursor dari `robbietilton.com/more-info` yang dipaduk
 
 2. **Visual & Styling (Palet Warna Tetap):**
    - Lingkaran dot: `bg-surface` / `bg-primary` dengan efek `mix-blend-difference` (mempertahankan palet dan kontras tema saat ini).
-   - Dimensi resting: `w-6 h-6 rounded-full fixed z-[1350] pointer-events-none`.
-   - Umpan balik tekanan (_pressing_): Mengecil lembut ke `scale(0.85)` / `w-4 h-4` saat pointer ditekan (`mousedown`).
+   - Dimensi resting: `40x40px` via token `--cursor-size: 2.5rem` (disamakan dengan tombol toggle tema), `rounded-full fixed z-[1350] pointer-events-none`. Offset centering dibaca dari `offsetWidth` elemen kursor sehingga ukuran cukup diubah di satu tempat.
+   - Umpan balik tekanan (_pressing_): Mengecil lembut ke `scale(0.85)` / 34px saat pointer ditekan (`mousedown`).
 
 3. **Interaksi Elemen Interaktif (Smooth Fluid Shrink & Respons Komponen):**
    - Ketika kursor diarahkan ke elemen yang bisa di-hover (pill judul section, tombol, tautan, kartu portofolio, kartu skill, chip):
@@ -768,11 +799,13 @@ Mengadopsi model interaksi kursor dari `robbietilton.com/more-info` yang dipaduk
 ### 12.12 Gradient Masks
 
 ```
-Top mask: bg-surface fixed z-[1030] h-[8%]
-  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%)
-Bottom mask: bg-surface fixed z-[1050] h-[8%]
+Bottom mask (satu-satunya yang tersisa — Session 6):
+  bg-surface fixed z-[1050] h-[8%]
   mask-image: linear-gradient(to top, #000 0%, transparent 100%)
   dark: bg-surface (auto via dark mode palette)
+
+Top mask: DIHAPUS di Session 6 — header dibuat transparan supaya konten
+  terlihat scroll dari ujung atas viewport tanpa tertutup layer solid.
 ```
 
 ---

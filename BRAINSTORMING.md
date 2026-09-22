@@ -30,7 +30,7 @@
 
 ### Tech Stack
 
-| Layer           | Teknologi Awal       | Status Aktual (Phase 0–2 Selesai)     | Catatan Migrasi                            |
+| Layer           | Teknologi Awal       | Status Aktual (Phase 0–3 Selesai)     | Catatan Migrasi                            |
 | --------------- | -------------------- | ------------------------------------- | ------------------------------------------ |
 | Framework       | Next.js 14.2.30      | **Next.js 15.5.25** (App Router)      | Turbopack stable, React 19 native support  |
 | React           | React 18.3.1         | **React 19.3.0**                      | Concurrent features, React 19 types        |
@@ -52,7 +52,7 @@
 
 ```
 ┌─────────────────────────────────────────────┐
-│ Navigation (fixed top, grid-12)             │
+│ Navigation (fixed top, grid-12, transparan) │
 │ ┌──────┐                        ┌──────────┐│
 │ │ HTMA │                        │ Theme Btn││
 │ └──────┘                        └──────────┘│
@@ -68,13 +68,15 @@
 │  │          │ │ - Footer     │ │   top    ││
 │  └──────────┘ └──────────────┘ └──────────┘│
 ├─────────────────────────────────────────────┤
-│ Gradient Masks (fixed top & bottom)         │
+│ Gradient Mask (fixed bottom only)           │
 │ Custom Cursor (fixed, pointer-events-none)  │
 │ Modal Portal (portfolio detail)             │
 └─────────────────────────────────────────────┘
 ```
 
-**Layout ini tetap 100% dipertahankan.** Hero sticky di kiri, konten scroll di tengah, sidebar sticky di kanan. Gradient mask atas-bawah tetap ada.
+**Layout ini tetap 100% dipertahankan.** Hero sticky di kiri, konten scroll di tengah, sidebar sticky di kanan.
+
+**Catatan (Session 6):** Gradient mask atas **dihapus** dan header dijadikan **transparan** (`bg-transparent` + `pointer-events-none`) supaya konten scroll terlihat dari ujung atas viewport. Logo & tombol toggle tetap solid dan interaktif (`pointer-events-auto`). Gradient mask bawah tetap dipertahankan.
 
 ### Halaman
 
@@ -375,16 +377,16 @@ Better T Stack mendukung:
 
 Kontrak kualitas tertulis yang mengikat setiap AI Agent yang mengeksekusi proyek ini (tidak boleh diturunkan secara diam-diam):
 
-| Dimensi              | Batasan / Target (Non-Negotiable)                                                                                 | Cara Verifikasi                            |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| **Layout Invariant** | Layout vertical 100% terkunci (Hero kiri sticky, Content scroll, Sidebar kanan sticky, Gradient mask atas-bawah). | Visual check & inspection                  |
-| **Data Invariant**   | 0 perubahan data portfolio (foto, list project, URL, repo tetap).                                                 | `git diff src/utils/portfolio-data.ts` = 0 |
-| **Type-Safety**      | 0 `any`, 0 `@ts-ignore`, 0 `@ts-expect-error`, strict mode aktif.                                                 | `bun run typechecks` (0 errors)            |
-| **Lint Quality**     | 0 error, 0 warnings pada linter Oxlint.                                                                           | `bun run lint` (0 warnings/errors)         |
-| **Scroll Parity**    | Perilaku & feel scroll Lenis wajib sama persis dengan Locomotive lama.                                            | Runtime browser check                      |
-| **Text Scramble**    | Native `useTextScramble` wajib identik visualnya dengan Baffle.js lama.                                           | Runtime browser check                      |
-| **Performance Bar**  | Lighthouse Core Web Vitals target: 90+ (Performance, Accessibility, Best Practices, SEO).                         | Lighthouse CLI / DevTools audit            |
-| **Form Security**    | Validasi input sisi klien via Zod schema (nama, email valid, pesan).                                              | Zod schema validation tests                |
+| Dimensi              | Batasan / Target (Non-Negotiable)                                                                                                                                  | Cara Verifikasi                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| **Layout Invariant** | Layout vertical 100% terkunci (Hero kiri sticky, Content scroll, Sidebar kanan sticky, Gradient mask bawah). Header transparan agar konten scroll dari ujung atas. | Visual check & inspection                                                                       |
+| **Data Invariant**   | Data portfolio existing TIDAK berubah (foto, list project, URL, repo tetap). Field `description` **ditambahkan** di Session 6 untuk kebutuhan copywriting card.    | `git diff src/utils/portfolio-data.ts` — hanya penambahan `description`, 0 perubahan nilai lama |
+| **Type-Safety**      | 0 `any`, 0 `@ts-ignore`, 0 `@ts-expect-error`, strict mode aktif.                                                                                                  | `bun run typechecks` (0 errors)                                                                 |
+| **Lint Quality**     | 0 error, 0 warnings pada linter Oxlint.                                                                                                                            | `bun run lint` (0 warnings/errors)                                                              |
+| **Scroll Parity**    | Perilaku & feel scroll Lenis wajib sama persis dengan Locomotive lama.                                                                                             | Runtime browser check                                                                           |
+| **Text Scramble**    | Native `useTextScramble` wajib identik visualnya dengan Baffle.js lama.                                                                                            | Runtime browser check                                                                           |
+| **Performance Bar**  | Lighthouse Core Web Vitals target: 90+ (Performance, Accessibility, Best Practices, SEO).                                                                          | Lighthouse CLI / DevTools audit                                                                 |
+| **Form Security**    | Validasi input sisi klien via Zod schema (nama, email valid, pesan).                                                                                               | Zod schema validation tests                                                                     |
 
 ---
 
@@ -403,13 +405,13 @@ Setiap kode yang ditulis dalam project ini WAJIB mengikuti standar dari Global R
 
 ### 4.2 TypeScript Strict
 
-| Rule                        | Status Saat Ini                                              | Aksi                          |
-| --------------------------- | ------------------------------------------------------------ | ----------------------------- |
-| **Dilarang `any`**          | Ada 1 pelanggaran: `useCursorPosition.ts` line 11 (`e: any`) | FIX → ganti ke `PointerEvent` |
-| **Functional programming**  | Sudah diterapkan, semua komponen function-based              | Pertahankan                   |
-| **Immutability**            | Zustand store sudah immutable via `set()`                    | Pertahankan                   |
-| **Early returns**           | Belum konsisten                                              | Terapkan di semua fungsi baru |
-| **`interface` over `type`** | Sudah diterapkan (`IPortfolio`, `IClientSlice`, dll)         | Pertahankan                   |
+| Rule                        | Status Saat Ini                                                                                               | Aksi                          |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **Dilarang `any`**          | ✅ 0 pelanggaran — tipe `any` di `useCursorPosition.ts` sudah dihapus pada Slice 2.3 (diganti `PointerEvent`) | Terpenuhi                     |
+| **Functional programming**  | Sudah diterapkan, semua komponen function-based                                                               | Pertahankan                   |
+| **Immutability**            | Zustand store sudah immutable via `set()`                                                                     | Pertahankan                   |
+| **Early returns**           | Belum konsisten                                                                                               | Terapkan di semua fungsi baru |
+| **`interface` over `type`** | Sudah diterapkan (`IPortfolio`, `IClientSlice`, dll)                                                          | Pertahankan                   |
 
 ### 4.3 Keamanan (OWASP)
 
@@ -655,11 +657,13 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Logo background → `primary-container` dengan teks `on-primary-container`
+- Logo background → tetap `bg-custom-black text-custom-green` (light) / `dark:bg-custom-green dark:text-custom-black`, shape `rounded-xl`.
 - Border radius logo → `rounded-xl` (12px, M3 small shape)
 - Theme toggle → Ganti ke ikon **Sun/Moon** (`MdLightMode` / `MdDarkMode` dari `react-icons/md`)
-- Navigation bar background: **solid `bg-surface`** (tanpa backdrop-blur)
-- Gradient mask atas (`mask-top`) tetap dipertahankan, tapi background-nya ikut warna `surface` baru
+- Navigation bar background → **`bg-transparent` + `pointer-events-none`** (diubah di Session 6; sebelumnya solid `bg-surface`). Konten scroll terlihat tembus dari ujung atas sampai bawah.
+- Logo & tombol toggle dibungkus `pointer-events-auto` supaya tetap bisa diklik meski header transparan.
+- Tombol toggle diberi background solid `bg-surface-container-high` + `shadow-sm` (hover `bg-surface-container-highest`) agar ikon tetap terlihat kontras di atas header transparan.
+- Gradient mask atas (`mask-top`) **dihapus** di Session 6.
 
 **Yang TIDAK berubah:**
 
@@ -688,10 +692,13 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 **Yang TIDAK berubah:**
 
 - Sticky behavior
-- Grid position
 - Baffle scramble effect (tetap ada, akan di-rewrite native — lihat bagian 6)
 - Rotate -90° pada mobile
 - Animasi Framer Motion (fade + slide)
+
+**Perubahan tambahan (Session 6):**
+
+- Grid position **diperlebar**: `lg:col-start-2 lg:col-end-5` → `lg:col-start-1 lg:col-end-5` (4 kolom, dimulai dari kolom 1) agar proporsi sisi kiri lebih seimbang dan tidak terlalu menempel ke konten utama.
 
 ---
 
@@ -758,14 +765,17 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 **Perubahan M3:**
 
 - Section header → sama seperti About & Skills (M3 Two-Stage Interactive Magnetic Pill).
-- Card style → M3 **Filled Card** / **Elevated Card**:
-  - Hapus brutalist offset shadow murni.
-  - Ganti ke: `bg-surface-container rounded-2xl overflow-hidden` (M3 Large shape: 16px).
-  - **Shape morphing:** `hover:rounded-[28px]` (M3 Extra Large shape: 28px) dengan spring motion `m3Motion.spatial.fast`.
-  - Hover: `hover:shadow-lg hover:scale-[1.02] bg-surface-container-high`.
+- Card style → **M3 Filled Card**, mengikuti referensi desain card (light & dark):
+  - Card: `bg-surface-container rounded-[24px] overflow-hidden` (M3 Large shape: 24px).
+  - **Anatomi:** thumbnail di atas (`rounded-[inherit]`, aspect `16/9`, `object-cover`) → content block di bawah dengan `p-6` (padding 24px) + `text-left`.
+  - **Penting:** elemen `<button>` punya `text-align: center` bawaan UA stylesheet — wajib di-override `text-left` agar judul & deskripsi rata kiri seperti referensi.
+  - Judul: `text-title-lg font-medium text-on-surface`. Deskripsi: `mt-2 text-body-md text-on-surface-variant`.
+  - **Shape morphing:** `hover:rounded-[28px]` (Extra Large) → `active:rounded-[16px]` (Medium) via `m3Motion.spatial.fast`.
+  - Hover: `hover:bg-surface-container-high hover:shadow-lg`.
   - Active/pressed: `active:scale-[0.98]`.
-- Card bottom overlay → `bg-surface/90 backdrop-blur-sm rounded-xl m-2 p-3` (M3 Medium shape).
-- Arrow icon → M3 **Icon Button** style: `bg-primary text-on-primary rounded-full p-1.5`.
+  - Kursor menyusut fluid & magnetic parallax via `.magnetic-item` (sudah aktif dari Slice 2.3).
+- **Grid diperbaiki:** `md:grid-cols-2` + auto rows (tinggi ikut konten) menggantikan bento span hardcoded yang membuat card terhimpit/tidak proporsional. Card index 0 memakai `md:col-span-2` sebagai featured. Semua thumbnail konsisten rasio `16/9`.
+- **Copywriting deskripsi:** field `description` ditambahkan ke `IPortfolio` + `portfolio-data.ts`, berisi 1 kalimat per project sesuai konten card-nya (Garuda Universe, Ibrahim Law, Urban Fashion Shop, Taskify, Crypto Price Watcher, Url Shortfly, Todolist App).
 - GitHub link di bawah → teks `on-surface-variant`, link `primary`.
 - Border separator → `border-outline-variant`.
 - Click → modal behavior
@@ -783,12 +793,16 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 **Perubahan M3:**
 
 - Modal → M3 **Basic Dialog** style:
-  - Container: `bg-surface-container-high rounded-[28px] p-6 shadow-2xl` (M3 Extra Large shape: 28px).
+  - Container: `bg-surface-container-high rounded-xl` (28px) `p-6 shadow-2xl max-w-5xl max-h-[90vh] overflow-y-auto` (M3 Extra Large shape).
   - Backdrop/Scrim: `bg-on-surface/32` (M3 official scrim opacity).
-  - Close button: M3 icon button `rounded-full` dengan hover state layer.
+  - Close button: M3 icon button `h-11 w-11 rounded-full bg-surface-container-highest` dengan hover state layer `bg-on-surface/8`.
+  - Elemen native `<dialog open inert>` (bukan `role="dialog"`) + `aria-label` — lolos rule `jsx-a11y(prefer-tag-over-role)`.
+  - Panel konten dalam: `bg-surface-container rounded-lg p-4`.
+  - Tombol Demo → M3 Filled Button (`bg-primary text-on-primary rounded-full`); Repository → Filled Tonal Button (`bg-secondary-container`). Shadow brutalist dihapus.
 - Animasi:
   - Scale dialog: 0.92 → 1 via `m3Motion.spatial.default` (spring overshoot natural).
   - Fade backdrop: opacity 0 → 1 via `m3Motion.effect.default`.
+- Modal menampilkan judul, deskripsi project, tombol Demo/Repository, dan gambar portfolio.
 
 **Yang TIDAK berubah:**
 
@@ -856,8 +870,8 @@ Mengadopsi model interaksi kursor presisi dari `robbietilton.com/more-info` yang
 
 2. **Warna & Tampilan Tetap:**
    - Lingkaran dot: `bg-surface` / `bg-primary` dengan efek `mix-blend-difference` tetap dipertahankan sesuai tema warna saat ini.
-   - Dimensi resting: 24x24px, fixed, pointer-events-none, z-index 1350.
-   - Umpan balik tekanan (_pressing_): mengecil halus ke `scale(0.85)` / 18px saat mouse ditekan (`mousedown`).
+   - Dimensi resting: 40x40px (`--cursor-size: 2.5rem`, disamakan dengan tombol toggle tema `h-10 w-10`), fixed, pointer-events-none, z-index 1350. Offset centering dihitung dari `offsetWidth` elemen kursor agar tidak drift saat ukuran diubah.
+   - Umpan balik tekanan (_pressing_): mengecil halus ke `scale(0.85)` / 34px saat mouse ditekan (`mousedown`).
 
 3. **Interaksi Elemen Interaktif (Smooth Fluid Shrink & Respons Komponen):**
    - Ketika kursor diarahkan ke elemen yang bisa di-hover (pill judul section, tombol, link, kartu portofolio, kartu skill, assist chip):
@@ -888,10 +902,12 @@ Mengadopsi model interaksi kursor presisi dari `robbietilton.com/more-info` yang
 
 - Background → `bg-surface` (light) / `bg-surface` (dark)
 - Mask gradient tetap sama (efek fade in/out)
+- **Top mask DIHAPUS (Session 6)** — `layout-wrapper.tsx` sekarang hanya menyisakan bottom mask. Header dibuat transparan, sehingga konten bisa terlihat scroll dari ujung atas viewport tanpa tertutup layer solid.
 
 **Yang TIDAK berubah:**
 
-- Seluruh behavior dan posisi
+- Bottom mask: fixed, z-1050, 8% height, `bg-surface`, `mask-bottom`
+- CSS `mask-image: linear-gradient(to top, #000 0%, transparent 100%)`
 
 ---
 
@@ -1341,9 +1357,17 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 - **Slice 3.1 — Hero Section (SELESAI)**: M3 typography hierarchy (`text-display-sm`), Assist Chip badge, Filled Tonal Button socials dengan magnetic hover delegation, dan spring motion specs. Commit `7b2ba93`.
 - **Slice 3.2 — About Section (SELESAI)**: M3 section header hover state layer, surface card containment, dan copywriting natural tanpa AI-isms. Commit `623127b`.
 - **Slice 3.3 — Skills Section (SELESAI)**: M3 Surface Container Low cards dengan optical weight balancing, kontras dark mode bersih, dan magnetic hover feedback.
-- **Slice 3.4 — Portfolio Section & Modal (IN-PROGRESS)**: M3 Filled Card (`bg-surface-container`) dengan shape morphing hover (`rounded-2xl` → `rounded-[28px]`), interaksi kursor dissolve + magnetic card attraction, Basic Dialog, dan Scrim resmi (`bg-on-surface/32`).
+- **Slice 3.4 — Portfolio Section & Modal (SELESAI)**: M3 Filled Card (`bg-surface-container`, radius 24px) mengikuti referensi desain card (light & dark) — anatomi thumbnail `16/9` di atas + content `p-6` `text-left`, shape morphing hover (`24px → 28px → 16px`), Basic Dialog native `<dialog>` dengan Scrim `bg-on-surface/32`. Grid diperbaiki dari bento span hardcoded (invalid `md:grid-rows-[10]`) menjadi `md:grid-cols-2` + auto rows. Field `description` ditambahkan ke `IPortfolio` + `portfolio-data.ts`.
 - **Slice 3.5 — Sidebar & Footer**: Navigation Rail dengan Active Indicator pill, Small FAB scroll-top dengan magnetic hover attraction, dan footer tertiary accent.
 - Verifikasi: `bun run typechecks`, `bun run lint`, `bun run build` sukses, visual responsive di desktop & mobile.
+
+**Pekerjaan tambahan di luar slice (Session 6) — sudah selesai:**
+
+- **Custom cursor smooth fluid shrink + magnetic parallax**: kursor dot menyusut fluid (`scale 1 → 0`, `opacity 1 → 0`) ke dalam elemen interaktif, elemen bergeser magnetik maks 3.5px. Commit `f69acd5`.
+- **Two-stage section header interaction**: kursor masuk section → pill judul aktif; kursor ke pill → dot menyusut masuk. Commit `b681783`.
+- **Header transparan + hero diperlebar**: commit `5cc2e39`.
+- **Ukuran kursor 24px → 40px** (disamakan tombol toggle tema), offset centering dibaca dari `offsetWidth` elemen.
+- **Cleanup**: `src/components/ui/svg/ArrowSVG.tsx` dihapus (tidak lagi punya caller setelah card bottom-bar lama diganti).
 
 ---
 
@@ -1373,19 +1397,19 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 
 Semua pertanyaan sudah dijawab dan dikonfirmasi (2026-09-03):
 
-| #   | Pertanyaan                | Jawaban Final                                                                                                                         |
-| --- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **Font choice**           | Full M3 Expressive — **Google Sans Flex** (variable font) untuk body & heading. Hapus Kata Grotesk & Neutral Face                     |
-| 2   | **Portfolio card style**  | Full M3 Expressive elevated card — hapus brutalist offset shadow                                                                      |
-| 3   | **Theme toggle icon**     | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq`                                                             |
-| 4   | **Navbar backdrop blur**  | **Tetap solid background** (`bg-surface`), tanpa `backdrop-blur`                                                                      |
-| 5   | **M3 color palette**      | Generate ulang pakai `@material/material-color-utilities` untuk nilai akurat. Estimasi di DESIGN.md akan di-replace saat implementasi |
-| 6   | **Tailwind v4**           | ✅ Konfirmasi lanjut — migrasi config JS → CSS-based `@theme`                                                                         |
-| 7   | **Motion v12**            | ✅ Konfirmasi lanjut — `framer-motion` → `motion`                                                                                     |
-| 8   | **React 19 + Next.js 15** | ✅ Siap — terima potensi breaking changes                                                                                             |
-| 9   | **Bun lockfile**          | **Commit `bun.lockb`** ke git (reproducible builds)                                                                                   |
-| 10  | **Monorepo**              | **Tetap single app** — tidak convert ke Turborepo                                                                                     |
-| 11  | **Git hooks**             | **Migrasi ke Lefthook** (ganti Husky) — menjalankan `oxlint` + `prettier --check` di pre-commit                                       |
+| #   | Pertanyaan                | Jawaban Final                                                                                                                                                                                                                      |
+| --- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Font choice**           | Full M3 Expressive — **Google Sans Flex** (variable font) untuk body & heading. Hapus Kata Grotesk & Neutral Face                                                                                                                  |
+| 2   | **Portfolio card style**  | Full M3 Expressive elevated card — hapus brutalist offset shadow                                                                                                                                                                   |
+| 3   | **Theme toggle icon**     | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq`                                                                                                                                                          |
+| 4   | **Navbar backdrop blur**  | Awalnya solid `bg-surface` tanpa `backdrop-blur`. **Di-supersede Session 6**: header jadi `bg-transparent` + `pointer-events-none` (logo & toggle tetap solid via `pointer-events-auto`) agar konten scroll tembus dari ujung atas |
+| 5   | **M3 color palette**      | Generate ulang pakai `@material/material-color-utilities` untuk nilai akurat. Estimasi di DESIGN.md akan di-replace saat implementasi                                                                                              |
+| 6   | **Tailwind v4**           | ✅ Konfirmasi lanjut — migrasi config JS → CSS-based `@theme`                                                                                                                                                                      |
+| 7   | **Motion v12**            | ✅ Konfirmasi lanjut — `framer-motion` → `motion`                                                                                                                                                                                  |
+| 8   | **React 19 + Next.js 15** | ✅ Siap — terima potensi breaking changes                                                                                                                                                                                          |
+| 9   | **Bun lockfile**          | **Commit `bun.lockb`** ke git (reproducible builds)                                                                                                                                                                                |
+| 10  | **Monorepo**              | **Tetap single app** — tidak convert ke Turborepo                                                                                                                                                                                  |
+| 11  | **Git hooks**             | **Migrasi ke Lefthook** (ganti Husky) — menjalankan `oxlint` + `prettier --check` di pre-commit                                                                                                                                    |
 
 ---
 
