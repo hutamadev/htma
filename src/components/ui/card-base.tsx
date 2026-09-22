@@ -5,10 +5,6 @@ interface CardProps {
 
 export default function Card({ children, className }: Readonly<CardProps>) {
   return (
-    <div
-      className={`flex w-full cursor-pointer flex-col rounded bg-transparent ${className}`}
-    >
-      {children}
-    </div>
+    <div className={`flex w-full flex-col ${className ?? ''}`}>{children}</div>
   );
 }
