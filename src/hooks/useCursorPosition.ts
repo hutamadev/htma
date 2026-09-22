@@ -31,8 +31,13 @@ export default function useCursorPosition() {
       el.style.removeProperty('--parallax-y');
     };
 
+    // Centre the dot on the pointer. Read the rendered width so the offset always
+    // matches --cursor-size without duplicating the value in JS.
+    const cursorEl = document.querySelector<HTMLElement>('.cursor');
+    const half = (cursorEl?.offsetWidth ?? 0) / 2;
+
     const handleMove = (e: MouseEvent | PointerEvent) => {
-      latestPos.current = { x: e.clientX - 12, y: e.clientY - 12 };
+      latestPos.current = { x: e.clientX - half, y: e.clientY - half };
 
       // Check if hovering interactive element via elementFromPoint
       const hoveredNode = document.elementFromPoint(e.clientX, e.clientY);

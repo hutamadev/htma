@@ -120,6 +120,9 @@
   --color-custom-green: #d0ef67;
   --color-custom-blue: #bcece1;
   --color-lime: #d0ef67;
+
+  /* Custom Cursor dot size — matches the theme toggle button (h-10 w-10) */
+  --cursor-size: 2.5rem;
 }
 
 .dark {
@@ -329,8 +332,8 @@ body {
   left: 0;
   top: 0;
   z-index: 1350;
-  height: 1.5rem;
-  width: 1.5rem;
+  height: var(--cursor-size);
+  width: var(--cursor-size);
   border-radius: 9999px;
   background-color: var(--color-surface);
   mix-blend-mode: difference;
