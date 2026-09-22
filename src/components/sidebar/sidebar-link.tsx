@@ -15,34 +15,25 @@ const sidebarList = [
   },
 ];
 
-const activeLink = (url: string, pathname: string) => {
-  return pathname === url
-    ? clsx(
-        'bg-custom-black text-custom-green',
-        'lg:bg-custom-green lg:text-custom-black',
-        'dark:bg-custom-green dark:text-custom-black dark:lg:bg-custom-black dark:lg:text-custom-green'
-      )
-    : clsx(
-        'menu-link bg-none text-custom-black',
-        'lg:text-custom-green',
-        'dark:text-custom-green dark:lg:text-custom-black'
-      );
-};
-
 export default function SidebarLink() {
   const pathname = usePathname();
 
   return (
     <>
       {sidebarList.map((side) => {
+        // M3 active indicator: primary-container pill for the current route, a
+        // plain state layer for the rest. Colour roles resolve per theme via
+        // CSS variables, so no dark: variants are needed.
+        const isActive = pathname === side.link;
+
         return (
           <li
             key={side.title}
             className={clsx(
-              activeLink(pathname, side.link),
-              'rotate-90 rounded px-1 text-base',
-              'md:text-base',
-              '2xl:text-lg'
+              isActive
+                ? 'bg-primary-container text-on-primary-container'
+                : 'text-on-surface-variant hover:bg-on-surface/8',
+              'rotate-90 rounded-full px-4 py-1.5 text-label-lg transition-colors duration-200'
             )}
           >
             <Link href={side.link}>{side.title}</Link>

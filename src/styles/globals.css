@@ -209,55 +209,6 @@ body {
   mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
 }
 
-.menu-link {
-  position: relative;
-  padding-top: 1px;
-  padding-bottom: 1px;
-}
-
-.menu-link:before,
-.menu-link:after {
-  position: absolute;
-  bottom: -2px;
-  height: 2px;
-  width: 0%;
-  content: '';
-}
-
-.menu-link:before {
-  left: 0;
-}
-
-.menu-link:after {
-  right: 0;
-  background-color: var(--color-custom-green);
-  transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-.dark .menu-link:after {
-  @media (min-width: 768px) {
-    background-color: var(--color-custom-black);
-  }
-}
-
-.menu-link:hover:before {
-  width: 100%;
-  background-color: var(--color-custom-green);
-  transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-.dark .menu-link:hover:before {
-  @media (min-width: 768px) {
-    background-color: var(--color-custom-black);
-  }
-}
-
-.menu-link:hover:after {
-  width: 100%;
-  background-color: transparent;
-  transition: 0s;
-}
-
 /* Loading UI */
 
 .loader,
