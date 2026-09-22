@@ -10,29 +10,19 @@ export default function ModalClose() {
   return (
     <div
       className={clsx(
-        isModalShow ? '' : '-translate-y-[999px]',
-        'fixed top-0 right-0 z-[1300] flex h-[10vh] w-full items-center justify-center duration-700',
-        'lg:h-[20vh]'
+        'fixed top-4 right-4 z-[1400] duration-300',
+        'md:top-6 md:right-6',
+        isModalShow ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
     >
-      <div
-        className={clsx(
-          'layout flex w-fit items-center justify-center rounded-full bg-custom-black p-3',
-          'dark:bg-custom-green'
-        )}
+      <button
+        type='button'
+        onClick={showModalHandler}
+        aria-label='Close portfolio detail'
+        className='flex h-11 w-11 items-center justify-center rounded-full bg-surface-container-highest text-on-surface shadow-lg transition-colors duration-200 hover:bg-on-surface/8'
       >
-        <button onClick={showModalHandler}>
-          <CloseSVG
-            className={clsx(
-              'mx-auto w-5 text-custom-green',
-              'dark:text-custom-black',
-              'md:w-6',
-              'lg:w-6'
-            )}
-            fill='currentColor'
-          />
-        </button>
-      </div>
+        <CloseSVG className='w-5' fill='currentColor' />
+      </button>
     </div>
   );
 }

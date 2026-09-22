@@ -6,7 +6,6 @@ import { useStore } from '@store/useStore';
 import { googleSansFlex } from '@utils/localFont';
 
 import NextImage from '../next-image';
-// import ArrowSVG from '../svg/ArrowSVG';
 import GithubSVG from '../svg/GithubSVG';
 
 export interface IModalCardProps {
@@ -24,98 +23,84 @@ export default function ModalCard({
     <section
       className={clsx(
         outerClassName,
-        isModalShow ? '' : 'translate-y-[999px]',
-        'fixed bottom-0 left-0 z-[1300] h-[80vh] w-full overflow-scroll rounded-t-3xl bg-custom-white-2 p-6 text-center font-semibold uppercase shadow-custom-shadow duration-700',
-        'dark:bg-custom-black',
-        'md:h-fit'
+        'pointer-events-none fixed inset-0 z-[1300] flex items-center justify-center p-4 duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+        isModalShow ? 'opacity-100' : 'opacity-0'
       )}
     >
-      <div
+      <dialog
+        open
+        inert={!isModalShow}
+        aria-label={`${portfolioData?.title ?? 'Portfolio'} detail`}
         className={clsx(
           innerClassName,
-          'layout grid w-full grid-cols-1 gap-6 rounded-xl border-2 border-custom-black/70 p-4',
-          'bg-custom-white-2 dark:border-custom-green/70',
-          'lg:grid-cols-2'
+          'static m-0 max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-xl border-0 bg-surface-container-high p-6 text-left shadow-2xl duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+          isModalShow
+            ? 'pointer-events-auto scale-100'
+            : 'pointer-events-none scale-[0.92]'
         )}
       >
-        <div className={clsx('grid grid-cols-1')}>
-          <h1
-            className={clsx(
-              googleSansFlex.className,
-              'text-start text-5xl text-custom-black uppercase',
-              'md:text-7xl'
+        <div
+          className={clsx(
+            'grid w-full grid-cols-1 gap-6 rounded-lg bg-surface-container p-4',
+            'lg:grid-cols-2'
+          )}
+        >
+          <div className={clsx('grid grid-cols-1')}>
+            <h1
+              className={clsx(
+                googleSansFlex.className,
+                'text-start text-4xl text-on-surface uppercase',
+                'md:text-5xl'
+              )}
+            >
+              {portfolioData?.title}.
+            </h1>
+            {portfolioData?.description && (
+              <p className='mt-3 text-start text-body-lg text-on-surface-variant'>
+                {portfolioData.description}
+              </p>
             )}
-          >
-            {portfolioData?.title}.
-          </h1>
-          <div
-            className={clsx(
-              'flex flex-row items-center',
-              'md:items-end',
-              portfolioData?.repo && 'gap-x-4'
-            )}
-          >
-            {portfolioData?.repo && (
-              <button
-                className={clsx(
-                  'flex w-full -translate-x-[0.2rem] -translate-y-[0.2rem] flex-row items-center justify-around rounded-xl border border-custom-black bg-custom-green px-4 py-4 shadow-[0.25rem_0.25rem_#24282C] duration-500',
-                  'active:translate-x-0 active:translate-y-0 active:shadow-none',
-                  'md:col-start-5 md:col-end-7'
-                )}
-              >
+            <div
+              className={clsx(
+                'mt-6 flex flex-row items-center',
+                'md:items-end',
+                portfolioData?.repo && 'gap-x-4'
+              )}
+            >
+              {portfolioData?.repo && (
                 <a
                   href={portfolioData.repo}
                   target='_blank'
                   rel='noreferrer'
-                  className={clsx(
-                    'flex items-center gap-x-1 text-base text-custom-black',
-                    'md:text-2xl'
-                  )}
+                  className='flex w-full items-center justify-center gap-x-2 rounded-full bg-secondary-container px-4 py-3 text-title-sm font-medium text-on-secondary-container transition-all duration-200 hover:bg-secondary-container/92 active:scale-95'
                 >
-                  <GithubSVG
-                    className={clsx('w-4 text-custom-black', 'md:w-5')}
-                    fill='currentColor'
-                  />
+                  <GithubSVG className='w-5' fill='currentColor' />
                   Repository
                 </a>
-              </button>
-            )}
-            <button
-              className={clsx(
-                'flex w-full -translate-x-[0.2rem] -translate-y-[0.2rem] flex-row items-center justify-around rounded-xl border border-custom-black bg-custom-green px-4 py-4 shadow-[0.25rem_0.25rem_#24282C] duration-500',
-                'active:translate-x-0 active:translate-y-0 active:shadow-none',
-                'md:col-start-5 md:col-end-7'
               )}
-            >
               <a
                 href={portfolioData?.url as string}
                 target='_blank'
                 rel='noreferrer'
-                className={clsx(
-                  'flex items-center gap-x-1 text-base text-custom-black',
-                  'md:text-2xl'
-                )}
+                className='flex w-full items-center justify-center gap-x-2 rounded-full bg-primary px-4 py-3 text-title-sm font-medium text-on-primary transition-all duration-200 hover:bg-primary/92 active:scale-95'
               >
-                <MdLink className={clsx('-rotate-45 text-xl', 'lg:text-2xl')} />
+                <MdLink className='-rotate-45 text-xl' />
                 Demo
               </a>
-            </button>
+            </div>
           </div>
+          {portfolioData?.image && (
+            <NextImage
+              src={portfolioData.image}
+              alt={`portfolio ${portfolioData?.title}}`}
+              width={600}
+              height={600}
+              className='h-full w-full'
+              imgClassName='h-[27rem] w-full rounded-lg object-cover object-center'
+            />
+          )}
         </div>
-        {portfolioData?.image && (
-          <NextImage
-            src={portfolioData.image}
-            alt={`portfolio ${portfolioData?.title}}`}
-            width={600}
-            height={600}
-            className={clsx('h-full w-full', '')}
-            imgClassName={clsx(
-              'h-[27rem] w-full rounded-xl object-cover object-center',
-              'md:w-full'
-            )}
-          />
-        )}
-      </div>
+      </dialog>
     </section>
   );
 }
