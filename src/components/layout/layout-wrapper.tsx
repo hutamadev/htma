@@ -13,11 +13,6 @@ interface ILayoutProps {
 export default function Layout({ children }: Readonly<ILayoutProps>) {
   return (
     <>
-      <div
-        className={clsx(
-          'visible fixed top-0 z-[1030] h-[8%] w-full bg-surface mask-top'
-        )}
-      ></div>
       <Navigation />
       <main>
         <CustomCursor />

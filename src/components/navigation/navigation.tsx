@@ -13,7 +13,7 @@ import { useStore } from '@store/useStore';
 import { googleSansFlex } from '@utils/localFont';
 
 export default function Navigation() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const { isClient, clientHandler } = useStore((state) => ({
     isClient: state.isClient,
     clientHandler: state.clientHandler,
@@ -24,14 +24,14 @@ export default function Navigation() {
   }, [clientHandler]);
 
   const toggleThemeHandler = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   return (
-    <header className='fixed top-0 z-[1090] flex nav-height w-full items-center border-b border-outline-variant/30 bg-surface'>
+    <header className='pointer-events-none fixed top-0 z-[1090] flex nav-height w-full items-center bg-transparent'>
       <nav className='layout flex justify-center'>
         <div className={clsx('grid-12 gap-1', 'md:gap-6')}>
-          <div className='col-start-1 flex w-fit items-center'>
+          <div className='pointer-events-auto col-start-1 flex w-fit items-center'>
             <Link
               href='/'
               className={clsx(
@@ -44,21 +44,21 @@ export default function Navigation() {
               HTMA
             </Link>
           </div>
-          <div className='col-start-12 mx-auto flex items-center justify-center'>
+          <div className='pointer-events-auto col-start-12 mx-auto flex items-center justify-center'>
             {isClient ? (
               <button
                 onClick={toggleThemeHandler}
                 aria-label={
-                  theme === 'dark'
+                  resolvedTheme === 'dark'
                     ? 'Switch to light mode'
                     : 'Switch to dark mode'
                 }
                 className={clsx(
-                  'relative z-[60] flex h-10 w-10 items-center justify-center rounded-full text-on-surface duration-300',
-                  'hover:bg-surface-container-high focus-visible:outline-2 focus-visible:outline-primary'
+                  'relative z-[60] flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface shadow-sm duration-300',
+                  'hover:bg-surface-container-highest focus-visible:outline-2 focus-visible:outline-primary'
                 )}
               >
-                {theme === 'dark' ? (
+                {resolvedTheme === 'dark' ? (
                   <MdLightMode className='text-2xl text-primary transition-transform duration-300 hover:rotate-90' />
                 ) : (
                   <MdDarkMode className='text-2xl text-primary transition-transform duration-300 hover:-rotate-12' />

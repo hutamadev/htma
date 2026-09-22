@@ -34,7 +34,7 @@ export default function Hero() {
     <section
       className={clsx(
         'sticky top-0 z-[1080] col-start-1 col-end-3 flex h-screen flex-col items-center',
-        'lg:col-start-2 lg:col-end-5'
+        'lg:col-start-1 lg:col-end-5'
       )}
     >
       <div
