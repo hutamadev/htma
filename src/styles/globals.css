@@ -296,11 +296,14 @@ body {
   background-color: var(--color-primary);
 }
 
-/* Magnetic Parallax for interactive elements (Independent CSS translate property) */
-a,
-button,
-[role='button'],
-.magnetic-item {
+/* Magnetic Parallax for interactive elements (Independent CSS translate property).
+   This rule is unlayered, so it beats Tailwind's layered translate-* utilities.
+   Elements that need their own translate (e.g. the scroll-top FAB sliding out of
+   view) opt out with data-no-magnetic. */
+a:not([data-no-magnetic]),
+button:not([data-no-magnetic]),
+[role='button']:not([data-no-magnetic]),
+.magnetic-item:not([data-no-magnetic]) {
   translate: var(--parallax-x, 0px) var(--parallax-y, 0px);
   will-change: translate;
   transition: translate 0.35s cubic-bezier(0.2, 0, 0, 1);
@@ -310,10 +313,10 @@ button,
   .cursor {
     display: none !important;
   }
-  a,
-  button,
-  [role='button'],
-  .magnetic-item {
+  a:not([data-no-magnetic]),
+  button:not([data-no-magnetic]),
+  [role='button']:not([data-no-magnetic]),
+  .magnetic-item:not([data-no-magnetic]) {
     translate: none !important;
   }
 }
