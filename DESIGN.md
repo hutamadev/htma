@@ -605,13 +605,31 @@ SVG illustrations: text-on-surface / dark:text-primary
 
 ### 12.3 Section Headers (About, Skills, Portfolio, Contact)
 
+Menggunakan sistem interaksi dua tahap (_Two-Stage Section Interaction_):
+
+1. **Tahap 1 — Kursor Masuk ke Area Section (_Section Context Activation_):**
+   - Begitu kursor mouse masuk ke dalam area section (About, Skills, atau Portfolio), kontainer judul section otomatis aktif:
+     - Background menyala menjadi `bg-primary-container text-on-primary-container`.
+     - Ikon panah berotasi `-rotate-45`.
+   - **Kursor kustom dot TETAP ADA dan melayang bebas** di atas konten section (`opacity: 1, scale: 1`).
+
+2. **Tahap 2 — Kursor Masuk Langsung ke Pill Judul (_Header Direct Hover & Absorption_):**
+   - Saat kursor diarahkan tepat di atas pill judul section (`.section-header`):
+     - Kursor dot **menyusut secara halus & fluid (_smooth fluid shrink_)** ke dalam pill (`scale: 1 → 0` bersamaan dengan `opacity: 1 → 0`).
+     - Judul section merespons dengan pergeseran magnetik elastis (_Magnetic Parallax_ `translate(var(--parallax-x), var(--parallax-y))` maks 3.5px) dan _subtle spring lift_ (`scale-[1.03]`).
+
 ```
-Container: flex items-center gap-x-2 pr-3 py-1
-  hover: bg-primary-container rounded-xl transition-all duration-200
-Arrow icon: text-primary text-2xl
-  hover: -rotate-45 transition-transform duration-200
-Title text: text-headline-sm text-on-surface (heading font)
-  hover: text-on-primary-container
+Container (Interactive Magnetic Pill):
+  flex items-center gap-x-2 px-3 py-1.5 rounded-xl cursor-pointer w-fit origin-left ml-1 sm:ml-1.5
+  transition: all 300ms cubic-bezier(0.2, 0, 0, 1)
+  section-hover: bg-primary-container text-on-primary-container
+  direct-hover: scale-[1.03] + magnetic translate + cursor smooth shrink
+Arrow icon:
+  text-primary text-2xl transition-transform duration-300
+  section-hover / direct-hover: -rotate-45 text-on-primary-container
+Title text:
+  text-headline-sm font-medium text-on-surface transition-colors duration-300
+  section-hover / direct-hover: text-on-primary-container
   dark default: text-primary
 ```
 
@@ -713,15 +731,39 @@ Error State:
   Helper text: text-body-sm text-error
 ```
 
-### 12.11 Custom Cursor
+### 12.11 Custom Cursor (Robbie Tilton Model + M3 Expressive Adaptation)
 
-```
-Cursor dot: bg-surface / bg-primary mix-blend-difference
-  w-6 h-6 rounded-full
-  pointer-events-none fixed z-[1350]
-  hidden on mobile (max-width: 768px → w-0 h-0)
-  Spring: damping: 30, stiffness: 700 (unchanged)
-```
+Mengadopsi model interaksi kursor dari `robbietilton.com/more-info` yang dipadukan dengan palet warna dan sistem token Material 3 Expressive:
+
+1. **Peniadaan Kursor Sistem Bawaan (Native Cursor Suppression):**
+   - Pada perangkat dengan pointer presisi/mouse (`@media (pointer: fine)`), kursor bawaan OS/laptop dihilangkan secara global:
+     ```css
+     @media (pointer: fine) {
+       *,
+       html,
+       body {
+         cursor: none !important;
+       }
+     }
+     ```
+   - Hanya kursor kustom web yang tampil di layar.
+   - Pada layar sentuh / mobile (`pointer: coarse`), kursor kustom dinonaktifkan (`display: none`), menjaga interaksi sentuh alami.
+
+2. **Visual & Styling (Palet Warna Tetap):**
+   - Lingkaran dot: `bg-surface` / `bg-primary` dengan efek `mix-blend-difference` (mempertahankan palet dan kontras tema saat ini).
+   - Dimensi resting: `w-6 h-6 rounded-full fixed z-[1350] pointer-events-none`.
+   - Umpan balik tekanan (_pressing_): Mengecil lembut ke `scale(0.85)` / `w-4 h-4` saat pointer ditekan (`mousedown`).
+
+3. **Interaksi Elemen Interaktif (Smooth Fluid Shrink & Respons Komponen):**
+   - Ketika kursor diarahkan ke elemen yang bisa di-hover (pill judul section, tombol, tautan, kartu portofolio, kartu skill, chip):
+     - **Kursor dot menyusut secara fluid (_Smooth Fluid Shrink_):** Kursor dot tidak sekadar menjadi transparan, melainkan menyusut lembut dari skala penuh ke nol (`scale: 1 → 0` berpadu dengan `opacity: 1 → 0`) menggunakan spring physics M3 (`stiffness: 350, damping: 26`). Efek visualnya: kursor dot mengembun dan terserap mulus ke dalam fisik komponen.
+     - **Komponen menyala sebagai penanda kursor sedang bergabung di dalamnya:** Elemen yang di-hover menampilkan indikator visual nyata:
+       - _Kontainer aktif:_ Menyala dengan `bg-primary-container` (pada judul section, chip, dan tautan) atau elevated surface (`bg-surface-container-high` pada kartu).
+       - _Pergeseran magnetik elastis (*Magnetic Parallax*):_ Komponen bergeser anggun mengikuti pergerakan pointer (`translate(var(--parallax-x), var(--parallax-y))` maks 3–4px).
+       - _Subtle spring lift:_ Mengembang sedikit (`scale: 1.03 - 1.04`) memberikan umpan balik taktil bahwa kursor berada di dalam.
+   - Saat pointer keluar dari elemen (`mouseleave`), kursor dot mengembang kembali secara mulus dari titik keluar (`scale: 0 → 1, opacity: 0 → 1`), dan komponen kembali rileks ke posisi netral via spring physics M3.
+   - Tracking kursor: `useCursorPosition` berbasis `pointermove` + `mousemove` + `requestAnimationFrame` zero-lag.
+   - Transisi magnetik elemen: CSS independen `translate` 350ms M3 Emphasized (`cubic-bezier(0.2, 0, 0, 1)`).
 
 ### 12.12 Gradient Masks
 

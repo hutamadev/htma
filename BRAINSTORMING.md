@@ -705,10 +705,10 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Section header → M3 style: icon warna `primary`, teks warna `on-surface`
-- Hover effect → M3 container highlight: `group-hover/about:bg-primary-container rounded-xl`
+- Section header → M3 **Interactive Magnetic Pill (Two-Stage Interaction)**:
+  - _Kursor masuk section:_ Judul section otomatis aktif (`bg-primary-container text-on-primary-container`, panah `-rotate-45`), sementara kursor dot **tetap ada** dan melayang bebas di atas konten.
+  - _Kursor ke judul section:_ Kursor dot **menyusut secara halus & fluid (_smooth fluid shrink_)** ke dalam pill (`scale: 1 → 0, opacity: 1 → 0`), dan pill merespons dengan pergeseran magnetik elastis (`origin-left ml-1 sm:ml-1.5`).
 - Border separator → `border-outline-variant` (lebih subtle, M3 guideline)
-- Name "Hutama" → `font-semibold text-on-surface` (tampilan natural tanpa background color)
 - Paragraf teks → `text-on-surface` dengan `text-body-md md:text-body-lg leading-relaxed`
 
 **Yang TIDAK berubah:**
@@ -729,11 +729,12 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Section header → sama seperti About (M3 state layer)
+- Section header → sama seperti About (M3 Two-Stage Interactive Magnetic Pill: aktif saat kursor di section, kursor menyusut fluid saat hover langsung ke judul).
 - Skill icon containers → M3 **Surface Container** style:
-  - `bg-surface-container rounded-xl p-2` (M3 medium shape)
-  - Hover: `hover:bg-surface-container-high` + subtle scale `hover:scale-105`
-  - Transisi smooth 200ms
+  - Kontainer minimalis seragam `rounded-2xl` (`h-14 w-14` s/d `2xl:h-[4.5rem] 2xl:w-[4.5rem]`).
+  - Tonal M3: `bg-surface-container-low/70 dark:bg-surface-container/50 border border-outline-variant/25 dark:border-outline-variant/35`.
+  - Optical weight balancing per logo, padding ringkas `p-1.5 sm:p-2`.
+  - Kursor melebur langsung saat hover, memicu kartu bergerak magnetik halus dan elevate ke `hover:bg-surface-container`.
 - Subheading "Main" / "Library & Framework" → M3 `Title Medium` type scale, warna `on-surface-variant`
 - Border separator → `border-outline-variant`
 
@@ -751,12 +752,12 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 - Section header sama (arrow + "my portfolio")
 - Grid layout bento-style dengan posisi hardcoded per index (md:col-start/end, md:row-start/end)
-- Card style: brutalist offset shadow (`shadow-[0.25rem_0.25rem_#24282C]`)
 - Card bottom bar: title + arrow icon, `bg-custom-white` / `bg-custom-green`
 - Click → modal via Zustand + Portal
 
 **Perubahan M3:**
 
+- Section header → sama seperti About & Skills (M3 Two-Stage Interactive Magnetic Pill).
 - Card style → M3 **Filled Card** / **Elevated Card**:
   - Hapus brutalist offset shadow murni.
   - Ganti ke: `bg-surface-container rounded-2xl overflow-hidden` (M3 Large shape: 16px).
@@ -846,27 +847,32 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 ### 8.9 Custom Cursor (`src/components/ui/custom-cursor.tsx`)
 
-**Saat ini:**
+**Model Desain (Robbie Tilton Model + M3 Expressive Integration):**
+Mengadopsi model interaksi kursor presisi dari `robbietilton.com/more-info` yang dipadukan dengan palet warna dan sistem token Material 3 Expressive saat ini:
 
-- `motion.div` dengan `useSpring` (damping: 30, stiffness: 700)
-- CSS class `.cursor`: fixed, 24x24px, rounded-full, `bg-custom-white-2 mix-blend-difference` / `bg-custom-green`
-- Hidden pada mobile (w-0, h-0 pada max-width 768px)
-- Hook `useCursorPosition`: `mousemove` event listener → `useMotionValue`
+1. **Peniadaan Kursor Sistem Bawaan (Native Cursor Suppression):**
+   - Pada perangkat dengan pointer mouse/trackpad (`@media (pointer: fine)`), kursor bawaan OS/laptop dihilangkan secara global (`*, html, body { cursor: none !important; }`), hanya menyisakan kursor kustom web di layar.
+   - Pada layar sentuh / mobile (`pointer: coarse`), kursor kustom otomatis dinonaktifkan (`display: none`), menjaga interaksi sentuh alami.
 
-**Rencana Improve Performance:**
+2. **Warna & Tampilan Tetap:**
+   - Lingkaran dot: `bg-surface` / `bg-primary` dengan efek `mix-blend-difference` tetap dipertahankan sesuai tema warna saat ini.
+   - Dimensi resting: 24x24px, fixed, pointer-events-none, z-index 1350.
+   - Umpan balik tekanan (_pressing_): mengecil halus ke `scale(0.85)` / 18px saat mouse ditekan (`mousedown`).
 
-1. **Ganti `mousemove` ke `pointermove`:** Lebih modern, support touch + mouse.
-2. **Tambah `{ passive: true }` pada event listener:** Menghindari blocking main thread.
-3. **Gunakan `requestAnimationFrame` throttle:** Saat ini setiap pixel movement trigger state update. Batasi ke 60fps max.
-4. **Tipe TypeScript perbaikan:** Ganti `any` di `updateMousePosition` ke `PointerEvent`.
-5. **Warna cursor:** `bg-surface` / `bg-primary` dengan `mix-blend-difference` tetap dipertahankan.
+3. **Interaksi Elemen Interaktif (Smooth Fluid Shrink & Respons Komponen):**
+   - Ketika kursor diarahkan ke elemen yang bisa di-hover (pill judul section, tombol, link, kartu portofolio, kartu skill, assist chip):
+     - **Kursor dot menyusut fluid (_Smooth Fluid Shrink_):** Kursor dot tidak sekadar menjadi transparan, melainkan menyusut lembut dari skala penuh ke nol (`scale: 1 → 0` berpadu dengan `opacity: 1 → 0`) menggunakan spring M3 (`stiffness: 350, damping: 26`). Efek visualnya: kursor dot mengembun dan terserap mulus ke dalam fisik komponen.
+     - **Komponen menyala sebagai penanda kursor sedang bergabung di dalamnya:** Elemen yang di-hover menampilkan indikator visual nyata:
+       - _Kontainer aktif:_ Menyala dengan `bg-primary-container` (pada judul section, chip, dan tautan) atau elevated surface (`bg-surface-container-high` pada kartu).
+       - _Pergeseran magnetik elastis (*Magnetic Parallax*):_ Komponen bergeser anggun mengikuti pergerakan pointer (`translate(var(--parallax-x), var(--parallax-y))` maks 3.5px).
+       - _Subtle spring lift:_ Mengembang sedikit (`scale: 1.03 - 1.04`) memberikan umpan balik taktil bahwa kursor berada di dalam.
+   - Saat pointer keluar dari elemen (`mouseleave`), kursor dot mengembang kembali secara mulus dari titik keluar (`scale: 0 → 1, opacity: 0 → 1`), dan komponen kembali rileks ke posisi netral via spring physics M3.
 
 **Yang TIDAK berubah:**
 
-- Visual appearance (circle, mix-blend-difference)
-- Spring physics (damping: 30, stiffness: 700)
-- Hidden pada mobile
-- Framer Motion sebagai engine
+- Palet warna (`bg-surface` / `bg-primary`, `mix-blend-difference`)
+- Engine Framer Motion / Motion
+- Nonaktif pada layar sentuh / mobile
 
 ---
 
@@ -1092,13 +1098,15 @@ scramble({
 
 ## 10. Performance Improvements
 
-### 10.1 Custom Cursor Optimization
+### 10.1 Custom Cursor Optimization (Robbie Tilton Interaction Model)
 
-(Sudah dijabarkan di bagian 5.9)
+(Sudah dijabarkan di bagian 8.9)
 
-- `pointermove` + `{ passive: true }`
-- `requestAnimationFrame` throttle
-- Fix TypeScript `any` → `PointerEvent`
+- `pointermove` + `{ passive: true }` untuk pelacakan kursor zero-lag tanpa menghambat rendering thread utama.
+- `requestAnimationFrame` throttle membatasi frekuensi pembaruan koordinat kursor tepat 60fps.
+- Peniadaan kursor bawaan OS/laptop via `@media (pointer: fine) { *, html, body { cursor: none !important; } }`.
+- Delegasi interaksi hover: kursor dot bertransisi lembut menghilang saat melintasi elemen interaktif, memicu umpan balik magnetik M3 pada komponen yang dituju.
+- Strict TypeScript: eliminasi tipe `any` pada event handler mouse menjadi `PointerEvent`.
 
 ### 10.2 Locomotive Scroll → Lenis
 
@@ -1316,8 +1324,8 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 - **Slice 2.2 — Native Text Scramble Hook (Baffle.js Cleanup)**: ✅ SELESAI
   - Action: Buat `src/hooks/useTextScramble.ts` (native rAF & timer cleanup), refactor `src/components/hero/hero.tsx`, hapus `useBaffle.ts`, shim `baffle` di `types.d.ts`, dan uninstall paket `baffle`.
   - Verifikasi: Efek decoding scramble identik visualnya dengan Baffle.js. Commit `c4380aa`.
-- **Slice 2.3 — Cursor Optimization**: ✅ SELESAI
-  - Action: Refactor `src/hooks/useCursorPosition.ts` (`pointermove`, `passive: true`, `requestAnimationFrame` throttle, coarse pointer detection, hapus tipe `any`, dan tambahkan `aria-hidden="true"` pada `custom-cursor.tsx`).
+- **Slice 2.3 — Cursor Optimization (Robbie Tilton Model Foundation)**: ✅ SELESAI
+  - Action: Refactor `src/hooks/useCursorPosition.ts` (`pointermove`, `passive: true`, `requestAnimationFrame` throttle, coarse pointer detection, hapus tipe `any`, tambahkan `aria-hidden="true"` pada `custom-cursor.tsx`, serta fondasi peniadaan kursor native `cursor: none !important`).
   - Verifikasi: Performa 60fps tanpa frame drop, strict types `PointerEvent`, 0 linter warning. Commit `2c56188`.
 - **Slice 2.4 — Layout & Navigation (M3 Surface & Sun/Moon Toggle)**: ✅ SELESAI
   - Action: Update `src/components/layout/layout-wrapper.tsx` & `src/components/navigation/navigation.tsx` (solid `bg-surface`, Sun/Moon icon toggle `MdLightMode`/`MdDarkMode` menggantikan `MdGraphicEq`, eliminasi rotated text, logo M3 `rounded-xl`, WCAG AA `aria-label`).
@@ -1328,13 +1336,13 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 ### Phase 3 — Sections (Home Page) — 🔄 IN-PROGRESS (SEDANG BERJALAN)
 
 - **Lead Skill**: `frontend-ui-engineering` + `impeccable`
-- **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Tone-based containment, Spring motion).
+- **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Tone-based containment, Spring motion) serta integrasi model interaksi kursor Robbie Tilton (peniadaan kursor native, hover dissolve & magnetic feedback pada elemen interaktif).
 
-- **Slice 3.1 — Hero Section (IN-PROGRESS)**: M3 typography hierarchy (`text-display-sm`), Assist Chip badge (`bg-primary-container text-on-primary-container`), Filled Tonal Button socials, dan spring motion specs.
-- **Slice 3.2 — About Section**: M3 section header hover state layer & surface card containment.
-- **Slice 3.3 — Skills Section**: M3 Surface Container Low (`bg-surface-container-low`) dengan subtle scale & transition.
-- **Slice 3.4 — Portfolio Section & Modal**: M3 Filled Card (`bg-surface-container`) dengan shape morphing hover (`rounded-2xl` → `rounded-[28px]`), Basic Dialog (`bg-surface-container-high rounded-[28px]`), dan Scrim resmi (`bg-on-surface/32`).
-- **Slice 3.5 — Sidebar & Footer**: Navigation Rail dengan Active Indicator pill (`bg-primary-container text-on-primary-container rounded-full`), Small FAB scroll-top, dan footer tertiary accent.
+- **Slice 3.1 — Hero Section (SELESAI)**: M3 typography hierarchy (`text-display-sm`), Assist Chip badge, Filled Tonal Button socials dengan magnetic hover delegation, dan spring motion specs. Commit `7b2ba93`.
+- **Slice 3.2 — About Section (SELESAI)**: M3 section header hover state layer, surface card containment, dan copywriting natural tanpa AI-isms. Commit `623127b`.
+- **Slice 3.3 — Skills Section (SELESAI)**: M3 Surface Container Low cards dengan optical weight balancing, kontras dark mode bersih, dan magnetic hover feedback.
+- **Slice 3.4 — Portfolio Section & Modal (IN-PROGRESS)**: M3 Filled Card (`bg-surface-container`) dengan shape morphing hover (`rounded-2xl` → `rounded-[28px]`), interaksi kursor dissolve + magnetic card attraction, Basic Dialog, dan Scrim resmi (`bg-on-surface/32`).
+- **Slice 3.5 — Sidebar & Footer**: Navigation Rail dengan Active Indicator pill, Small FAB scroll-top dengan magnetic hover attraction, dan footer tertiary accent.
 - Verifikasi: `bun run typechecks`, `bun run lint`, `bun run build` sukses, visual responsive di desktop & mobile.
 
 ---
@@ -1342,7 +1350,7 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 ### Phase 4 — Contact Page
 
 - **Lead Skill**: `frontend-ui-engineering` + `security-and-hardening`
-- **Objective**: Redesain form kontak dengan text field M3 Expressive & validasi Zod schema yang aman.
+- **Objective**: Redesain form kontak dengan text field M3 Expressive, validasi Zod schema yang aman, serta integrasi kursor Robbie Tilton pada input dan tombol kirim (cursor dissolve & button magnetic feedback).
 
 - **Slice 4.1 — Zod Schema & Validation**: Skema Zod untuk nama, email, subjek, pesan.
 - **Slice 4.2 — M3 Text Fields & UI**: Input form dengan floating label/indicator, state error tersanitasi, animasi submit.
