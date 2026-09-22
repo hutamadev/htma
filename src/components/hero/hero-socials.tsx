@@ -17,6 +17,7 @@ const socials = [
 
 export default function HeroSocials() {
   const isClient = useStore((state) => state.isClient);
+
   return (
     <ul
       className={clsx(
@@ -33,20 +34,16 @@ export default function HeroSocials() {
                 href={item.href}
                 target='_blank'
                 rel='noopener noreferrer'
+                aria-label={item.title}
                 className={clsx(
-                  'group/link flex items-center gap-x-3 rounded-3xl p-2 text-sm text-custom-black duration-300',
-                  'md:text-lg',
-                  'lg:p-[clamp(0.875rem,_0.6544rem_+_0.2941vw,_1.125rem)_clamp(1.5rem,_1.0588rem_+_0.5882vw,_2rem)]',
-                  'hover:bg-custom-green',
-                  'dark:text-custom-green dark:hover:text-custom-black'
+                  'group/link flex items-center gap-x-3 rounded-full bg-secondary-container px-6 py-3 font-medium text-on-secondary-container',
+                  'text-label-lg md:text-title-sm',
+                  'transition-all duration-200 hover:bg-secondary-container/92 active:scale-95',
+                  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary'
                 )}
               >
                 <item.image
-                  className={clsx(
-                    'mb-1 w-5 text-custom-black',
-                    'group-hover/link:dark:text-custom-black',
-                    'dark:text-custom-green'
-                  )}
+                  className='w-5 text-on-secondary-container'
                   fill='currentColor'
                 />
                 {item.title}

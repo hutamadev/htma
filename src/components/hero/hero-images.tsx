@@ -7,8 +7,11 @@ import Chubbs2SVG from '@components/ui/svg/Chubbs2SVG';
 
 import { useStore } from '@store/useStore';
 
+import { m3Motion } from '@utils/motion';
+
 export default function HeroImages() {
   const isClient = useStore((state) => state.isClient);
+
   return (
     <section
       className={clsx(
@@ -20,17 +23,14 @@ export default function HeroImages() {
         <>
           <motion.div
             initial={{ opacity: 0, x: -24 }}
-            animate={{
-              opacity: 1,
-              x: 0,
-              transition: { delay: 1.2, duration: 0.7 },
-            }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ ...m3Motion.spatial.slow, delay: 0.8 }}
             exit={{ opacity: 0, x: -24 }}
           >
             <Chubbs2SVG
               className={clsx(
-                'w-20 text-custom-black',
-                'dark:text-custom-green',
+                'w-20 text-on-surface',
+                'dark:text-primary',
                 '2xl:w-24'
               )}
               fill='currentColor'
@@ -38,17 +38,14 @@ export default function HeroImages() {
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 24 }}
-            animate={{
-              opacity: 1,
-              x: 0,
-              transition: { delay: 2, duration: 0.7 },
-            }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ ...m3Motion.spatial.slow, delay: 1.0 }}
             exit={{ opacity: 0, x: 24 }}
           >
             <Chubbs1SVG
               className={clsx(
-                'w-20 text-custom-black',
-                'dark:text-custom-green',
+                'w-20 text-on-surface',
+                'dark:text-primary',
                 '2xl:w-24'
               )}
               fill='currentColor'
