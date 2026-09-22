@@ -7,16 +7,19 @@ import { MdDoubleArrow } from 'react-icons/md';
 import { useStore } from '@store/useStore';
 
 const ScrollTop = () => {
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
   const { isClient, clientHandler } = useStore((state) => state);
 
-  const handleScroll = () => {
-    const position = window.scrollY;
-    setScrollPosition(position);
-  };
-
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    // Track only the threshold crossing, not the raw offset: setting the same
+    // boolean is a no-op for React, so this re-renders on visibility change
+    // instead of on every scroll event.
+    const handleScroll = () => {
+      setIsVisible(window.scrollY > window.innerHeight / 4);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -36,9 +39,7 @@ const ScrollTop = () => {
   return (
     <button
       className={clsx(
-        isClient && scrollPosition > window.innerHeight / 4
-          ? ''
-          : 'translate-y-[999px]',
+        isClient && isVisible ? '' : 'translate-y-[999px]',
         'fixed bottom-[5%] rounded-xl bg-primary-container p-2 text-on-primary-container duration-700',
         'hover:-translate-y-1 hover:shadow-md',
         'focus-visible:outline-2 focus-visible:outline-primary'
