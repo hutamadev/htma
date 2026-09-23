@@ -323,15 +323,38 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Temuan non-tipografi (belum diperbaiki)**: `not-found.tsx` masih memakai token legacy (`custom-black`, `custom-white-2`, `custom-green`, `rounded-xl`) dan `error.tsx` masih `custom-*` + `shadow-custom-shadow` — belum ikut migrasi M3; `global-error.tsx` memakai hex mentah (`#fdfcfa`, `#d0ef67`) dan bukan token. Kandidat Phase 5.
    - **DESIGN.md** mendapat section baru **7.4 Breakpoint Standar & Inventaris Tipografi Responsif**: tabel breakpoint + sumber docs, konvensi body copy, inventaris yang scaling, dan tabel "sengaja tidak scaling + alasan". Spec per-komponen (12.4 About, 12.6 GitHub paragraph, 12.7 Modal, 12.10 Contact) ikut disinkronkan.
 
+### Session 8 — 2026-09-24
+
+1. **Migrasi token legacy ke peran M3** (commit `948742d`):
+   - `globals.css`: alias `custom-black`, `custom-green`, `custom-white-2`, `custom-shadow` dihapus, plus `.loader` (ring 3 div ber-border + keyframes `spin`) dan `.text-outline` hardcoded. Sekarang hanya satu skema penamaan: peran M3.
+   - Pemetaan caller: `text-red-500` → `text-error`; tombol high-emphasis → `bg-on-surface text-primary-container` (light) dan `dark:enabled:bg-primary dark:enabled:text-surface` (dark); disabled → `bg-on-surface/[0.12] text-on-surface/[0.38]` (opasitas M3 12%/38%, bukan alias 50%); skeleton → `dark:bg-primary/40`; logo nav → `bg-on-surface text-primary-container` + `dark:bg-primary dark:text-surface`; radius tombol `rounded-xl` → `rounded-full` mengikuti spec Filled Button.
+   - `global-error.tsx`: Next.js **tidak memuat stylesheet app ke root error boundary**, jadi alias legacy memang tidak pernah resolve di sana. Gaya sekarang self-contained di konstanta `globalErrorStyles`, keyed ke `prefers-color-scheme` — kelas `.dark` juga tidak tersedia di boundary ini. Komentar header file menjelaskan alasannya supaya tidak "diperbaiki" jadi utility Tailwind lagi.
+2. **Indikator loading M3 Expressive** (commit `c1afe20`):
+   - File: `src/components/ui/loading-spin.tsx` (render loop) + `loading-spin-shapes.ts` (data bentuk) — keduanya baru; loader CSS lama diganti seluruhnya.
+   - Spec yang diterapkan: loop **7 bentuk M3** berurutan, morph tiap **650ms**, rotasi konstan **50deg per bentuk** + settle spring **90deg** (stiffness 200, damping ratio 0.6), box **48dp** dengan bentuk **38dp** (rasio 0.79).
+   - **`loading-spin-shapes.ts`**: 7 outline di-flatten ke sampel cubic, lalu **didistribusikan ulang ke `POINTS_PER_SHAPE` ray yang sama** sehingga semua bentuk punya jumlah titik dan sudut identik (prasyarat lerp titik-per-titik). Oval (indeks 6) tidak punya path di referensi → digenerate dari fungsi radialnya.
+   - **Kenapa canvas, bukan CSS/SVG**: morph M3 me-lerp titik searah antar bentuk; interpolasi `d` CSS tidak bisa karena outline beda jumlah cubic dan beda titik awal. Konsekuensi: canvas tidak mewarisi warna → `--color-primary` dibaca dari computed style dan dibaca ulang saat tema ditukar lewat `MutationObserver`. Delta frame di-clamp 100ms supaya tab yang lama di-background tidak melanjutkan dengan satu lompatan besar.
+   - `prefers-reduced-motion`: bentuk diam di indeks 0 dan hanya fade (rotasi + morph yang memicu vestibular).
+   - A11y: elemen `progress` indeterminate tetap dirender untuk assistive tech; canvas sendiri `aria-hidden`.
+3. **Verifikasi runtime (Chromium + dev server)**:
+   - Boundary `app/loading.tsx` ter-mount saat navigasi klien; canvas menggambar (`filled > 0`), hash frame **berubah** antar sampel 360ms (animasi hidup), backing store 48×48 px = `h-8` (32px) × dpr 1.5.
+   - Warna mengikuti token persis di kedua tema, termasuk saat kelas tema ditukar **selagi canvas hidup**: light `#526600` → rata-rata piksel (82,102,0); dark `#b4d34e` → (180,211,78).
+   - Halaman 404: `on-surface` (228,227,218), `on-surface-variant` (199,200,184), `primary-container` (224,230,196) di dark — migrasi peran M3 terbukti tampil.
+4. **Pitfall Session 8**:
+   - **`page.emulateNetworkConditions` di puppeteer terpasang memakai field `download`/`upload`**, bukan `downloadThroughput`/`uploadThroughput`; nama lama gagal dengan `Failed to deserialize params.downloadThroughput`.
+   - **Loading boundary tidak muncul di navigasi klien berulang**: Next sudah prefetch `/contact` sehingga navigasi instan. Harus pakai tab **dingin** (tutup lalu buka lagi) + throttle jaringan (latency 4–5s) supaya boundary bertahan cukup lama untuk disampel.
+   - **next-themes langsung resolve ke dark di Chromium headless** (`prefers-color-scheme: dark`), jadi uji tema terang wajib melepas kelas `dark` eksplisit — jangan mengandalkan default.
+   - Catatan Session 7 "token legacy belum diperbaiki di `not-found.tsx`/`error.tsx`/`global-error.tsx`" **sudah selesai** di Session 8 (poin 1); catatan lama di Session 7 sengaja dibiarkan sebagai jejak.
+
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 42 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 46 commits dari origin sebelum commit MEMORY ini)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** **BERSIH** — seluruh pekerjaan Phase 0–4 sudah di-commit (Slice 3.4/3.5 memang sudah masuk di `45163d0`/`0f448e3`; catatan "DIRTY" di Session 6 sudah usang)
-- **Commit terbaru:** `01decd0` (`feat(portfolio): scale card title and description type to card width`)
+- **Working tree:** **BERSIH** — seluruh pekerjaan Phase 0–4 plus mulai Phase 5 (token legacy + indikator loading) sudah di-commit
+- **Commit terbaru:** `948742d` (`refactor(theme): drop legacy color aliases and migrate callers to M3 roles`), sebelumnya `c1afe20` (`feat(ui): replace css loader ring with M3 Expressive loading indicator`)
 
 ### File belum di-commit
 
@@ -354,7 +377,10 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 4. **Phase 4 — Contact Page** — ✅ **SELESAI PENUH** (commit `1b4546f`):
    - Slice 4.1: Zod Schema & Validation ✅ (`src/utils/contact-schema.ts`)
    - Slice 4.2: M3 Text Fields & UI ✅ (M3 Filled Text Field + Filled Button + spinner)
-5. **Phase 5 — Polish, SEO & Launch** ⏳ — berikutnya (Lighthouse 90+). `robots.ts`, `sitemap.ts`, dan `manifest.ts` sudah ada; sisa Slice 5.1 = OpenGraph/Twitter card + JSON-LD (`Person`, `WebSite`).
+5. **Phase 5 — Polish, SEO & Launch** ⏳ — berjalan. `robots.ts`, `sitemap.ts`, dan `manifest.ts` sudah ada.
+   - **Slice 5.0 — token legacy → peran M3 ✅** (commit `948742d`, Session 8)
+   - **Slice 5.0b — indikator loading M3 Expressive ✅** (commit `c1afe20`, Session 8)
+   - **Sisa Slice 5.1** = OpenGraph/Twitter card + JSON-LD (`Person`, `WebSite`), lalu audit Lighthouse (target 90+).
 
 **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
@@ -380,5 +406,10 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - Portfolio card: radius 24px, thumbnail `16/9` atas, content `p-6` `text-left` (WAJIB override `text-align: center` bawaan `<button>`)
 - Contact form (Session 7): validasi di `src/utils/contact-schema.ts` (`contactSchema` + `ContactFormValues`), field M3 Filled Text Field di `src/components/ui/input-form.tsx` (props `title` / `error` / `isTextArea`), label float via `placeholder=' '` + varian `peer-[:placeholder-shown:not(:focus)]`. Jangan pasang `placeholder` asli di field kontak — akan merusak mekanisme float.
 - Zod 4.6.5: pakai `z.email()` (top-level), **bukan** `z.string().email()` yang sudah deprecated. Kalau butuh `trim()` sebelum cek format, gunakan `.pipe(z.email({ message }))`.
-- **Working tree BERSIH** per akhir Session 7. **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
+- **Working tree BERSIH** per akhir Session 8. **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
 - `.env.local` belum ada di lokal; untuk uji submit, isi `NEXT_PUBLIC_EMAILJS_SERVICE_ID` / `_TEMPLATE_ID` / `_PUBLIC_KEY` (lihat `.env.example`) atau stub request ke `api.emailjs.com` lewat request interception supaya tidak mengirim email nyata.
+- **Indikator loading (Session 8)**: `src/components/ui/loading-spin.tsx` (render loop canvas) + `src/components/ui/loading-spin-shapes.ts` (7 bentuk M3, semua di-resample ke ray & jumlah titik yang sama). Canvas **bukan pilihan gaya**: morph M3 me-lerp titik searah, dan interpolasi `d` CSS tidak bisa karena outline beda jumlah cubic + beda titik awal. Jangan disederhanakan jadi CSS/SVG; kalau diubah, patuhi spec — morph **650ms**, rotasi **50deg/bentuk** + settle **90deg** (stiffness 200, ratio 0.6), box **48dp** dengan bentuk **38dp**.
+- Warna indikator dibaca dari `--color-primary` via computed style lalu dibaca ulang saat tema ditukar (`MutationObserver`). Sudah diverifikasi: light `#526600`, dark `#b4d34e`, termasuk ketika kelas `dark` ditukar selagi canvas hidup.
+- `global-error.tsx` **self-contained by necessity**: Next.js tidak memuat stylesheet app ke root error boundary, jadi utility Tailwind maupun `--color-*` tidak tersedia. Gaya ditulis inline di `globalErrorStyles` dan keyed ke `prefers-color-scheme`. Jangan dialihkan ke utility — hasilnya tak bergaya.
+- Alias token legacy (`custom-black`, `custom-green`, `custom-white-2`, `custom-shadow`) **sudah dihapus** dari `globals.css` (Session 8). Gunakan peran M3 (`on-surface`, `primary`, `error`, `outline-variant`, …).
+- Verifikasi UI di browser: pakai **tab dingin** (prefetch membuat navigasi klien berulang instan sehingga loading boundary tak sempat muncul) + `page.emulateNetworkConditions({ offline, latency, download, upload })` — nama field versi ini `download`/`upload`, bukan `downloadThroughput`. Chromium headless resolve `prefers-color-scheme: dark`, jadi uji tema terang harus melepas kelas `dark` secara eksplisit.
