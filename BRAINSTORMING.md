@@ -127,7 +127,7 @@ Migrasi penuh dari **pnpm + Node.js** ke **Bun** sebagai satu-satunya runtime da
 bun install
 ```
 
-Ini menghasilkan `bun.lockb` (binary lockfile) yang menggantikan `pnpm-lock.yaml`.
+Ini menghasilkan `bun.lock` (text lockfile, format Bun >=1.2) yang menggantikan `pnpm-lock.yaml`.
 
 #### 2.3 Update `package.json`
 
@@ -136,15 +136,14 @@ Ini menghasilkan `bun.lockb` (binary lockfile) yang menggantikan `pnpm-lock.yaml
   "packageManager": "bun",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --turbopack",
     "start": "next start",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
-    "lint:strict": "oxlint -D correctness -D suspicious -D perf -D react -D nextjs",
+    "lint:fix": "oxlint --fix && bun run format",
+    "lint:strict": "oxlint --deny-warnings",
     "typechecks": "tsc --noEmit --incremental false",
     "format": "prettier --write .",
     "format:check": "prettier -c .",
-    "prepare": "husky",
     "commitlint": "commitlint --edit"
   }
 }
@@ -154,7 +153,8 @@ Ini menghasilkan `bun.lockb` (binary lockfile) yang menggantikan `pnpm-lock.yaml
 
 - `next lint` & `eslint` → diganti menggunakan perintah `oxlint` (Linter berbasis Rust yang 50-100x lebih cepat)
 - `pnpm format` → `bun run format`
-- `next dev` → `next dev --turbopack` (Turbopack stable di Next 15, Bun-compatible)
+- `next dev` / `next build` → `--turbopack` (Turbopack stable di Next 15, Bun-compatible)
+- Tanpa `prepare: husky` - hooks ditangani Lefthook (§3.4)
 - Tambah `"packageManager": "bun"`
 
 #### 2.4 Update `engines` field
@@ -174,21 +174,17 @@ Hapus `"node": ">= 18"` karena Bun jadi primary runtime.
 Tambahkan:
 
 ```
-bun.lockb
+bun.lock
 ```
 
-Atau justru commit `bun.lockb` (recommended untuk reproducible builds). Pilih salah satu:
+Pilih salah satu:
 
-- **Commit `bun.lockb`** → reproducible, CI/CD konsisten (RECOMMENDED)
-- **Gitignore `bun.lockb`** → lockfile di-generate per machine
+- **Commit `bun.lock`** → reproducible, CI/CD konsisten (RECOMMENDED, dipakai project ini)
+- **Gitignore `bun.lock`** → lockfile di-generate per machine
 
-#### 2.6 Husky hooks compatibility
+#### 2.6 Git hooks compatibility
 
-Bun kompatibel penuh dengan Husky. `prepare` script (`husky`) berjalan normal via `bun install`.
-
-#### 2.7 lint-staged compatibility
-
-`lint-staged` berjalan normal dengan Bun. Tidak ada perubahan config.
+Husky + lint-staged **tidak dipakai**. Hooks dimigrasi penuh ke **Lefthook** (§3.4): `prepare` script dihapus, hook dijalankan via `bunx` dari `lefthook.yml`.
 
 #### 2.8 Environment variables
 
@@ -308,18 +304,22 @@ Oxlint bisa dijalankan tanpa config (zero-config), tapi demi strictness, kita bu
 ```json
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react", "nextjs"],
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn",
-    "perf": "warn",
-    "style": "off"
+    "perf": "warn"
   },
   "rules": {
+    "react/react-in-jsx-scope": "off",
     "nextjs/no-head-element": "error",
     "nextjs/no-async-client-component": "error",
     "react/no-children-prop": "error",
     "typescript/no-floating-promises": "error"
+  },
+  "env": {
+    "builtin": true,
+    "browser": true
   }
 }
 ```
@@ -382,11 +382,12 @@ Kontrak kualitas tertulis yang mengikat setiap AI Agent yang mengeksekusi proyek
 | **Layout Invariant** | Layout vertical 100% terkunci (Hero kiri sticky, Content scroll, Sidebar kanan sticky, Gradient mask bawah). Header transparan agar konten scroll dari ujung atas. | Visual check & inspection                                                                       |
 | **Data Invariant**   | Data portfolio existing TIDAK berubah (foto, list project, URL, repo tetap). Field `description` **ditambahkan** di Session 6 untuk kebutuhan copywriting card.    | `git diff src/utils/portfolio-data.ts` — hanya penambahan `description`, 0 perubahan nilai lama |
 | **Type-Safety**      | 0 `any`, 0 `@ts-ignore`, 0 `@ts-expect-error`, strict mode aktif.                                                                                                  | `bun run typechecks` (0 errors)                                                                 |
-| **Lint Quality**     | 0 error, 0 warnings pada linter Oxlint.                                                                                                                            | `bun run lint` (0 warnings/errors)                                                              |
+| **Lint Quality**     | 0 error, 0 warnings pada linter Oxlint.                                                                                                                            | `bun run lint:strict` (Oxlint `--deny-warnings`, 0 warnings/errors)                             |
 | **Scroll Parity**    | Perilaku & feel scroll Lenis wajib sama persis dengan Locomotive lama.                                                                                             | Runtime browser check                                                                           |
 | **Text Scramble**    | Native `useTextScramble` wajib identik visualnya dengan Baffle.js lama.                                                                                            | Runtime browser check                                                                           |
 | **Performance Bar**  | Lighthouse Core Web Vitals target: 90+ (Performance, Accessibility, Best Practices, SEO).                                                                          | Lighthouse CLI / DevTools audit                                                                 |
 | **Form Security**    | Validasi input sisi klien via Zod schema (nama, email valid, pesan).                                                                                               | Zod schema validation tests                                                                     |
+| **Security Headers** | Header statis dari `next.config.ts`: `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`, CSP minimal (tanpa `script-src`/`style-src`).    | `curl -I` pada response halaman / inspeksi `next.config.ts`                                     |
 
 ---
 
@@ -1076,9 +1077,9 @@ scramble({
 
 **Package manager migration:**
 
-| Dari                    | Ke                | Aksi                                      |
-| ----------------------- | ----------------- | ----------------------------------------- |
-| `pnpm` (pnpm-lock.yaml) | `bun` (bun.lockb) | Hapus `pnpm-lock.yaml`, run `bun install` |
+| Dari                    | Ke               | Aksi                                      |
+| ----------------------- | ---------------- | ----------------------------------------- |
+| `pnpm` (pnpm-lock.yaml) | `bun` (bun.lock) | Hapus `pnpm-lock.yaml`, run `bun install` |
 
 ### 9.3 Package Baru yang Ditambahkan
 
@@ -1422,7 +1423,7 @@ Semua pertanyaan sudah dijawab dan dikonfirmasi (2026-09-03):
 | 6   | **Tailwind v4**           | ✅ Konfirmasi lanjut — migrasi config JS → CSS-based `@theme`                                                                                                                                                                      |
 | 7   | **Motion v12**            | ✅ Konfirmasi lanjut — `framer-motion` → `motion`                                                                                                                                                                                  |
 | 8   | **React 19 + Next.js 15** | ✅ Siap — terima potensi breaking changes                                                                                                                                                                                          |
-| 9   | **Bun lockfile**          | **Commit `bun.lockb`** ke git (reproducible builds)                                                                                                                                                                                |
+| 9   | **Bun lockfile**          | **Commit `bun.lock`** ke git (reproducible builds)                                                                                                                                                                                 |
 | 10  | **Monorepo**              | **Tetap single app** — tidak convert ke Turborepo                                                                                                                                                                                  |
 | 11  | **Git hooks**             | **Migrasi ke Lefthook** (ganti Husky) — menjalankan `oxlint` + `prettier --check` di pre-commit                                                                                                                                    |
 

@@ -116,7 +116,7 @@ Dokumentasi arsitektur & panduan teknis:
 | 20  | Tailwind v4                   | Migrasi config JS → CSS-based `@theme`                                                                                                                                                  |
 | 21  | Framer Motion                 | `framer-motion` & `motion` di-upgrade ke v13 (`^13.3.0`)                                                                                                                                |
 | 22  | React 19 + Next.js 15         | `react@^19.3.0` + `next@^15.5.25` (LTS stabil, Next 16 ditahan)                                                                                                                         |
-| 23  | Bun lockfile                  | **Commit `bun.lockb`** ke git (reproducible builds)                                                                                                                                     |
+| 23  | Bun lockfile                  | **Commit `bun.lock`** ke git (reproducible builds)                                                                                                                                      |
 | 24  | Monorepo                      | **Tetap single app** — tidak convert ke Turborepo                                                                                                                                       |
 | 25  | Git hooks                     | **Migrasi ke Lefthook** (ganti Husky + lint-staged)                                                                                                                                     |
 
@@ -346,15 +346,36 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **next-themes langsung resolve ke dark di Chromium headless** (`prefers-color-scheme: dark`), jadi uji tema terang wajib melepas kelas `dark` eksplisit — jangan mengandalkan default.
    - Catatan Session 7 "token legacy belum diperbaiki di `not-found.tsx`/`error.tsx`/`global-error.tsx`" **sudah selesai** di Session 8 (poin 1); catatan lama di Session 7 sengaja dibiarkan sebagai jejak.
 
+### Session 9 — 2026-09-24
+
+1. **Security headers statis** (`next.config.ts`, commit `4aa5eff`):
+   - `headers()` mengembalikan 5 header untuk `/:path*`: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera/microphone/geolocation/browsing-topics dimatikan), dan CSP minimal `base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'`.
+   - **CSP sengaja TANPA `script-src`/`style-src`**: inline script `next-themes` butuh nonce, dan `script-src` tanpa nonce akan mematikan tema. Ceiling ini ditulis sebagai komentar di file supaya tidak "dilengkapi" tanpa nonce.
+   - Verifikasi runtime: `curl -D - http://127.0.0.1:3000/` → `HTTP/1.1 200 OK` + kelima header tampil apa adanya.
+   - **Rate limiting TIDAK diimplementasikan (ditunda)**: form memanggil endpoint EmailJS langsung dari browser dengan public key, jadi throttle di klien tidak mengikat penyerang. Mitigasi nyata butuh route server + KV/edge store. Aktifkan kalau spam terbukti di produksi.
+2. **Override PostCSS 8.5.28** (`package.json` → `overrides`, commit `bdcfe3d`):
+   - Sebelum override, `next` memakai salinan transitif `postcss@8.4.31` (entri `next/postcss` di lockfile) — ini yang kena advisory.
+   - Setelah `"overrides": { "postcss": "8.5.28" }`: entri `next/postcss` hilang dari `bun.lock`, dan di `node_modules` hanya tersisa satu instalasi `postcss@8.5.28` di top-level (tidak ada `node_modules/**/node_modules/postcss`).
+   - `bun audit` → **No vulnerabilities found (checked 276 packages)**.
+   - `bun run build` tetap lulus (9/9 static pages) — Tailwind v4 / Lightning CSS tidak terpengaruh.
+3. **Oxlint diperketat** (`.oxlintrc.json`, commit `f62e815`):
+   - Plugin: `typescript`, `react`, `nextjs` → ditambah `unicorn`, `oxc`, `jsx-a11y`.
+   - Kategori: `suspicious` dan `perf` jadi `warn`; rule error baru `nextjs/no-head-element`, `nextjs/no-async-client-component`, `react/no-children-prop`, `typescript/no-floating-promises`.
+   - Gerbang `bun run lint:strict` (`oxlint --deny-warnings`) → 0 error, 0 warning.
+4. **Sinkronisasi dokumen dengan realitas (drift audit)** (commit dokumen ini):
+   - `BRAINSTORMING.md`: `bun.lockb` → `bun.lock` (§2.2, §2.5, §9.2, §12); blok script §2.3 disamakan dengan `package.json` nyata (`build --turbopack`, `lint:fix`, `lint:strict` = `--deny-warnings`, tanpa `prepare: husky`); §2.6/§2.7 "Husky/lint-staged kompatibel" diganti catatan migrasi Lefthook; blok `.oxlintrc.json` di §3.3 disalin dari file asli; kontrak §3.7 → gate `Lint Quality` lewat `lint:strict` + baris baru **Security Headers**.
+   - `MEMORY.md`: baris keputusan #23 → `bun.lock`; Session 8 sudah tercatat di commit `a7d4b56`.
+5. **Verifikasi akhir Session 9**: `format:check` ✅, `lint:strict` ✅ (0 warning), `typechecks` ✅ (0 error), `build` ✅ 9/9 static pages. Dev server dihentikan lebih dulu sebelum build (aturan Session 7).
+
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 46 commits dari origin sebelum commit MEMORY ini)
+- **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (0 ahead, 0 behind)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** **BERSIH** — seluruh pekerjaan Phase 0–4 plus mulai Phase 5 (token legacy + indikator loading) sudah di-commit
-- **Commit terbaru:** `948742d` (`refactor(theme): drop legacy color aliases and migrate callers to M3 roles`), sebelumnya `c1afe20` (`feat(ui): replace css loader ring with M3 Expressive loading indicator`)
+- **Working tree:** **BERSIH** setelah commit dokumen Session 9
+- **Commit terbaru (Session 9):** `f62e815` (`chore(lint): enable unicorn, oxc and jsx-a11y rules`), `4aa5eff` (`feat(security): send static security headers for all routes`), `bdcfe3d` (`chore(deps): pin postcss to 8.5.28 via overrides`), lalu `a7d4b56` (docs Session 8) dan `948742d` (`refactor(theme): drop legacy color aliases and migrate callers to M3 roles`)
 
 ### File belum di-commit
 
@@ -406,10 +427,13 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - Portfolio card: radius 24px, thumbnail `16/9` atas, content `p-6` `text-left` (WAJIB override `text-align: center` bawaan `<button>`)
 - Contact form (Session 7): validasi di `src/utils/contact-schema.ts` (`contactSchema` + `ContactFormValues`), field M3 Filled Text Field di `src/components/ui/input-form.tsx` (props `title` / `error` / `isTextArea`), label float via `placeholder=' '` + varian `peer-[:placeholder-shown:not(:focus)]`. Jangan pasang `placeholder` asli di field kontak — akan merusak mekanisme float.
 - Zod 4.6.5: pakai `z.email()` (top-level), **bukan** `z.string().email()` yang sudah deprecated. Kalau butuh `trim()` sebelum cek format, gunakan `.pipe(z.email({ message }))`.
-- **Working tree BERSIH** per akhir Session 8. **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
+- **Working tree BERSIH** per akhir Session 9 (3 commit kode + 1 commit dokumen). Sama seperti akhir Session 8. **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
 - `.env.local` belum ada di lokal; untuk uji submit, isi `NEXT_PUBLIC_EMAILJS_SERVICE_ID` / `_TEMPLATE_ID` / `_PUBLIC_KEY` (lihat `.env.example`) atau stub request ke `api.emailjs.com` lewat request interception supaya tidak mengirim email nyata.
 - **Indikator loading (Session 8)**: `src/components/ui/loading-spin.tsx` (render loop canvas) + `src/components/ui/loading-spin-shapes.ts` (7 bentuk M3, semua di-resample ke ray & jumlah titik yang sama). Canvas **bukan pilihan gaya**: morph M3 me-lerp titik searah, dan interpolasi `d` CSS tidak bisa karena outline beda jumlah cubic + beda titik awal. Jangan disederhanakan jadi CSS/SVG; kalau diubah, patuhi spec — morph **650ms**, rotasi **50deg/bentuk** + settle **90deg** (stiffness 200, ratio 0.6), box **48dp** dengan bentuk **38dp**.
 - Warna indikator dibaca dari `--color-primary` via computed style lalu dibaca ulang saat tema ditukar (`MutationObserver`). Sudah diverifikasi: light `#526600`, dark `#b4d34e`, termasuk ketika kelas `dark` ditukar selagi canvas hidup.
 - `global-error.tsx` **self-contained by necessity**: Next.js tidak memuat stylesheet app ke root error boundary, jadi utility Tailwind maupun `--color-*` tidak tersedia. Gaya ditulis inline di `globalErrorStyles` dan keyed ke `prefers-color-scheme`. Jangan dialihkan ke utility — hasilnya tak bergaya.
 - Alias token legacy (`custom-black`, `custom-green`, `custom-white-2`, `custom-shadow`) **sudah dihapus** dari `globals.css` (Session 8). Gunakan peran M3 (`on-surface`, `primary`, `error`, `outline-variant`, …).
+- **Security headers** ada di `next.config.ts` (`securityHeaders` + `headers()` untuk `/:path*`). CSP sengaja tanpa `script-src`/`style-src` karena inline script `next-themes` butuh nonce; jangan pasang directive itu tanpa nonce atau tema akan mati. Verifikasi cepat: `curl -D - http://127.0.0.1:3000/`.
+- **`overrides.postcss = 8.5.28`** di `package.json` wajib dipertahankan: tanpa itu `next` menarik kembali `postcss@8.4.31` (advisory), dan `bun audit` tidak lagi bersih. Jangan hapus entri `overrides` tanpa menjalankan ulang `bun audit`.
+- Kalau `bun audit` melaporkan advisory baru pada dependency transitif, pola yang dipakai project ini adalah **`overrides` di `package.json`** (bukan downgrade paket induk) lalu verifikasi pohon `node_modules` + `bun run build`.
 - Verifikasi UI di browser: pakai **tab dingin** (prefetch membuat navigasi klien berulang instan sehingga loading boundary tak sempat muncul) + `page.emulateNetworkConditions({ offline, latency, download, upload })` — nama field versi ini `download`/`upload`, bukan `downloadThroughput`. Chromium headless resolve `prefers-color-scheme: dark`, jadi uji tema terang harus melepas kelas `dark` secara eksplisit.
