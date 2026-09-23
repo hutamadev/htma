@@ -1354,7 +1354,7 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 
 ---
 
-### Phase 3 — Sections (Home Page) — 🔄 IN-PROGRESS (SEDANG BERJALAN)
+### Phase 3 — Sections (Home Page) — ✅ SELESAI
 
 - **Lead Skill**: `frontend-ui-engineering` + `impeccable`
 - **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Tone-based containment, Spring motion) serta integrasi model interaksi kursor Robbie Tilton (peniadaan kursor native, hover dissolve & magnetic feedback pada elemen interaktif).
@@ -1377,14 +1377,23 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 
 ---
 
-### Phase 4 — Contact Page
+### Phase 4 — Contact Page — ✅ SELESAI
 
 - **Lead Skill**: `frontend-ui-engineering` + `security-and-hardening`
 - **Objective**: Redesain form kontak dengan text field M3 Expressive, validasi Zod schema yang aman, serta integrasi kursor Robbie Tilton pada input dan tombol kirim (cursor dissolve & button magnetic feedback).
+- **Status**: ✅ **100% SELESAI** (Slice 4.1–4.2 terverifikasi lulus gerbang kualitas)
 
-- **Slice 4.1 — Zod Schema & Validation**: Skema Zod untuk nama, email, subjek, pesan.
-- **Slice 4.2 — M3 Text Fields & UI**: Input form dengan floating label/indicator, state error tersanitasi, animasi submit.
-- Verifikasi: Pengujian input invalid, email salah format, submit loading state.
+- **Slice 4.1 — Zod Schema & Validation (SELESAI)**: File baru `src/utils/contact-schema.ts` berisi `contactSchema` + tipe hasil inferensi `ContactFormValues`. Setiap field `trim()` lebih dulu, lalu `min(1)` (pesan "… is required") dan batas panjang untuk membatasi payload ke endpoint template publik: nama 80, email 254, subjek 120, pesan 2000 karakter. Email divalidasi lewat `.pipe(z.email({ message }))` — bukan `.email()` — karena Zod 4.6.5 sudah menandai `z.string().email()` **deprecated**; bentuk `pipe` dipakai supaya `trim()` tetap berjalan **sebelum** cek format (input `"  a@b.co  "` lolos, sedangkan `"   "` tetap "Email is required"). Tipe global `Inputs` yang sudah mati dihapus dari `types.d.ts`.
+- **Slice 4.2 — M3 Text Fields & UI (SELESAI)**: `src/components/ui/input-form.tsx` ditulis ulang sebagai M3 Filled Text Field — container `bg-surface-container-highest rounded-t-xs border-b-2 border-outline`, `focus-within:border-b-primary`, label float dari `text-label-lg text-on-surface-variant` ke `text-label-sm text-primary` memakai varian arbitrary `peer-[:placeholder-shown:not(:focus)]` (tanpa state JS tambahan). State error mengubah indicator + label jadi `text-error` dan menambah helper text `text-body-sm text-error`. `contact-form.tsx` memakai `react-hook-form` + `zodResolver` (menggantikan `useState` manual), memasang `aria-invalid` + `aria-describedby` ke setiap field, tombol Send jadi M3 Filled Button (`rounded-full`, `hover:bg-primary/92`, `active:scale-95`) dengan spinner in-button pada state disabled. Header section kontak memakai two-stage section header yang sama dengan About/Skills/Portfolio.
+
+**Temuan & catatan Phase 4:**
+
+- **`cursor-not-allowed` di tombol disabled tidak pernah aktif.** Rule global `@media (pointer: fine) { * { cursor: none !important } }` (DESIGN 12.11) selalu menang. Bukan bug — memang tabrakan dua spesifikasi DESIGN, dibiarkan apa adanya.
+- **`.env.local` tidak ada di lokal** sehingga `NEXT_PUBLIC_EMAILJS_*` `undefined` dan submit langsung jatuh ke toast "Something went wrong". Di produksi variabel diisi lewat environment platform.
+- **Jangan jalankan `bun run build` selagi `next dev` hidup.** Keduanya berbagi direktori `.next`; build sempat menghapus `_buildManifest.js` milik dev sampai server error `ENOENT` dan berhenti melayani form. Hentikan dev dulu.
+- **Bundle `/contact` = 121 kB (First Load 305 kB)** — kenaikan dari zod + react-hook-form + resolvers. Kandidat ditinjau lagi di Phase 5 bila Lighthouse Performance turun.
+
+Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build` sukses 9/9 static pages. Uji browser (Chromium) pada `bun run dev`: submit kosong → 4 pesan error + indicator/label/helper merah + `aria-invalid="true"`; email salah format → "Enter a valid email address" dan fokus otomatis balik ke field email; fokus field valid → label terangkat (`top: 6px`, `font-size: 11px`) dan indicator jadi `rgb(180, 211, 78)` (dark) / pill hijau (light); submit loading → teks "Sending…", tombol `disabled`, spinner 16px `animation: spin 1s`, bg `on-surface/[0.12]`; response sukses (di-stub lewat request interception, tanpa email nyata) → toast "Message sent successfully", form reset, tombol kembali normal. Payload POST terverifikasi ke `https://api.emailjs.com/api/v1.0/email/send` dengan `template_params` = `from_name`, `from_email`, `subject`, `message` (nama variabel template tidak berubah). Mobile 390px: grid jatuh ke satu kolom, field 229px, tombol pill 97×45. Overflow horizontal 400px di `/contact` berasal dari nav rail sidebar dan **identik di `/`** (pre-existing, di luar lingkup Phase 4). Commit `1b4546f`.
 
 ---
 

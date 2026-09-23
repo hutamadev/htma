@@ -6,7 +6,7 @@
 
 ---
 
-## Status Saat Ini: PHASE 3 — SECTIONS (HOME PAGE) — 🔄 SEDANG BERJALAN
+## Status Saat Ini: PHASE 4 — CONTACT PAGE — ✅ SELESAI (berikutnya Phase 5)
 
 - **Phase 0 — Runtime Migration**: ✅ Selesai (Bun runtime & package manager, `bun.lock` stabil).
 - **Phase 1 — Foundation (Tooling, Next 15, Tailwind v4, M3 Palette, Google Sans Flex)**: ✅ **100% Selesai**.
@@ -17,8 +17,10 @@
   - Slice 3.3 Skills — ✅ Selesai
   - Slice 3.4 Portfolio Section & Modal — ✅ Selesai (commit `8e8b307`, `8ab9fde`)
   - Slice 3.5 Sidebar & Footer — ✅ Selesai
-- **Phase 4 — Contact Page**: ⏳ Berikutnya
-- **Phase 5 — Polish, SEO & Launch**: ⏳ Belum mulai
+- **Phase 4 — Contact Page**: ✅ **100% Selesai** (commit `1b4546f`)
+  - Slice 4.1 Zod Schema & Validation — ✅ Selesai (`src/utils/contact-schema.ts`)
+  - Slice 4.2 M3 Text Fields & UI — ✅ Selesai
+- **Phase 5 — Polish, SEO & Launch**: ⏳ Berikutnya
 
 Dokumentasi arsitektur & panduan teknis:
 
@@ -285,32 +287,42 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Perf fix scroll listener**: `setScrollPosition(window.scrollY)` tiap event → state diganti boolean `isVisible`; listener pakai `{ passive: true }`.
    - **Verifikasi runtime**: light mode rail `#E5E5E0` / active `#D0EF67`+`#171E00` / inactive+footer `#46483C` / brain `#3A665E`; dark mode rail `#353530` / active `#3D4D00`+`#D0EF67` / brain `#A1D0C5`. Siklus FAB terverifikasi: top `translate: 0px 999px` (di luar viewport) → scroll 2000 `translate: none` (terlihat) → klik → `scrollY: 0` (tersembunyi lagi).
 
+### Session 7 — 2026-09-23
+
+1. **Slice 4.1 — Zod Schema & Validation**:
+   - File baru `src/utils/contact-schema.ts` — `contactSchema` + `export type ContactFormValues = z.infer<typeof contactSchema>`.
+   - Setiap field `trim()` → `min(1, '… is required')` → `max(...)`: nama 80, email 254, subjek 120, pesan 2000. Batas panjang menjaga payload ke endpoint template publik tidak bisa digelembungkan.
+   - **Email divalidasi dengan `.pipe(z.email({ message }))`, bukan `.email()`.** Zod 4.6.5 (versi terpasang) sudah menandai `z.string().email()` **deprecated** — `node_modules/zod/v4/classic/schemas.d.cts:113` → `@deprecated Use z.email() instead.`. Bentuk `pipe` dipilih karena `z.email()` adalah format check: kalau dirantai langsung (`z.email().trim()`), `trim()` jalan **setelah** cek format sehingga email berpadded spasi akan ditolak. Dengan `z.string().trim().min().max().pipe(z.email())`, trim jalan lebih dulu.
+   - Perilaku terverifikasi: `"  a@b.co  "` → lolos (jadi `a@b.co`), `"   "` → "Email is required", `"nope@"` → "Enter a valid email address", >254 char → pesan panjang.
+2. **Slice 4.2 — M3 Text Fields & UI**:
+   - `src/components/ui/input-form.tsx` ditulis ulang jadi **M3 Filled Text Field**: container `bg-surface-container-highest rounded-t-xs border-b-2 border-outline` + `focus-within:border-b-primary`, input `px-4 pt-6 pb-2 text-body-lg text-on-surface bg-transparent outline-none` (total tinggi 56px), label absolute yang terangkat dari `text-label-lg text-on-surface-variant` ke `text-label-sm`.
+   - **Floating label tanpa state JS**: `placeholder=' '` pada field + varian arbitrary `peer-[:placeholder-shown:not(:focus)]:` untuk posisi istirahat. Bentuk `:placeholder-shown:not(:focus)` dipilih supaya aturan istirahat dan aturan fokus tidak pernah bertabrakan (tidak bergantung urutan variant Tailwind). Terverifikasi di CSS hasil build.
+   - State error: indicator + label `text-error`, helper text `text-body-sm text-error` di bawah field; `aria-invalid` + `aria-describedby` menunjuk ke id helper. Label sekarang benar-benar terhubung ke input lewat `htmlFor={id}` + `useId()` (sebelumnya label tanpa asosiasi apa pun).
+   - `forwardRef` diperbaiki: `forwardRef<unknown, …>` → `forwardRef<RefType, …>` (RefType = `HTMLInputElement | HTMLTextAreaElement`), cast ke `LegacyRef<T>`; `displayName` dipertahankan (Fix 4 BRAINSTORMING).
+   - `contact-form.tsx`: `useState` status manual dibuang, diganti `react-hook-form` + `zodResolver(contactSchema)` dengan `isSubmitting` dari `formState`. Tombol Send jadi M3 Filled Button (`rounded-full px-8 py-3 text-label-lg font-medium bg-primary text-on-primary`, `hover:bg-primary/92 hover:shadow-md active:scale-95`) + spinner in-button (`size-4 animate-spin border-2 border-current border-t-transparent`). Form pakai `noValidate` supaya validasi browser bawaan tidak menimpa pesan Zod.
+   - `contact.tsx`: header lama (hover hitam) diganti **two-stage section header** yang identik dengan About/Skills/Portfolio (`section-header magnetic-item group/header`, pill `bg-primary-container`), plus subtitle `text-body-lg text-on-surface-variant` dan border `border-outline-variant`.
+   - Grid Name/Email: `gap-y-4` → `gap-4` (kolom sebelumnya saling menempel tanpa jarak horizontal).
+3. **Cleanup**: interface global `Inputs` dihapus dari `types.d.ts` — sudah tanpa konsumen setelah `ContactFormValues`.
+4. **Temuan Session 7**:
+   - **`cursor-not-allowed` pada tombol disabled tidak pernah aktif** — rule global `@media (pointer: fine) { * { cursor: none !important } }` (DESIGN 12.11) selalu menang. Bukan regresi; dua spesifikasi DESIGN memang bertabrakan di titik ini. Dibiarkan sesuai DESIGN.
+   - **`.env.local` tidak ada di lokal**, jadi `NEXT_PUBLIC_EMAILJS_*` `undefined` dan submit apa pun langsung jatuh ke toast "Something went wrong". Diisi lewat environment platform saat deploy.
+   - **`bun run build` tidak boleh jalan bersamaan dengan `next dev`** — keduanya berbagi `.next`; build menghapus `_buildManifest.js` milik dev, dev lalu spamming `ENOENT` dan berhenti melayani halaman. Hentikan dev dulu, baru build (dan restart dev setelahnya).
+   - **Bundle `/contact` = 121 kB (First Load 305 kB)**, naik karena zod + react-hook-form + resolvers. Perlu ditinjau di Phase 5 kalau Lighthouse Performance turun.
+
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 30 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 40 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** **DIRTY** — Slice 3.4 + cursor resize belum di-commit (atas instruksi user)
-- **Commit terbaru:** `6611c43` (`docs: update BRAINSTORMING.md and DESIGN.md for cursor and header changes`)
+- **Working tree:** **BERSIH** — seluruh pekerjaan Phase 0–4 sudah di-commit (Slice 3.4/3.5 memang sudah masuk di `45163d0`/`0f448e3`; catatan "DIRTY" di Session 6 sudah usang)
+- **Commit terbaru:** `1b4546f` (`feat(contact): apply M3 filled text fields, filled button, and section header`)
 
 ### File belum di-commit
 
 ```
- M BRAINSTORMING.md
- M DESIGN.md
- M MEMORY.md
- M src/components/ui/card-base.tsx
- M src/components/ui/modal/modal-backdrop.tsx
- M src/components/ui/modal/modal-card.tsx
- M src/components/ui/modal/modal-close.tsx
-D  src/components/ui/svg/ArrowSVG.tsx
- M src/hooks/useCursorPosition.ts
- M src/modules/home-page/portfolio.tsx
- M src/styles/globals.css
- M src/utils/portfolio-data.ts
- M types.d.ts
+(tidak ada)
 ```
 
 ---
@@ -325,8 +337,10 @@ D  src/components/ui/svg/ArrowSVG.tsx
    - Slice 3.3: Skills Section ✅
    - Slice 3.4: Portfolio Section & Modal ✅ (commit `8e8b307`, `8ab9fde`)
    - Slice 3.5: Sidebar & Footer ✅
-4. **Phase 4 — Contact Page** ⏳ — berikutnya (Zod + M3 Text Fields)
-5. **Phase 5 — Polish, SEO & Launch** ⏳ (Lighthouse 90+)
+4. **Phase 4 — Contact Page** — ✅ **SELESAI PENUH** (commit `1b4546f`):
+   - Slice 4.1: Zod Schema & Validation ✅ (`src/utils/contact-schema.ts`)
+   - Slice 4.2: M3 Text Fields & UI ✅ (M3 Filled Text Field + Filled Button + spinner)
+5. **Phase 5 — Polish, SEO & Launch** ⏳ — berikutnya (Lighthouse 90+). `robots.ts`, `sitemap.ts`, dan `manifest.ts` sudah ada; sisa Slice 5.1 = OpenGraph/Twitter card + JSON-LD (`Person`, `WebSite`).
 
 **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
@@ -350,4 +364,7 @@ D  src/components/ui/svg/ArrowSVG.tsx
 - Theme toggle: Sun/Moon icons (bukan MdGraphicEq), dibungkus `bg-surface-container-high` + `shadow-sm`
 - Custom cursor: 40px (`--cursor-size: 2.5rem`), smooth fluid shrink + magnetic parallax; offset centering dibaca dari `offsetWidth`
 - Portfolio card: radius 24px, thumbnail `16/9` atas, content `p-6` `text-left` (WAJIB override `text-align: center` bawaan `<button>`)
-- **Working tree saat ini DIRTY** — Slice 3.4 belum di-commit atas instruksi user. Commit dulu sebelum lanjut Slice 3.5.
+- Contact form (Session 7): validasi di `src/utils/contact-schema.ts` (`contactSchema` + `ContactFormValues`), field M3 Filled Text Field di `src/components/ui/input-form.tsx` (props `title` / `error` / `isTextArea`), label float via `placeholder=' '` + varian `peer-[:placeholder-shown:not(:focus)]`. Jangan pasang `placeholder` asli di field kontak — akan merusak mekanisme float.
+- Zod 4.6.5: pakai `z.email()` (top-level), **bukan** `z.string().email()` yang sudah deprecated. Kalau butuh `trim()` sebelum cek format, gunakan `.pipe(z.email({ message }))`.
+- **Working tree BERSIH** per akhir Session 7. **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
+- `.env.local` belum ada di lokal; untuk uji submit, isi `NEXT_PUBLIC_EMAILJS_SERVICE_ID` / `_TEMPLATE_ID` / `_PUBLIC_KEY` (lihat `.env.example`) atau stub request ke `api.emailjs.com` lewat request interception supaya tidak mengirim email nyata.
