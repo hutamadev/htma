@@ -1,119 +1,96 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import emailjs from '@emailjs/browser';
 import clsx from 'clsx';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import InputForm from '@components/ui/input-form';
+import { contactSchema, type ContactFormValues } from '@utils/contact-schema';
 
 export default function ContactForm() {
-  const [status, setStatus] = useState<
-    'pending' | 'success' | 'reject' | 'idle'
-  >('idle');
-
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
-  } = useForm<Inputs>();
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      from_name: '',
+      from_email: '',
+      subject: '',
+      message: '',
+    },
+  });
 
-  const submitHandler: SubmitHandler<Inputs> = async (data, event) => {
-    event?.preventDefault();
-    if (
-      data.from_email === '' ||
-      data.message === '' ||
-      data.from_name === '' ||
-      data.subject === ''
-    ) {
-      toast.error('Please fill all the fields', { duration: 3000 });
-    }
-
-    const templateParams = {
-      from_name: data.from_name,
-      message: data.message,
-      subject: data.subject,
-      from_email: data.from_email,
-    };
-
+  const submitHandler = async (data: ContactFormValues) => {
     try {
-      setStatus('pending');
-      const res = await emailjs.send(
+      await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string,
-        templateParams,
+        { ...data },
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string
       );
-      if (res.status === 200) {
-        setStatus('success');
-        toast.success('Message sent successfully', {
-          duration: 3000,
-        });
-        reset();
-      }
+      toast.success('Message sent successfully', { duration: 3000 });
+      reset();
     } catch (error) {
-      setStatus('reject');
       toast.error('Something went wrong', { duration: 3000 });
-      // eslint-disable-next-line no-console
       console.error(error);
-    } finally {
-      setTimeout(() => setStatus('idle'), 6000);
     }
   };
 
   return (
     <form
+      noValidate
       onSubmit={handleSubmit(submitHandler)}
       className='flex w-full flex-col justify-center gap-y-4'
     >
-      <div
-        className={clsx(
-          'grid grid-cols-1 gap-y-4',
-          'md:grid-cols-2 md:gap-x-4'
-        )}
-      >
+      <div className={clsx('grid grid-cols-1 gap-4', 'md:grid-cols-2')}>
         <InputForm
           title='Name'
           type='text'
-          placeholder='enter your name'
-          aria-invalid={errors.from_name ? 'true' : 'false'}
-          {...register('from_name', { required: true })}
+          error={errors.from_name?.message}
+          {...register('from_name')}
         />
         <InputForm
           title='Email'
           type='email'
-          placeholder='enter your email'
-          aria-invalid={errors.from_email ? 'true' : 'false'}
-          {...register('from_email', { required: true })}
+          error={errors.from_email?.message}
+          {...register('from_email')}
         />
       </div>
       <InputForm
         title='Subject'
         type='text'
-        placeholder='enter your email subject'
-        aria-invalid={errors.subject ? 'true' : 'false'}
-        {...register('subject', { required: true })}
+        error={errors.subject?.message}
+        {...register('subject')}
       />
       <InputForm
         title='Message'
-        type='text'
         isTextArea
-        placeholder='message...'
-        aria-invalid={errors.message ? 'true' : 'false'}
-        {...register('message', { required: true })}
+        error={errors.message?.message}
+        {...register('message')}
       />
       <button
         type='submit'
+        disabled={isSubmitting}
         className={clsx(
-          'mx-auto w-fit rounded bg-custom-black px-8 py-2 text-custom-green shadow-custom-shadow',
-          'disabled:cursor-not-allowed disabled:bg-custom-black/50 disabled:text-custom-green/50',
-          'dark:bg-custom-green dark:text-custom-black'
+          'mx-auto flex w-fit items-center justify-center gap-x-2 rounded-full bg-primary px-8 py-3',
+          'text-label-lg font-medium text-on-primary transition-all duration-200',
+          'hover:bg-primary/92 hover:shadow-md active:scale-95',
+          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+          'disabled:cursor-not-allowed disabled:bg-on-surface/[0.12] disabled:text-on-surface/[0.38] disabled:shadow-none'
         )}
-        disabled={status === 'pending'}
       >
-        {status === 'pending' ? 'Sending...' : 'Send'}
+        {isSubmitting && (
+          <span
+            aria-hidden='true'
+            className='size-4 animate-spin rounded-full border-2 border-current border-t-transparent'
+          />
+        )}
+        {isSubmitting ? 'Sending...' : 'Send'}
       </button>
     </form>
   );

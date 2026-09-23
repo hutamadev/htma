@@ -9,35 +9,34 @@ export default function Contact() {
   return (
     <section
       className={clsx(
-        'group flex cursor-default flex-col gap-y-6 border-y border-y-custom-black/50 py-6',
-        'dark:border-y-custom-white-2/50'
+        'group/contact flex cursor-default flex-col gap-y-6 border-y border-outline-variant py-8'
       )}
     >
       <div
         className={clsx(
-          'relative flex h-full w-fit items-center gap-x-1 bg-transparent pt-1 pr-2 duration-300',
-          'group-hover:rounded group-hover:bg-custom-black'
+          'section-header magnetic-item group/header relative flex h-full w-fit cursor-pointer items-center gap-x-2 rounded-xl bg-transparent px-3 py-1.5 transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+          'ml-1 origin-left sm:ml-1.5',
+          'group-hover/contact:bg-primary-container hover:scale-[1.03]'
         )}
       >
         <MdArrowForward
           className={clsx(
-            'relative -top-1 text-3xl text-custom-green duration-500',
-            'group-hover:-rotate-45'
+            'text-2xl text-primary transition-transform duration-300',
+            'group-hover/contact:-rotate-45 group-hover/header:-rotate-45'
           )}
         />
         <h1
           className={clsx(
             googleSansFlex.className,
-            'text-xl text-custom-black',
-            'group-hover:text-custom-green',
-            'lg:text-2xl',
-            'dark:text-custom-green'
+            'text-headline-sm font-medium text-on-surface transition-colors duration-300',
+            'group-hover/contact:text-on-primary-container group-hover/header:text-on-primary-container',
+            'dark:text-primary dark:group-hover/contact:text-on-primary-container'
           )}
         >
           contact
         </h1>
       </div>
-      <p className={clsx('text-center text-sm', 'md:text-base')}>
+      <p className='text-center text-body-lg text-on-surface-variant'>
         Need to get in touch? You're just a message away from reaching me.
       </p>
       <ContactForm />
