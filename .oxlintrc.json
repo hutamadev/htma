@@ -2,10 +2,16 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y"],
   "categories": {
-    "correctness": "error"
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
   },
   "rules": {
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "nextjs/no-head-element": "error",
+    "nextjs/no-async-client-component": "error",
+    "react/no-children-prop": "error",
+    "typescript/no-floating-promises": "error"
   },
   "env": {
     "builtin": true,
