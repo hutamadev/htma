@@ -12,7 +12,7 @@ export default function LoadingSkeleton({
       className={clsx(
         className,
         'animate-pulse rounded bg-slate-300',
-        'dark:bg-custom-green/40'
+        'dark:bg-primary/40'
       )}
     ></div>
   );

@@ -37,17 +37,6 @@
   --color-inverse-on-surface: var(--color-inverse-on-surface);
   --color-inverse-primary: var(--color-inverse-primary);
 
-  /* Backward-compatible legacy aliases (so 51 existing components work seamlessly) */
-  --color-custom-black: var(--color-custom-black);
-  --color-custom-white: var(--color-custom-white);
-  --color-custom-white-2: var(--color-custom-white-2);
-  --color-custom-green: var(--color-custom-green);
-  --color-custom-blue: var(--color-custom-blue);
-  --color-lime: var(--color-lime);
-
-  /* Shadows */
-  --shadow-custom-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-
   /* M3 Expressive Shape Scale */
   --radius-xs: 4px;
   --radius-sm: 8px;
@@ -113,14 +102,6 @@
   --color-inverse-on-surface: #f3f1e9;
   --color-inverse-primary: #b4d34e;
 
-  /* Backward-compatible legacy aliases (Light) */
-  --color-custom-black: #1b1c17;
-  --color-custom-white: #ffffff;
-  --color-custom-white-2: #fdfcfa;
-  --color-custom-green: #d0ef67;
-  --color-custom-blue: #bcece1;
-  --color-lime: #d0ef67;
-
   /* Custom Cursor dot size — matches the theme toggle button (h-10 w-10) */
   --cursor-size: 2.5rem;
 }
@@ -157,14 +138,6 @@
   --color-inverse-surface: #e4e3da;
   --color-inverse-on-surface: #30312b;
   --color-inverse-primary: #526600;
-
-  /* Backward-compatible legacy aliases (Dark) */
-  --color-custom-black: #1b1c17;
-  --color-custom-white: #0e0f0b;
-  --color-custom-white-2: #1f201b;
-  --color-custom-green: #b4d34e;
-  --color-custom-blue: #214e46;
-  --color-lime: #b4d34e;
 }
 
 html,
@@ -207,58 +180,6 @@ body {
 @utility mask-bottom {
   -webkit-mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
   mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
-}
-
-/* Loading UI */
-
-.loader,
-.loader::before,
-.loader::after {
-  animation: spin 2s linear infinite;
-  border-radius: 0.75rem;
-  border-width: 2px;
-}
-
-.loader {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-color: var(--color-custom-black);
-}
-
-.dark .loader {
-  border-color: var(--color-custom-white-2);
-}
-
-.loader::before,
-.loader::after {
-  position: absolute;
-  content: '';
-}
-
-.loader::before {
-  height: 110%;
-  width: 110%;
-  border-color: var(--color-custom-green);
-  -webkit-animation-delay: 0.5s;
-  animation-delay: 0.5s;
-}
-
-.dark .loader::before {
-  border-color: var(--color-custom-black);
-}
-
-.loader::after {
-  height: 120%;
-  width: 120%;
-  border-color: var(--color-custom-black);
-  -webkit-animation-delay: 0.1s;
-  animation-delay: 0.1s;
-}
-
-.dark .loader::after {
-  border-color: var(--color-custom-green);
 }
 
 /* Scroll-bar */

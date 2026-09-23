@@ -110,7 +110,7 @@ Karena ini adalah portfolio web (bukan Android app), kita mengambil **prinsip da
 
 ### 4.1 Seed Color
 
-**Seed:** `#D3F36A` (custom-green saat ini — lime green, energetic)
+**Seed:** `#D3F36A` (lime green, energetic — mendasari `primary-container` di light dan `primary` di dark)
 
 Tonal palette resmi di bawah di-generate langsung menggunakan `@material/material-color-utilities` (Mathematical M3 HCT Model).
 
@@ -186,12 +186,32 @@ Tonal palette resmi di bawah di-generate langsung menggunakan `@material/materia
 
 ### 4.3 Mapping Warna Lama → Baru
 
-| Lama                       | Baru (Light)                                        | Baru (Dark)         |
-| -------------------------- | --------------------------------------------------- | ------------------- |
-| `custom-black (#24282C)`   | `on-surface (#1B1C17)`                              | `surface (#1B1C17)` |
-| `custom-white-2 (#EAE9E2)` | `surface (#FDFCFA)`                                 | —                   |
-| `custom-white (#fbfbf8)`   | `surface-container-lowest (#FFFFFF)`                | —                   |
-| `custom-green (#D3F36A)`   | `primary-container (#D0EF67)` / `primary (#526600)` | `primary (#B4D34E)` |
+Slice 1.3 sudah me-repoint setiap alias `custom-*` ke **nilai M3 yang sama persis**,
+jadi migrasi ke role M3 tidak mengubah satu piksel pun. Kolom kiri berisi nilai
+AKTUAL di `globals.css` saat alias masih hidup — bukan nilai sebelum migrasi
+(tabel lama menulis `#24282C` / `#EAE9E2` / `#D3F36A`, itu sudah usang).
+
+| Alias lama             | Nilai aktual (light / dark)               | Role M3 pengganti                              |
+| ---------------------- | ----------------------------------------- | ---------------------------------------------- |
+| `custom-black`         | `#1B1C17` / `#1B1C17`                     | `on-surface` (light) / `surface` (dark)        |
+| `custom-white-2`       | `#FDFCFA` / `#1F201B`                     | `surface` (light) / `surface-container` (dark) |
+| `custom-white`         | `#FFFFFF` / `#0E0F0B`                     | `surface-container-lowest`                     |
+| `custom-green`         | `#D0EF67` / `#B4D34E`                     | `primary-container` (light) / `primary` (dark) |
+| `custom-blue`          | `#BCECE1` / `#214E46`                     | — (nol pemakai)                                |
+| `color-lime`           | `#D0EF67` / `#B4D34E`                     | — (nol pemakai)                                |
+| `shadow-custom-shadow` | `1.95px 1.95px 2.6px rgba(0, 0, 0, 0.15)` | — (satu pemakai, kini inline di `error.tsx`)   |
+
+> **Status: SELESAI.** Seluruh alias di atas sudah dihapus dari `@theme` setelah
+> semua pemanggilnya dimigrasikan ke role M3 (`not-found.tsx`, `error.tsx`,
+> `navigation.tsx`, `loading-skeleton.tsx`, dan CSS `.loader` di `globals.css`).
+> Jangan pakai lagi — gunakan role M3 di kolom kanan.
+
+**Kenapa `custom-black` butuh dua role:** nilainya konstan `#1B1C17` di light dan
+dark, sedangkan role M3 berubah per mode (`on-surface` light `#1B1C17` → dark
+`#E4E3DA`). Satu kelas tidak cukup, jadi pola "kotak gelap + isi lime" memakai
+pasangan `bg-on-surface text-primary-container dark:bg-primary dark:text-surface`.
+Pola ini dipakai di tiga tempat: tombol navbar (12.1), tombol 404, dan tombol
+"Try again" di halaman error.
 
 ### 4.4 M3 Expressive Color Emphasis
 
@@ -636,7 +656,7 @@ Detail implementasi setiap komponen portfolio menggunakan M3 Expressive + Tailwi
 ```
 Container: bg-transparent + pointer-events-none (Session 6)
   Konten scroll tembus dari ujung atas; logo & toggle dibungkus pointer-events-auto
-Logo box: bg-custom-black text-custom-green (light) / dark:bg-custom-green dark:text-custom-black
+Logo box: bg-on-surface text-primary-container (light) / dark:bg-primary dark:text-surface
   rounded-xl px-3 py-1.5 text-title-md font-semibold
 Theme toggle: MdLightMode / MdDarkMode
   h-10 w-10 rounded-full bg-surface-container-high text-on-surface shadow-sm

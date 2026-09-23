@@ -36,9 +36,9 @@ export default function Navigation() {
               href='/'
               className={clsx(
                 googleSansFlex.className,
-                'flex items-center rounded-xl bg-custom-black px-3 py-1.5 text-title-md font-semibold tracking-wide text-custom-green duration-200',
+                'flex items-center rounded-xl bg-on-surface px-3 py-1.5 text-title-md font-semibold tracking-wide text-primary-container duration-200',
                 'hover:bg-primary-container hover:text-on-primary-container',
-                'dark:bg-custom-green dark:text-custom-black dark:hover:bg-primary-container dark:hover:text-on-primary-container'
+                'dark:bg-primary dark:text-surface dark:hover:bg-primary-container dark:hover:text-on-primary-container'
               )}
             >
               HTMA
