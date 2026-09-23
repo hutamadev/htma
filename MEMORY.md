@@ -308,16 +308,22 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **`.env.local` tidak ada di lokal**, jadi `NEXT_PUBLIC_EMAILJS_*` `undefined` dan submit apa pun langsung jatuh ke toast "Something went wrong". Diisi lewat environment platform saat deploy.
    - **`bun run build` tidak boleh jalan bersamaan dengan `next dev`** — keduanya berbagi `.next`; build menghapus `_buildManifest.js` milik dev, dev lalu spamming `ENOENT` dan berhenti melayani halaman. Hentikan dev dulu, baru build (dan restart dev setelahnya).
    - **Bundle `/contact` = 121 kB (First Load 305 kB)**, naik karena zod + react-hook-form + resolvers. Perlu ditinjau di Phase 5 kalau Lighthouse Performance turun.
+5. **Perbaikan susulan — tipografi kartu portfolio responsif** (permintaan user: header & description kartu seksi terlalu besar di mobile & tablet):
+   - **Masalah terukur**: di viewport 390px kartu portfolio hanya **197px** lebar (grid `mx-4` + kolom konten ~229px), sehingga content inner = **149px** — sementara title tetap 22px (`text-title-lg`) dan memaksa wrapping berat. Lebar kartu membesar murni mengikuti viewport: `card ≈ vw - 183` selama masih satu kolom (`<768px`), lalu lompat ke dua kolom di `md:`. Titik nyaman title 22px adalah content inner ≥ ~260px (kartu ≥ ~310px), yang baru tercapai di `vw ≈ 490px`.
+   - **Solusi**: title `text-title-lg` → `text-title-md sm:text-title-lg` (16px → 22px) dan desc `text-body-md` → `text-body-sm sm:text-body-md` (12px → 14px). Breakpoint `sm:` (640px) dipilih karena sudah jadi langkah standar di proyek ini (`skills`, `section header`) — container query sengaja **tidak** dipakai supaya tidak lahir konvensi kedua.
+   - **Verifikasi runtime**: 360/390/600px → title `16px/24px` + desc `12px/18px`; 640/768/1024/1440px → title `22px/33px` + desc `14px/21px`. Judul tetap satu baris di 360px. Screenshot mobile 390px & tablet 768px diperiksa visual. Commit `01decd0`.
+   - **Modal card tidak diubah** — title-nya sudah responsif (`text-4xl md:text-5xl`).
+   - **Catatan sisa**: `p-6` pada content block masih memakan 48px dari 197px (24%) di mobile. Kalau masih terasa kurang proporsional, lever berikutnya adalah padding responsif (`p-4 sm:p-6`), bukan ukuran teks lagi.
 
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` (ahead 40 commits dari origin)
+- **Branch aktif:** `feat/portfolio-update` (ahead 42 commits dari origin)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
 - **Working tree:** **BERSIH** — seluruh pekerjaan Phase 0–4 sudah di-commit (Slice 3.4/3.5 memang sudah masuk di `45163d0`/`0f448e3`; catatan "DIRTY" di Session 6 sudah usang)
-- **Commit terbaru:** `1b4546f` (`feat(contact): apply M3 filled text fields, filled button, and section header`)
+- **Commit terbaru:** `01decd0` (`feat(portfolio): scale card title and description type to card width`)
 
 ### File belum di-commit
 
