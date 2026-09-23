@@ -78,10 +78,10 @@ export default function Portfolio() {
                     imgClassName='aspect-[16/9] w-full object-cover object-center'
                   />
                   <div className='p-6 text-left'>
-                    <h3 className='text-title-lg font-medium text-on-surface'>
+                    <h3 className='text-title-md font-medium text-on-surface sm:text-title-lg'>
                       {portfolio.title}
                     </h3>
-                    <p className='mt-2 text-body-md text-on-surface-variant'>
+                    <p className='mt-2 text-body-sm text-on-surface-variant sm:text-body-md'>
                       {portfolio.description}
                     </p>
                   </div>

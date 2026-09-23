@@ -249,20 +249,20 @@ M3 Expressive memperluas type scale dengan emphasis pada **kontras ukuran** yang
 
 ### 5.3 Type Usage di Portfolio
 
-| Elemen                                  | Current                               | M3 Expressive                                           |
-| --------------------------------------- | ------------------------------------- | ------------------------------------------------------- |
-| Hero "hutama"                           | `text-4xl font-bold` (Neutral Face)   | `text-display-sm` atau `text-display-md` (heading font) |
-| Hero "hello, I'm"                       | `text-lg`                             | `text-title-lg`                                         |
-| Hero "--web developer"                  | `text-2xl font-thin`                  | `text-headline-sm font-normal`                          |
-| Section header ("about", "skills", etc) | `text-xl` / `text-2xl` (Neutral Face) | `text-headline-sm` (heading font)                       |
-| About body text                         | `text-sm` / `text-base`               | `text-body-lg`                                          |
-| Skill subheading ("Main", "Library")    | `text-base`                           | `text-title-md`                                         |
-| Portfolio card title                    | `text-sm font-semibold`               | `text-title-lg` (22px)                                  |
-| Portfolio card description              | —                                     | `text-body-md` (14px) `text-on-surface-variant`         |
-| Footer text                             | `text-xs` / `text-base`               | `text-body-sm`                                          |
-| Contact form label                      | `text-sm font-medium`                 | `text-label-lg`                                         |
-| Navigation logo "HTMA"                  | `text-lg font-semibold`               | `text-title-md font-semibold`                           |
-| Sidebar nav links                       | `text-base`                           | `text-label-lg`                                         |
+| Elemen                                  | Current                               | M3 Expressive                                                              |
+| --------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------- |
+| Hero "hutama"                           | `text-4xl font-bold` (Neutral Face)   | `text-display-sm` atau `text-display-md` (heading font)                    |
+| Hero "hello, I'm"                       | `text-lg`                             | `text-title-lg`                                                            |
+| Hero "--web developer"                  | `text-2xl font-thin`                  | `text-headline-sm font-normal`                                             |
+| Section header ("about", "skills", etc) | `text-xl` / `text-2xl` (Neutral Face) | `text-headline-sm` (heading font)                                          |
+| About body text                         | `text-sm` / `text-base`               | `text-body-lg`                                                             |
+| Skill subheading ("Main", "Library")    | `text-base`                           | `text-title-md`                                                            |
+| Portfolio card title                    | `text-sm font-semibold`               | `text-title-md` (16px) → `sm:text-title-lg` (22px)                         |
+| Portfolio card description              | —                                     | `text-body-sm` (12px) → `sm:text-body-md` (14px) `text-on-surface-variant` |
+| Footer text                             | `text-xs` / `text-base`               | `text-body-sm`                                                             |
+| Contact form label                      | `text-sm font-medium`                 | `text-label-lg`                                                            |
+| Navigation logo "HTMA"                  | `text-lg font-semibold`               | `text-title-md font-semibold`                                              |
+| Sidebar nav links                       | `text-base`                           | `text-label-lg`                                                            |
 
 ---
 
@@ -676,8 +676,12 @@ Anatomi (thumbnail atas → teks bawah):
   Thumbnail: rounded-[inherit] (24px), aspect-[16/9], object-cover
   Content block: p-6 (padding 24px) + text-left
     (button UA default text-align:center WAJIB di-override text-left)
-    Title:  text-title-lg font-medium text-on-surface
-    Desc:   mt-2 text-body-md text-on-surface-variant
+    Title:  text-title-md font-medium text-on-surface sm:text-title-lg
+    Desc:   mt-2 text-body-sm text-on-surface-variant sm:text-body-md
+    (Di bawah 640px kartu hanya selebar ~197px dengan content inner ~149px
+     — title 22px memaksa wrapping berat, jadi turun ke Title Medium 16px
+     dan desc ke Body Small 12px. Dari `sm:` (640px) ke atas kartu >= 366px,
+     keduanya kembali ke ukuran DESIGN 22px / 14px.)
 
 Grid:
   ul: grid-cols-1 md:grid-cols-2, gap-4
