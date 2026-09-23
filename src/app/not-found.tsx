@@ -10,7 +10,7 @@ export default function NotFound() {
       <h2 className='text-headline-sm font-semibold text-custom-black dark:text-custom-white-2'>
         Page Not Found
       </h2>
-      <p className='max-w-md text-body-md text-on-surface-variant'>
+      <p className='max-w-md text-body-md text-on-surface-variant md:text-body-lg'>
         The page you are looking for does not exist or has been moved.
       </p>
       <Link

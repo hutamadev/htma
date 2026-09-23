@@ -94,8 +94,8 @@ export default function Portfolio() {
 
       <p
         className={clsx(
-          'flex flex-col items-center justify-center gap-x-1 text-center text-on-surface-variant',
-          'md:flex-row'
+          'flex flex-col items-center justify-center gap-x-1 text-center text-body-md text-on-surface-variant',
+          'md:flex-row md:text-body-lg'
         )}
       >
         For other portfolio, you can visit my GitHub at{' '}

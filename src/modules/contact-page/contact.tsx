@@ -36,7 +36,7 @@ export default function Contact() {
           contact
         </h1>
       </div>
-      <p className='text-center text-body-lg text-on-surface-variant'>
+      <p className='text-center text-body-md text-on-surface-variant md:text-body-lg'>
         Need to get in touch? You're just a message away from reaching me.
       </p>
       <ContactForm />

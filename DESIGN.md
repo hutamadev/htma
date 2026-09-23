@@ -368,6 +368,54 @@ Desktop: hero name → text-display-md/lg (45px-57px)
 <h1 class="text-[36px] leading-tight md:text-[45px] lg:text-[57px]">hutama</h1>
 ```
 
+### 7.4 Breakpoint Standar & Inventaris Tipografi Responsif
+
+Semua breakpoint mengikuti **default Tailwind CSS v4** apa adanya — proyek tidak
+mendefinisikan `--breakpoint-*` di `@theme`, jadi tidak ada breakpoint kustom.
+
+| Prefix  | Minimum width  | CSS                       | Dipakai di proyek untuk             |
+| ------- | -------------- | ------------------------- | ----------------------------------- |
+| (tanpa) | 0              | —                         | Mobile — nilai dasar (mobile-first) |
+| `sm`    | 40rem (640px)  | `@media (width >= 40rem)` | Kartu portfolio, skill icon         |
+| `md`    | 48rem (768px)  | `@media (width >= 48rem)` | Body copy, grid 2 kolom, navbar     |
+| `lg`    | 64rem (1024px) | `@media (width >= 64rem)` | Sidebar rail, modal 2 kolom, hero   |
+| `xl`    | 80rem (1280px) | `@media (width >= 80rem)` | (belum dipakai)                     |
+| `2xl`   | 96rem (1536px) | `@media (width >= 96rem)` | Hero display-lg, skill icon besar   |
+
+Sumber: `https://tailwindcss.com/docs/responsive-design` (Tailwind v4 docs, tabel
+"Breakpoint prefix / Minimum width"). Tailwind mobile-first: utility tanpa prefix
+= mobile, prefix = breakpoint itu **dan di atasnya**.
+
+**Konvensi body copy:** `text-body-md md:text-body-lg` (14px mobile → 16px `md:`).
+Dipakai konsisten di About, subtitle Contact, paragraf GitHub Portfolio, deskripsi
+modal, dan body 404.
+
+**Inventaris — yang scaling:**
+
+| Elemen                | Kelas                                                        | Mobile → breakpoint         |
+| --------------------- | ------------------------------------------------------------ | --------------------------- |
+| Hero "hello, I'm"     | `text-xs md:text-sm lg:text-title-md`                        | 12px → 14px → 16px          |
+| Hero "hutama"         | `text-xl md:text-3xl lg:text-display-md 2xl:text-display-lg` | 20px → 30px → 45px → 57px   |
+| Hero socials          | `text-label-lg md:text-title-sm`                             | 14px (ganti ukuran di `md`) |
+| Body copy (5 tempat)  | `text-body-md md:text-body-lg`                               | 14px → 16px                 |
+| Kartu portfolio title | `text-title-md sm:text-title-lg`                             | 16px → 22px                 |
+| Kartu portfolio desc  | `text-body-sm sm:text-body-md`                               | 12px → 14px                 |
+| Modal title           | `text-4xl md:text-5xl`                                       | 36px → 48px                 |
+| Modal desc            | `text-body-md md:text-body-lg`                               | 14px → 16px                 |
+| Footer icon           | `text-xl md:text-2xl`                                        | 20px → 24px                 |
+
+**Sengaja TIDAK scaling (dengan alasan):**
+
+| Elemen            | Kelas                            | Alasan                                                                                              |
+| ----------------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Section header    | `text-headline-sm` (24px)        | Spec 7.2; teks pendek, tetap 1 baris di 390px                                                       |
+| Subheading skills | `text-title-md` (16px)           | Lebih terbaca kalau tidak mengecil di mobile                                                        |
+| Input teks form   | `text-body-lg` (16px)            | **WAJIB 16px ke atas** — di bawah itu iOS Safari auto-zoom saat field difokuskan. Jangan diturunkan |
+| Label / helper    | `text-label-lg` / `text-body-sm` | UI text, sengaja kecil dan stabil                                                                   |
+| Footer text       | `text-body-sm` (12px)            | Spec 7.2 — de-emphasize eksplisit                                                                   |
+| Nav logo "HTMA"   | `text-title-md` (16px)           | Brand presence, stabil di semua ukuran                                                              |
+| Sidebar link      | `text-label-lg` (14px)           | Rail; konsisten dengan active indicator                                                             |
+
 ---
 
 ## 8. Containment
@@ -645,7 +693,7 @@ Title text:
 
 ```
 Separator: border-outline-variant
-Body text: text-body-lg text-on-surface leading-relaxed
+Body text: text-body-md md:text-body-lg text-on-surface leading-relaxed
   dark: text-on-surface (auto via dark mode palette)
 Name "Hutama": font-semibold text-on-surface (natural inline, tanpa background color)
 ```
@@ -695,7 +743,8 @@ Interaksi kursor:
   Card menyala bg-surface-container-high sebagai penanda kursor masuk
 
 Dark mode: bg-surface-container (#1F201B), desc text-on-surface-variant (#C7C8B8)
-GitHub link: text-primary underline / text-on-surface-variant
+GitHub paragraph: text-center text-body-md text-on-surface-variant md:flex-row md:text-body-lg
+GitHub link: text-primary underline (ukuran mengikuti paragraf induk)
 ```
 
 ### 12.7 Modal / Dialog (M3 Basic Dialog)
@@ -712,6 +761,9 @@ Dialog container (native <dialog>):
   a11y: elemen <dialog open inert> + aria-label (bukan role="dialog")
 Inner content panel:
   bg-surface-container rounded-lg p-4
+Typography:
+  Title:       text-4xl md:text-5xl uppercase text-on-surface (heading font)
+  Description: mt-3 text-start text-body-md text-on-surface-variant md:text-body-lg
 Buttons (M3 Filled Button / Filled Tonal Button):
   Demo: bg-primary text-on-primary rounded-full px-4 py-3
   Repository: bg-secondary-container text-on-secondary-container rounded-full
@@ -758,6 +810,8 @@ Separator: TIDAK ditambahkan — Portfolio sudah pakai border-b border-outline-v
 ### 12.10 Contact Form (M3 Filled Text Fields & Filled Button)
 
 ```
+Subtitle (di atas form): text-center text-body-md text-on-surface-variant md:text-body-lg
+
 Filled Text Field:
   Container: bg-surface-container-highest rounded-t-xs border-b-2 border-outline p-3
     focus-within: border-b-primary

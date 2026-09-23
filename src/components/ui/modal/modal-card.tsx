@@ -56,7 +56,7 @@ export default function ModalCard({
               {portfolioData?.title}.
             </h1>
             {portfolioData?.description && (
-              <p className='mt-3 text-start text-body-lg text-on-surface-variant'>
+              <p className='mt-3 text-start text-body-md text-on-surface-variant md:text-body-lg'>
                 {portfolioData.description}
               </p>
             )}
