@@ -53,7 +53,18 @@ export default function HeroImages() {
           </motion.div>
         </>
       ) : (
-        <LoadingSkeleton className={clsx('h-36 w-full')} />
+        <>
+          <LoadingSkeleton
+            className={clsx(
+              // Matches the logos' 136x230 viewBox so the swap keeps the row height
+              'aspect-[136/230] w-20 rounded-3xl',
+              '2xl:w-24'
+            )}
+          />
+          <LoadingSkeleton
+            className={clsx('aspect-[136/230] w-20 rounded-3xl', '2xl:w-24')}
+          />
+        </>
       )}
     </section>
   );

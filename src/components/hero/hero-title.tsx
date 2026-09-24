@@ -36,7 +36,11 @@ export default function HeroTitle() {
         </motion.h1>
       ) : (
         <LoadingSkeleton
-          className={clsx('h-2 w-14', 'md:h-2.5 md:w-16', 'lg:h-4 lg:w-28')}
+          className={clsx(
+            'h-2 w-14 rounded-full',
+            'md:h-2.5 md:w-16',
+            'lg:h-4 lg:w-28'
+          )}
         />
       )}
 
@@ -66,7 +70,13 @@ export default function HeroTitle() {
           </motion.h1>
         ) : (
           <LoadingSkeleton
-            className={clsx('h-5 w-24', 'md:h-7 md:w-36', 'lg:h-12 lg:w-80')}
+            className={clsx(
+              'h-5 w-24 rounded-full',
+              'md:h-7 md:w-32',
+              'lg:h-12 lg:w-40',
+              // "hutama" at display-lg measures 207.45px
+              '2xl:w-52'
+            )}
           />
         )}
       </div>
@@ -88,7 +98,11 @@ export default function HeroTitle() {
         </motion.div>
       ) : (
         <LoadingSkeleton
-          className={clsx('h-3.5 w-24', 'md:h-4 md:w-32', 'lg:h-6 lg:w-48')}
+          className={clsx(
+            'h-3.5 w-24 rounded-md',
+            'md:h-4 md:w-32',
+            'lg:h-6 lg:w-32 lg:rounded-lg'
+          )}
         />
       )}
     </div>

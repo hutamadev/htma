@@ -104,6 +104,9 @@
 
   /* Custom Cursor dot size — matches the theme toggle button (h-10 w-10) */
   --cursor-size: 2.5rem;
+
+  /* Half-width of the skeleton reveal wave's travel beyond the viewport edge */
+  --skeleton-wave-span: 40vw;
 }
 
 .dark {
@@ -180,6 +183,67 @@ body {
 @utility mask-bottom {
   -webkit-mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
   mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
+}
+
+/* M3 Expressive loading placeholder (mirrors the reference m3e-skeleton
+   defaults): a surface base carrying an on-surface tint, swept by an
+   on-surface reveal wave. The wave is viewport-anchored via
+   background-attachment: fixed, so every skeleton on screen is lit by one
+   sweep instead of each block restarting its own. Browsers that ignore fixed
+   backgrounds (iOS Safari) fall back to a per-block sweep. */
+@utility skeleton {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: color-mix(
+    in srgb,
+    var(--color-on-surface) 8%,
+    var(--color-surface)
+  );
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 35%,
+      var(--color-on-surface) 50%,
+      transparent 65%,
+      transparent 100%
+    );
+    background-attachment: fixed;
+    background-size: calc(100vw + var(--skeleton-wave-span) * 2) 100%;
+    background-position-x: calc(-1 * var(--skeleton-wave-span));
+    opacity: 0.06;
+    animation: skeleton-wave 2100ms linear infinite;
+  }
+
+  /* Vestibular safety: drop the wave outright rather than let the global
+     reduced-motion rule spin an infinite animation at 0.01ms per cycle. */
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    background-color: GrayText;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@keyframes skeleton-wave {
+  from {
+    background-position-x: calc(-1 * var(--skeleton-wave-span));
+  }
+  to {
+    background-position-x: calc(100vw + var(--skeleton-wave-span));
+  }
 }
 
 /* Scroll-bar */

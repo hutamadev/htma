@@ -65,7 +65,11 @@ export default function Navigation() {
                 )}
               </button>
             ) : (
-              <LoadingSpin className='h-6 w-6' />
+              // Chrome of the button above, so the grid row keeps the same
+              // 40px box while the indicator stands in for the icon.
+              <span className='flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface shadow-sm'>
+                <LoadingSpin className='h-6 w-6' />
+              </span>
             )}
           </div>
         </div>

@@ -52,7 +52,7 @@ export default function HeroSocials() {
           ))}
         </>
       ) : (
-        <LoadingSkeleton className={clsx('h-4 w-40', 'lg:h-8 lg:w-80')} />
+        <LoadingSkeleton className={clsx('h-4 w-32 rounded-full', 'lg:h-11')} />
       )}
     </ul>
   );

@@ -27,7 +27,7 @@ const InputForm = forwardRef<RefType, IInputFormProps>(
     const hasError = Boolean(error);
 
     const fieldClassName = clsx(
-      'peer w-full bg-transparent px-4 pt-6 pb-2 text-body-lg text-on-surface outline-none'
+      'peer relative w-full bg-transparent px-4 pt-6 pb-2 text-body-lg text-on-surface outline-none'
     );
 
     const fieldProps = {
@@ -44,6 +44,10 @@ const InputForm = forwardRef<RefType, IInputFormProps>(
         <div
           className={clsx(
             'relative rounded-t-xs border-b-2 bg-surface-container-highest transition-colors duration-200',
+            // M3 state layer: on-surface at 8% over the field's own surface,
+            // painted under the text because the field itself is positioned.
+            'before:pointer-events-none before:absolute before:inset-0 before:rounded-t-xs before:bg-on-surface/8 before:opacity-0 before:transition-opacity before:duration-200 before:content-[""]',
+            'hover:before:opacity-100',
             hasError
               ? 'border-b-error'
               : 'border-b-outline focus-within:border-b-primary'

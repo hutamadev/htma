@@ -39,8 +39,15 @@ export default function useTextScramble(selector: string) {
       if (elements.length === 0) return;
 
       elements.forEach((el) => {
+        if (!(el instanceof HTMLElement)) return;
+
         const originalText = el.textContent ?? '';
         if (!originalText) return;
+
+        // Placeholder glyphs are narrower than the real ones, so the box
+        // resizes mid-flight and drags anything centred around it. Pin the
+        // width it starts with (offsetWidth = untransformed layout width).
+        el.style.minWidth = `${el.offsetWidth}px`;
 
         const chars = characters.split('');
         let revealedCount = 0;
@@ -59,24 +66,23 @@ export default function useTextScramble(selector: string) {
         }, speed);
         intervalsRef.current.push(scrambleInterval);
 
+        const settle = () => {
+          clearInterval(scrambleInterval);
+          clearInterval(revealInterval);
+          el.textContent = originalText;
+          el.style.minWidth = '';
+        };
+
         // Progressive reveal phase
         const revealInterval = setInterval(() => {
           revealedCount++;
-          if (revealedCount >= originalText.length) {
-            clearInterval(revealInterval);
-            clearInterval(scrambleInterval);
-            el.textContent = originalText;
-          }
+          if (revealedCount >= originalText.length) settle();
         }, revealDelay);
         intervalsRef.current.push(revealInterval);
 
         // Safety fallback timer
         const safetyTimer = setTimeout(
-          () => {
-            clearInterval(scrambleInterval);
-            clearInterval(revealInterval);
-            el.textContent = originalText;
-          },
+          settle,
           revealDuration + revealDelay * originalText.length
         );
         timeoutsRef.current.push(safetyTimer);

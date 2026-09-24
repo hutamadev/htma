@@ -33,7 +33,7 @@ export default function SidebarLink() {
               isActive
                 ? 'bg-primary-container text-on-primary-container'
                 : 'text-on-surface-variant hover:bg-on-surface/8',
-              'rotate-90 rounded-full px-4 py-1.5 text-label-lg transition-colors duration-200'
+              'rotate-90 rounded-full px-4 py-1.5 text-label-lg font-medium transition-colors duration-200'
             )}
           >
             <Link href={side.link}>{side.title}</Link>

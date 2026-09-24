@@ -15,6 +15,7 @@ export default function Hero() {
   const { scramble } = useTextScramble('.nameBaffle');
 
   const clientHandler = useStore((state) => state.clientHandler);
+  const isClient = useStore((state) => state.isClient);
 
   useEffect(() => {
     clientHandler();
@@ -38,6 +39,9 @@ export default function Hero() {
       )}
     >
       <div
+        // The placeholders stand in for the name, logos, and links until the
+        // store flips, so the region reports itself busy for assistive tech.
+        aria-busy={isClient ? undefined : true}
         className={clsx(
           'flex h-full flex-col-reverse justify-between pt-52 pb-24',
           'md:pt-52 md:pb-36',
