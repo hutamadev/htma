@@ -1143,4 +1143,36 @@ const animationConfig = shouldReduceMotion
 
 ---
 
+## 16. Loading Skeletons (M3 Expressive Placeholder)
+
+```css
+/* Base: on-surface 8% di atas surface */
+background-color: color-mix(
+  in srgb,
+  var(--color-on-surface) 8%,
+  var(--color-surface)
+);
+
+/* Sweep: on-surface 35% -> 65% */
+background-image: linear-gradient(
+  90deg,
+  transparent 0%,
+  transparent 35%,
+  var(--color-on-surface) 50%,
+  transparent 65%,
+  transparent 100%
+);
+
+/* Viewport-anchored wave: sapuan serempak di seluruh layar */
+--skeleton-wave-span: 40vw;
+background-attachment: fixed;
+background-size: calc(100vw + var(--skeleton-wave-span) * 2) 100%;
+animation: skeleton-wave 2100ms linear infinite;
+```
+
+- **Aksesibilitas**: placeholder murni dekoratif dengan `aria-hidden="true"`, kontainer utama diberi `aria-busy="true"` selama fase pre-hidrasi (`!isClient`).
+- **Stabilitas Layout**: dimensi bar disesuaikan dengan `leading-relaxed` copy asli sehingga delta layout shift saat hidrasi = 0px pada tablet & desktop.
+
+---
+
 > **Status Token:** Nilai hex di atas sudah 100% final dan akurat, di-generate langsung dari seed `#D3F36A` menggunakan `@material/material-color-utilities` resmi Google. Siap dipindahkan langsung ke `src/styles/globals.css` pada Phase 1.

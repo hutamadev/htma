@@ -367,15 +367,35 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - `MEMORY.md`: baris keputusan #23 → `bun.lock`; Session 8 sudah tercatat di commit `a7d4b56`.
 5. **Verifikasi akhir Session 9**: `format:check` ✅, `lint:strict` ✅ (0 warning), `typechecks` ✅ (0 error), `build` ✅ 9/9 static pages. Dev server dihentikan lebih dulu sebelum build (aturan Session 7).
 
+### Session 10 — 2026-09-24
+
+1. **M3 Expressive Loading Skeletons & Hydration Stabilization (Slice 5.0c)** (commit `758168f`):
+   - `globals.css`: implementasi efek M3 Expressive loading placeholder skeleton wave dengan `--skeleton-wave-span: 40vw` dan `background-attachment: fixed` (viewport-anchored sweep). Seluruh skeleton di halaman disapu secara serempak dengan satu gelombang on-surface tint, dengan fallback per-block sweep untuk browser non-fixed attachment (iOS Safari).
+   - `loading-skeleton.tsx`: dijadikan elemen murni dekoratif dengan `aria-hidden="true"` dan class `.skeleton`.
+   - `src/modules/home-page/home-content.tsx`: komponen hydration gate (`isClient` dari Zustand). Menampilkan placeholder skeleton struktural sebelum hidrasi yang mencerminkan padding, border, grid mode, dan line height section asli (About, Skills, Portfolio, Footer). Dilengkapi atribut `aria-busy="true"` pada kontainer root skeleton untuk assistive technology.
+   - `src/components/hero/*`: penyesuaian bentuk placeholder (`rounded-full`, `rounded-3xl` rasio 136/230 pada logo) serta penambahan state `aria-busy={isClient ? undefined : true}` pada hero container saat SSR.
+   - `src/hooks/useTextScramble.ts`: layout width (`offsetWidth`) dipin ke style `minWidth` selama animasi teks scramble berjalan agar tidak memicu horizontal layout shift/jitter.
+   - `src/components/ui/input-form.tsx`: penambahan M3 state layer `before:bg-on-surface/8` dengan opacity transition saat hover.
+   - `src/components/sidebar/sidebar-link.tsx`: penyesuaian ketebalan font rail link menjadi `font-medium` (`text-label-lg font-medium`).
+2. **Hasil Pengukuran Layout Shift Hidrasi**:
+   - `768px`, `1024px`, `1440px`, `1920px`: **0px delta** (`dBody: 0`, `dMain: 0`, `dTop: 0`). Presisi sempurna antara pre-hidrasi dan post-hidrasi.
+   - `390px` (mobile): residual `dMain: -16px` dan `dTop: -24px` (berasal dari entrance animation `initial={{ y: 24 }}` Framer Motion pada `PageWrapper`).
+3. **Verifikasi Kualitas Session 10**:
+   - `format:check` ✅ (Prettier)
+   - `lint:strict` ✅ (Oxlint 0 warning)
+   - `typechecks` ✅ (tsc 0 error)
+   - `build` ✅ (9/9 static pages prerendered)
+   - Browser screenshot proof pre-hydration tersimpan di `/tmp/skel-1440-pre.png` dan `/tmp/skel-390-pre.png`.
+
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (0 ahead, 0 behind)
+- **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (ahead per commit lokal)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** **BERSIH** setelah commit dokumen Session 9
-- **Commit terbaru (Session 9):** `f62e815` (`chore(lint): enable unicorn, oxc and jsx-a11y rules`), `4aa5eff` (`feat(security): send static security headers for all routes`), `bdcfe3d` (`chore(deps): pin postcss to 8.5.28 via overrides`), lalu `a7d4b56` (docs Session 8) dan `948742d` (`refactor(theme): drop legacy color aliases and migrate callers to M3 roles`)
+- **Working tree:** **BERSIH** setelah commit dokumen Session 10
+- **Commit terbaru (Session 10):** `758168f` (`feat(ui): implement M3 expressive loading skeletons and hydration stabilization`)
 
 ### File belum di-commit
 
@@ -401,9 +421,9 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 5. **Phase 5 — Polish, SEO & Launch** ⏳ — berjalan. `robots.ts`, `sitemap.ts`, dan `manifest.ts` sudah ada.
    - **Slice 5.0 — token legacy → peran M3 ✅** (commit `948742d`, Session 8)
    - **Slice 5.0b — indikator loading M3 Expressive ✅** (commit `c1afe20`, Session 8)
+   - **Slice 5.0c — M3 Expressive Loading Skeletons & Hydration Swap ✅** (commit `758168f`, Session 10)
    - **Sisa Slice 5.1** = OpenGraph/Twitter card + JSON-LD (`Person`, `WebSite`), lalu audit Lighthouse (target 90+).
-
-**Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
+     **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
 ---
 
