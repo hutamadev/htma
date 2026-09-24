@@ -387,6 +387,24 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - `build` ✅ (9/9 static pages prerendered)
    - Browser screenshot proof pre-hydration tersimpan di `/tmp/skel-1440-pre.png` dan `/tmp/skel-390-pre.png`.
 
+### Session 11 — 2026-09-24
+
+1. **Metadata, OpenGraph & JSON-LD Structured Data (Slice 5.1)** (commit `5d0c6fa`):
+   - `src/app/layout.tsx`: konfigurasi `metadataBase: new URL('https://htma.site')`, `title.template` (`%s | Hutama — Web Developer`), `title.default` (`Hutama — Web Developer`), OpenGraph (`og:title`, `og:description`, `og:site_name`, `og:url`), Twitter card (`summary_large_image`), `robots` (index/follow + googleBot options), dan keywords komprehensif.
+   - `JSON-LD`: structured data skema `Person` (`name: Hutama`, `jobTitle: Web Developer`, `sameAs: github.com/hutamadev`) dan `WebSite` (`publisher: #person`) yang disematkan langsung di dalam `<body>`.
+   - `src/app/opengraph-image.tsx`: auto-generated dynamic OpenGraph preview (1200x630 PNG) menggunakan `ImageResponse` dari `next/og`. Desain selaras dengan Material 3 Expressive (background dark surface `#1b1c17`, aksen primary `#b4d34e` dan container `#526600`, deskripsi typography Google Sans style, metadata footer).
+   - `src/app/page.tsx` & `src/app/contact/page.tsx`: per-page metadata diperbarui dengan canonical URLs (`/` dan `/contact`), `absolute` title pada home page agar tidak double-apply template, dan deskripsi SEO yang terarah.
+2. **Hasil Verifikasi Runtime**:
+   - `GET /` → tag `<title>`, `<meta name="description">`, `<meta property="og:*">`, canonical link, dan JSON-LD ter-render sempurna di SSR HTML.
+   - `GET /contact` → title ter-render `Contact | Hutama — Web Developer` via template layout.
+   - `GET /opengraph-image` → status `200 OK`, `image/png`, ukuran 36.5 KB, visual M3 Expressive terverifikasi.
+   - `GET /sitemap.xml` dan `/robots.txt` → `200 OK`.
+3. **Verifikasi Kualitas Session 11**:
+   - `format:check` ✅ (Prettier)
+   - `lint:strict` ✅ (Oxlint 0 warning)
+   - `typechecks` ✅ (tsc 0 error)
+   - `build` ✅ (10/10 static pages prerendered)
+
 ---
 
 ## Git State
@@ -394,8 +412,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (ahead per commit lokal)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** **BERSIH** setelah commit dokumen Session 10
-- **Commit terbaru (Session 10):** `758168f` (`feat(ui): implement M3 expressive loading skeletons and hydration stabilization`)
+- **Working tree:** **BERSIH** setelah commit dokumen Session 11
+- **Commit terbaru (Session 11):** `5d0c6fa` (`feat(seo): configure root metadata, open graph image, and JSON-LD structured data`)
 
 ### File belum di-commit
 
@@ -422,8 +440,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Slice 5.0 — token legacy → peran M3 ✅** (commit `948742d`, Session 8)
    - **Slice 5.0b — indikator loading M3 Expressive ✅** (commit `c1afe20`, Session 8)
    - **Slice 5.0c — M3 Expressive Loading Skeletons & Hydration Swap ✅** (commit `758168f`, Session 10)
-   - **Sisa Slice 5.1** = OpenGraph/Twitter card + JSON-LD (`Person`, `WebSite`), lalu audit Lighthouse (target 90+).
-     **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
+   - **Slice 5.1 — Metadata & SEO ✅** (commit `5d0c6fa`, Session 11)
+   - **Sisa Slice 5.2** = Audit Kualitas Lighthouse (target 90+ semua metrik).
+   - **Sisa Slice 5.3** = Cross-Browser & Final Build verification.
+
+**Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
 ---
 

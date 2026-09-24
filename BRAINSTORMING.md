@@ -1406,7 +1406,7 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
 - **Slice 5.0 — Pembersihan Token Legacy**: ✅ **SELESAI** (commit `948742d`) — migrasi seluruh caller custom colors ke token peran M3.
 - **Slice 5.0b — Indikator Loading M3 Expressive**: ✅ **SELESAI** (commit `c1afe20`) — 7 bentuk morph canvas 48dp (rotasi 50deg/shape + settle 90deg, morph 650ms).
 - **Slice 5.0c — Loading Skeletons & Hydration Swap**: ✅ **SELESAI** (commit `758168f`) — M3 expressive skeleton wave di `globals.css`, hydration gate `HomeContent`, a11y `aria-busy`/`aria-hidden`, 0px delta shift pada tablet/desktop.
-- **Slice 5.1 — Metadata & SEO**: OpenGraph, Twitter card, JSON-LD (`Person`, `WebSite`), `sitemap.ts`, `robots.ts`.
+- **Slice 5.1 — Metadata & SEO**: ✅ **SELESAI** (commit `5d0c6fa`) — OpenGraph, Twitter card, dynamic `opengraph-image.tsx`, JSON-LD (`Person`, `WebSite`), `sitemap.ts`, `robots.ts`.
 - **Slice 5.2 — Audit Kualitas**: Audit Lighthouse (target 90+ semua metrik: Performance, Accessibility, Best Practices, SEO).
 - **Slice 5.3 — Cross-Browser & Final Build**: Uji di browser Chromium (Helium on CachyOS), final `bun run build` & `bun run lint` zero errors/warnings.
 
