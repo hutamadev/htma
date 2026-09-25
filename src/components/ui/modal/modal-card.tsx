@@ -78,21 +78,23 @@ export default function ModalCard({
                   Repository
                 </a>
               )}
-              <a
-                href={portfolioData?.url as string}
-                target='_blank'
-                rel='noreferrer'
-                className='flex w-full items-center justify-center gap-x-2 rounded-full bg-primary px-4 py-3 text-title-sm font-medium text-on-primary transition-all duration-200 hover:bg-primary/92 active:scale-95'
-              >
-                <MdLink className='-rotate-45 text-xl' />
-                Demo
-              </a>
+              {portfolioData?.url && (
+                <a
+                  href={portfolioData.url}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='flex w-full items-center justify-center gap-x-2 rounded-full bg-primary px-4 py-3 text-title-sm font-medium text-on-primary transition-all duration-200 hover:bg-primary/92 active:scale-95'
+                >
+                  <MdLink className='-rotate-45 text-xl' />
+                  Demo
+                </a>
+              )}
             </div>
           </div>
           {portfolioData?.image && (
             <NextImage
               src={portfolioData.image}
-              alt={`portfolio ${portfolioData?.title}}`}
+              alt={`portfolio ${portfolioData.title}`}
               width={600}
               height={600}
               className='h-full w-full'

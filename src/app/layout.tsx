@@ -115,7 +115,9 @@ export default function RootLayout({ children }: Readonly<IRootLayoutProps>) {
         >
           <Layout>{children}</Layout>
         </ThemeProvider>
-        <Analytics />
+        {/* Vercel only serves /_vercel/insights/script.js, so skip it elsewhere
+            instead of letting the request 404 and log console errors. */}
+        {process.env.VERCEL ? <Analytics /> : null}
       </body>
     </html>
   );

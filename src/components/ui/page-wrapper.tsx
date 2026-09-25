@@ -38,9 +38,9 @@ export default function PageWrapper({ children }: Readonly<IPageWrapperProps>) {
         'md:px-0',
         'lg:col-start-5'
       )}
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0, transition: { duration: 0.7 } }}
-      exit={{ opacity: 0, y: 0 }}
+      initial={{ y: 24 }}
+      animate={{ y: 0, transition: { duration: 0.7 } }}
+      exit={{ y: 0 }}
     >
       {children}
     </motion.section>

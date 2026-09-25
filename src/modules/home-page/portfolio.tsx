@@ -57,7 +57,6 @@ export default function Portfolio() {
             >
               <button
                 type='button'
-                aria-label={`View ${portfolio.title} detail`}
                 onClick={portfolioHandler.bind(null, portfolio)}
                 className='block h-full w-full'
               >
