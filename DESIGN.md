@@ -541,15 +541,22 @@ export const m3Easing = {
 
 ### 9.4 Animation Usage di Portfolio
 
-| Elemen                   | Target Properti      | M3 Expressive Motion Token       | Implementasi                                  |
-| :----------------------- | :------------------- | :------------------------------- | :-------------------------------------------- |
-| **Hero Title Reveal**    | y, opacity           | Spatial Default + Effect Default | `m3Motion.spatial.default` + stagger          |
-| **Hero Images Reveal**   | scale, opacity       | Spatial Slow + Effect Slow       | `m3Motion.spatial.slow`                       |
-| **Page Wrapper Enter**   | y, opacity           | Spatial Default + Effect Default | `m3Motion.spatial.default`                    |
-| **Portfolio Card Hover** | scale, border-radius | Spatial Fast                     | `m3Motion.spatial.fast` (hover scale & morph) |
-| **Modal Open/Close**     | scale, opacity       | Spatial Default + Effect Default | `m3Motion.spatial.default` + backdrop fade    |
-| **Theme Toggle**         | rotate, scale        | Spatial Fast                     | `m3Motion.spatial.fast`                       |
-| **Custom Cursor**        | x, y                 | Spring (High Stiffness)          | `damping: 30, stiffness: 700` (rAF throttle)  |
+| Elemen                   | Target Properti      | M3 Expressive Motion Token         | Implementasi                                  |
+| :----------------------- | :------------------- | :--------------------------------- | :-------------------------------------------- |
+| **Hero Title Reveal**    | y, opacity           | Spatial Default + Effect Default   | `m3Motion.spatial.default` + stagger          |
+| **Hero Images Reveal**   | scale, opacity       | Spatial Slow + Effect Slow         | `m3Motion.spatial.slow`                       |
+| **Page Wrapper Enter**   | y (transform only)   | Spatial Default, **tanpa opacity** | `m3Motion.spatial.default` + `duration: 0.7`  |
+| **Portfolio Card Hover** | scale, border-radius | Spatial Fast                       | `m3Motion.spatial.fast` (hover scale & morph) |
+| **Modal Open/Close**     | scale, opacity       | Spatial Default + Effect Default   | `m3Motion.spatial.default` + backdrop fade    |
+| **Theme Toggle**         | rotate, scale        | Spatial Fast                       | `m3Motion.spatial.fast`                       |
+| **Custom Cursor**        | x, y                 | Spring (High Stiffness)            | `damping: 30, stiffness: 700` (rAF throttle)  |
+
+**Catatan penting (Slice 5.2 / Session 12):** entrance animation `PageWrapper` **tidak lagi
+menganimasikan opacity**. `motion` menulis gaya `initial` ke HTML SSR, dan `opacity: 0` di
+elemen pembungkus membuat seluruh isi halaman tidak terpaint sampai hidrasi — LCP mobile
+tertahan di ~4 s. Dengan animasi transform-only isi sudah terpaint di frame pertama
+(LCP `/` mobile 4.3 s → 2.7 s). Jangan kembalikan `opacity: 0` ke wrapper ini; kalau butuh
+fade, terapkan ke elemen di dalamnya yang bukan kandidat LCP.
 
 ---
 
@@ -1170,8 +1177,9 @@ background-size: calc(100vw + var(--skeleton-wave-span) * 2) 100%;
 animation: skeleton-wave 2100ms linear infinite;
 ```
 
-- **Aksesibilitas**: placeholder murni dekoratif dengan `aria-hidden="true"`, kontainer utama diberi `aria-busy="true"` selama fase pre-hidrasi (`!isClient`).
-- **Stabilitas Layout**: dimensi bar disesuaikan dengan `leading-relaxed` copy asli sehingga delta layout shift saat hidrasi = 0px pada tablet & desktop.
+- **Cakupan**: skeleton sekarang **hanya dipakai hero** (`hero-title`, `hero-images`, `hero-socials`). Gate hidrasi untuk About/Skills/Portfolio/Footer **dihapus di Slice 5.2** — keempatnya dirender SSR langsung dari `src/app/page.tsx`, karena gate itu menahan seluruh konten sampai hidrasi (HTML SSR hanya berisi skeleton ⇒ LCP = waktu hidrasi).
+- **Aksesibilitas**: placeholder murni dekoratif dengan `aria-hidden="true"`, kontainer diberi `aria-busy="true"` selama fase pre-hidrasi (`!isClient`).
+- **Stabilitas Layout**: dimensi bar disesuaikan dengan `leading-relaxed` copy asli sehingga delta layout shift saat hidrasi = 0px pada tablet & desktop. Diverifikasi ulang setelah gate dihapus: CLS tetap 0 di keempat audit, jadi skeleton bukan penyumbang stabilisasi — delta residual lama berasal dari entrance `motion` `PageWrapper` (lihat Section 9.4).
 
 ---
 

@@ -1407,8 +1407,23 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
 - **Slice 5.0b — Indikator Loading M3 Expressive**: ✅ **SELESAI** (commit `c1afe20`) — 7 bentuk morph canvas 48dp (rotasi 50deg/shape + settle 90deg, morph 650ms).
 - **Slice 5.0c — Loading Skeletons & Hydration Swap**: ✅ **SELESAI** (commit `758168f`) — M3 expressive skeleton wave di `globals.css`, hydration gate `HomeContent`, a11y `aria-busy`/`aria-hidden`, 0px delta shift pada tablet/desktop.
 - **Slice 5.1 — Metadata & SEO**: ✅ **SELESAI** (commit `5d0c6fa`) — OpenGraph, Twitter card, dynamic `opengraph-image.tsx`, JSON-LD (`Person`, `WebSite`), `sitemap.ts`, `robots.ts`.
-- **Slice 5.2 — Audit Kualitas**: Audit Lighthouse (target 90+ semua metrik: Performance, Accessibility, Best Practices, SEO).
+- **Slice 5.2 — Audit Kualitas**: Audit Lighthouse (target 90+ semua metrik: Performance, Accessibility, Best Practices, SEO). ✅ **SELESAI**
+  - **Hasil terukur** (build produksi + `next start`, Lighthouse 13.5.0, Chromium bersih):
+    - `/` mobile: Perf **78 → 92** · A11y 100 · Best Practices **96 → 100** · SEO **92 → 100** (LCP **4.3 s → 2.7 s**, TBT 320 → 250 ms, CLS 0)
+    - `/contact` mobile: Perf **81 → 96** · A11y 100 · Best Practices **96 → 100** · SEO **92 → 100** (LCP **3.7 s → 2.2 s**, TBT 380 → 200 ms, CLS 0)
+    - `/` dan `/contact` desktop: **100 / 100 / 100 / 100** (LCP 0.6 s, TBT 0 ms, CLS 0)
+  - **Akar masalah LCP (ditemukan & diperbaiki):** seluruh konten di bawah hero dirender **hanya setelah hidrasi** — gate `isClient` di `home-content.tsx` plus `motion` wrapper `initial={{ opacity: 0 }}`. HTML SSR hanya berisi **86 div skeleton, 0 konten nyata**, jadi LCP = waktu hidrasi (~4 s pada 4× CPU throttle).
+  - **Perbaikan yang dipakai:** section di-SSR langsung dari `src/app/page.tsx` (`home-content.tsx` dihapus), dan entrance `PageWrapper` jadi **transform-only** (tanpa opacity) supaya isi terpaint di frame pertama.
+  - **Perbaikan kualitas lain yang ikut terangkat:** `<Analytics/>` digate `process.env.VERCEL` (hilang 404 `/_vercel/insights/script.js` + 2 console error), `aria-label` kartu portfolio dihapus agar accessible name memuat teks terlihat (WCAG 2.5.3), anchor Demo modal hanya dirender saat `portfolioData.url` ada (sebelumnya `href` undefined = anchor tanpa href), typo `}` pada `alt` gambar modal dibetulkan.
+  - **Pitfall lingkungan audit:** Helium (CachyOS) membawa **uBOL prainstal** → Lighthouse via `CHROME_PATH` tercemar (dokumen `/` termuat **2×**, body kedua 667 byte; `redirects` melaporkan 3.2–4.8 s palsu; `unminified-javascript` menunjuk `chrome-extension://…`). `--disable-extensions` tidak mematikannya. Audit bersih = Chromium tanpa extension + `bunx lighthouse --port=<cdp-port>`.
+  - **Lever yang sengaja belum diambil** (target sudah lewat): hero masih client-gated; `image-delivery-insight` 190 KiB (thumbnail portfolio 600×600 untuk slot ~212 px); `legacy-javascript` 14 KiB & `unused-javascript` 116–131 KiB dari chunk framework; `render-blocking` 140–180 ms dari `@import` Google Fonts di `globals.css`.
 - **Slice 5.3 — Cross-Browser & Final Build**: Uji di browser Chromium (Helium on CachyOS), final `bun run build` & `bun run lint` zero errors/warnings.
+  - **Sisa pekerjaan (belum dieksekusi):**
+    - `.env.local` tidak ada → submit form kontak belum terverifikasi end-to-end; isi `NEXT_PUBLIC_EMAILJS_*` atau stub request ke `api.emailjs.com` lewat request interception.
+    - **Prosedur audit dipromosikan ke skill global `lighthouse-audit-local`**: browser bersih + attach via `--port=<cdp>`, hindari browser ber-adblock bawaan, dan **tidak** mengunduh salinan Chrome for Testing terpisah (keputusan Session 12). Langkah + sanity check-nya ada di skill itu, jangan diduplikasi di dokumen project.
+    - Cross-browser di luar Chromium (bila tersedia): fallback skeleton non-`background-attachment: fixed` (iOS Safari) dan perilaku Lenis/`mix-blend-difference` kursor.
+    - Urutan gerbang verifikasi: `format:check` → `lint:strict` → `typechecks` → `build`, dev/prod server **dimatikan dulu** (aturan Session 7: `.next` dipakai bersama).
+    - Branch `feat/portfolio-update` ahead dari `origin`, belum di-push dan belum di-merge ke `main` — keputusan rilis (push/PR) di slice ini.
 
 ---
 

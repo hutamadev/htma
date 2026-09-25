@@ -20,7 +20,7 @@
 - **Phase 4 — Contact Page**: ✅ **100% Selesai** (commit `1b4546f`)
   - Slice 4.1 Zod Schema & Validation — ✅ Selesai (`src/utils/contact-schema.ts`)
   - Slice 4.2 M3 Text Fields & UI — ✅ Selesai
-- **Phase 5 — Polish, SEO & Launch**: ⏳ Berikutnya
+- **Phase 5 — Polish, SEO & Launch**: ⏳ Berjalan (Slice 5.0–5.2 selesai; sisa 5.3 cross-browser & final build)
 
 Dokumentasi arsitektur & panduan teknis:
 
@@ -407,18 +407,39 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ---
 
+### Session 12 — 2026-09-25
+
+1. **Slice 5.2 — Audit Lighthouse ✅ SELESAI** (kode **belum di-commit**, atas permintaan user):
+   - **Metode**: `bun run build` + `next start`, Lighthouse **13.5.0** via `bunx --bun lighthouse --port=<cdp-port>` ke **Chromium bersih** (bukan Helium); 4 target: `/` & `/contact` × mobile & desktop.
+   - **Hasil**: `/` mobile **78 → 92** · `/contact` mobile **81 → 96** · `/` & `/contact` desktop **100/100/100/100**. Best Practices **96 → 100** dan SEO **92 → 100** di keempat target; A11y 100. Metrik akhir mobile: FCP 0.8–1.0 s, LCP **4.3 → 2.7 s** (`/`) & **3.7 → 2.2 s** (`/contact`), TBT 250/200 ms, **CLS 0** di semua run.
+   - **Akar masalah LCP**: konten di bawah hero hanya dirender **setelah hidrasi** — gate `isClient` di `home-content.tsx` + `motion` wrapper `initial={{ opacity: 0 }}`. HTML SSR cuma berisi **86 div skeleton** (`Garuda Universe` = 0 kemunculan, wrapper `style="opacity:0;transform:translateY(24px)"`), sehingga LCP = waktu hidrasi.
+   - **Perbaikan**: `src/modules/home-page/home-content.tsx` **dihapus**; `src/app/page.tsx` merender `About/Skills/Portfolio/Footer` langsung (SSR); `page-wrapper.tsx` entrance jadi **transform-only** (`y: 24 → 0`, tanpa opacity). `loading-skeleton.tsx` tetap dipakai hero (hero masih `isClient`-gated).
+   - **Perbaikan non-perf**: `<Analytics/>` digate `process.env.VERCEL` (hilang 404 `/_vercel/insights/script.js` + 2 console error); `aria-label` kartu portfolio dihapus (name tidak memuat teks terlihat → WCAG 2.5.3); anchor Demo `modal-card.tsx` hanya dirender saat `portfolioData.url` ada (sebelumnya `href` undefined = anchor tanpa href); typo `}` pada `alt` gambar modal dibetulkan.
+   - **Verifikasi**: `format` ✅ `lint:strict` ✅ `typechecks` ✅ `build` **10/10** ✅. Modal diuji lewat pointer click nyata → `inert` hilang, `opacity` 1, anchor Demo ber-`href`; screenshot light & dark diperiksa. **CLS tetap 0** setelah gate dihapus — skeleton memang bukan penyumbang stabilisasi (shift residual lama berasal dari entrance `motion` wrapper).
+   - **Pitfall audit**: browser ber-adblock bawaan (Helium/uBOL) merusak hasil Lighthouse. Prosedur lengkap + sanity check sudah dipromosikan ke skill global **`lighthouse-audit-local`** — rincian panjang tidak diduplikasi di sini.
+   - **Lever yang belum diambil** (target sudah lewat): hero masih client-gated; `image-delivery-insight` 190 KiB (thumbnail portfolio 600×600 untuk slot ~212 px); `legacy-javascript` 14 KiB & `unused-javascript` 116–131 KiB dari chunk framework; `render-blocking` 140–180 ms dari `@import` Google Fonts di `globals.css`.
+
+---
+
 ## Git State
 
 - **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (ahead per commit lokal)
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
 - **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** **BERSIH** setelah commit dokumen Session 11
-- **Commit terbaru (Session 11):** `5d0c6fa` (`feat(seo): configure root metadata, open graph image, and JSON-LD structured data`)
+- **Working tree:** **DIRTY** — perubahan Slice 5.2 (Session 12) sengaja **belum di-commit** atas permintaan user
+- **Commit terbaru:** `0901e68` (docs Session 11); kode terakhir `5d0c6fa`
 
 ### File belum di-commit
 
 ```
-(tidak ada)
+ M BRAINSTORMING.md
+ M MEMORY.md
+ M src/app/layout.tsx
+ M src/app/page.tsx
+ M src/components/ui/modal/modal-card.tsx
+ M src/components/ui/page-wrapper.tsx
+ M src/modules/home-page/portfolio.tsx
+ D src/modules/home-page/home-content.tsx
 ```
 
 ---
@@ -441,8 +462,14 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Slice 5.0b — indikator loading M3 Expressive ✅** (commit `c1afe20`, Session 8)
    - **Slice 5.0c — M3 Expressive Loading Skeletons & Hydration Swap ✅** (commit `758168f`, Session 10)
    - **Slice 5.1 — Metadata & SEO ✅** (commit `5d0c6fa`, Session 11)
-   - **Sisa Slice 5.2** = Audit Kualitas Lighthouse (target 90+ semua metrik).
+   - **Slice 5.2 — Audit Kualitas Lighthouse ✅ SELESAI** (Session 12): `/` mobile **92**, `/contact` mobile **96**, desktop **100/100/100/100**; Best Practices & SEO 100.
+     - Lever opsional yang belum diambil: hero masih client-gated; `image-delivery-insight` 190 KiB; `legacy-javascript`/`unused-javascript` dari chunk framework; `render-blocking` 140–180 ms dari `@import` Google Fonts.
    - **Sisa Slice 5.3** = Cross-Browser & Final Build verification.
+     - `.env.local` tidak ada → submit form kontak belum terverifikasi end-to-end (pakai stub request interception kalau perlu).
+     - Cross-browser di luar Chromium: fallback skeleton non-`background-attachment: fixed` (iOS Safari) + perilaku Lenis/`mix-blend-difference` kursor.
+     - Audit Lighthouse: ikuti skill global **`lighthouse-audit-local`** (browser bersih + `--port=<cdp>`, tanpa unduhan browser baru).
+     - Gerbang: `format:check` → `lint:strict` → `typechecks` → `build`; **matikan dev/prod server dulu** (`.next` dipakai bersama).
+     - Branch `feat/portfolio-update` ahead dari `origin`, belum push, belum merge ke `main` → keputusan rilis di slice ini.
 
 **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
@@ -478,3 +505,5 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **`overrides.postcss = 8.5.28`** di `package.json` wajib dipertahankan: tanpa itu `next` menarik kembali `postcss@8.4.31` (advisory), dan `bun audit` tidak lagi bersih. Jangan hapus entri `overrides` tanpa menjalankan ulang `bun audit`.
 - Kalau `bun audit` melaporkan advisory baru pada dependency transitif, pola yang dipakai project ini adalah **`overrides` di `package.json`** (bukan downgrade paket induk) lalu verifikasi pohon `node_modules` + `bun run build`.
 - Verifikasi UI di browser: pakai **tab dingin** (prefetch membuat navigasi klien berulang instan sehingga loading boundary tak sempat muncul) + `page.emulateNetworkConditions({ offline, latency, download, upload })` — nama field versi ini `download`/`upload`, bukan `downloadThroughput`. Chromium headless resolve `prefers-color-scheme: dark`, jadi uji tema terang harus melepas kelas `dark` secara eksplisit.
+- Konten home (About/Skills/Portfolio/Footer) sekarang **SSR langsung** dari `src/app/page.tsx`; hanya hero yang masih `isClient`-gated. Jangan tambahkan gate hidrasi baru di jalur render tanpa mengukur LCP lagi — gate itu yang menahan `/` mobile di 78 (Slice 5.2).
+- **Audit Lighthouse**: ikuti skill global `lighthouse-audit-local` (browser bersih via `--port=<cdp>`); jangan pakai Helium, jangan unduh browser baru.
