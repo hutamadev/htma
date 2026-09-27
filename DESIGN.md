@@ -1179,6 +1179,10 @@ animation: skeleton-wave 2100ms linear infinite;
 
 - **Cakupan**: skeleton sekarang **hanya dipakai hero** (`hero-title`, `hero-images`, `hero-socials`). Gate hidrasi untuk About/Skills/Portfolio/Footer **dihapus di Slice 5.2** — keempatnya dirender SSR langsung dari `src/app/page.tsx`, karena gate itu menahan seluruh konten sampai hidrasi (HTML SSR hanya berisi skeleton ⇒ LCP = waktu hidrasi).
 - **Aksesibilitas**: placeholder murni dekoratif dengan `aria-hidden="true"`, kontainer diberi `aria-busy="true"` selama fase pre-hidrasi (`!isClient`).
+- **Degradasi & mode paksa** (diverifikasi dari `src/styles/globals.css`, belum diuji di browser non-Chromium):
+  - `background-attachment: fixed` yang diabaikan browser (iOS Safari) membuat sapuan jatuh ke mode **per-blok** — perilaku bawaan, bukan `@supports` terpisah.
+  - `prefers-reduced-motion: reduce` → `animation: none` pada `::after`. Dipilih mematikan animasi, **bukan** diputar 0,01 ms oleh rule global, supaya gelombang tak berputar tanpa henti.
+  - `forced-colors: active` → base container jadi `GrayText` dan wave (`::after`) disembunyikan.
 - **Stabilitas Layout**: dimensi bar disesuaikan dengan `leading-relaxed` copy asli sehingga delta layout shift saat hidrasi = 0px pada tablet & desktop. Diverifikasi ulang setelah gate dihapus: CLS tetap 0 di keempat audit, jadi skeleton bukan penyumbang stabilisasi — delta residual lama berasal dari entrance `motion` `PageWrapper` (lihat Section 9.4).
 
 ---

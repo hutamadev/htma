@@ -20,7 +20,7 @@
 - **Phase 4 — Contact Page**: ✅ **100% Selesai** (commit `1b4546f`)
   - Slice 4.1 Zod Schema & Validation — ✅ Selesai (`src/utils/contact-schema.ts`)
   - Slice 4.2 M3 Text Fields & UI — ✅ Selesai
-- **Phase 5 — Polish, SEO & Launch**: ⏳ Berjalan (Slice 5.0–5.2 selesai; sisa 5.3 cross-browser & final build)
+- **Phase 5 — Polish, SEO & Launch**: ⏳ Berjalan (Slice 5.0–5.2 selesai; Slice 5.3 **sebagian** — gerbang build + verifikasi SSR/header/metadata lulus, sisa uji browser yang terblokir lingkungan tanpa browser)
 
 Dokumentasi arsitektur & panduan teknis:
 
@@ -409,7 +409,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ### Session 12 — 2026-09-25
 
-1. **Slice 5.2 — Audit Lighthouse ✅ SELESAI** (kode **belum di-commit**, atas permintaan user):
+1. **Slice 5.2 — Audit Lighthouse ✅ SELESAI** (permintaan "tahan commit" sudah selesai: kode masuk `d97e616`, dokumen `d7c2203`):
    - **Metode**: `bun run build` + `next start`, Lighthouse **13.5.0** via `bunx --bun lighthouse --port=<cdp-port>` ke **Chromium bersih** (bukan Helium); 4 target: `/` & `/contact` × mobile & desktop.
    - **Hasil**: `/` mobile **78 → 92** · `/contact` mobile **81 → 96** · `/` & `/contact` desktop **100/100/100/100**. Best Practices **96 → 100** dan SEO **92 → 100** di keempat target; A11y 100. Metrik akhir mobile: FCP 0.8–1.0 s, LCP **4.3 → 2.7 s** (`/`) & **3.7 → 2.2 s** (`/contact`), TBT 250/200 ms, **CLS 0** di semua run.
    - **Akar masalah LCP**: konten di bawah hero hanya dirender **setelah hidrasi** — gate `isClient` di `home-content.tsx` + `motion` wrapper `initial={{ opacity: 0 }}`. HTML SSR cuma berisi **86 div skeleton** (`Garuda Universe` = 0 kemunculan, wrapper `style="opacity:0;transform:translateY(24px)"`), sehingga LCP = waktu hidrasi.
@@ -421,25 +421,41 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ---
 
+### Session 13 — 2026-09-27
+
+1. **Sinkronisasi dokumen dengan realitas git (drift audit)** — blok `Git State` lama di file ini masih mengklaim Slice 5.2 belum di-commit dan branch belum di-push. Realitas (`git rev-list --left-right --count origin/feat/portfolio-update...HEAD` → `0 0`): Slice 5.2 sudah di-commit (`d97e616` perf, `d7c2203` docs) dan branch sudah sinkron penuh dengan origin. Blok itu diganti dengan keadaan sebenarnya.
+2. **Keputusan dependency `use-sync-external-store@^1.7.0` — DIPERTAHANKAN.** Uncommitted diff menyisakan satu baris dependency + entri lockfile tanpa penjelasan. Ternyata bukan sisa: `src/store/useStore.ts:2` memakai `createWithEqualityFn` dari `zustand/traditional`, dan `node_modules/zustand/esm/traditional.mjs:2` mengimpor `use-sync-external-store/shim/with-selector.js`. Jadi peer itu benar-benar dieksekusi di runtime; entri dependency-nya sah dan harus ikut ter-commit. Jangan dihapus — `zustand/traditional` akan gagal resolve di instalasi bersih.
+3. **Gerbang kualitas Slice 5.3 (kode) — LULUS SEMUA**:
+   - `bun run format:check` ✅ (Prettier, "All matched files use Prettier code style")
+   - `bun run lint:strict` ✅ (exit 0)
+   - `bun run typechecks` ✅ (exit 0, tsc 0 error)
+   - `bun run build` ✅ **10/10 static pages**. Bundle: `/` 9.54 kB (First Load **199 kB**), `/contact` 121 kB (First Load **311 kB** — naik dari catatan 305 kB Session 7), shared JS 200 kB.
+   - Server dev/prod dimatikan lebih dulu sebelum build (aturan Session 7) — terverifikasi tidak ada proses `next-server` hidup.
+4. **Verifikasi runtime tanpa browser (`next start` + `curl`)** — menutup bagian SSR/metadata Slice 5.3:
+   - `/` → `200`, HTML 95.980 byte, `x-nextjs-prerender: 1`. Konten nyata ada di HTML awal (`Garuda Universe`, `Ibrahim Law`), dan `skeleton` hanya muncul **6** kali (hero) — jalur SSR hasil Slice 5.2 terbukti masih utuh.
+   - 5 security header tampil apa adanya (`nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`, CSP minimal).
+   - JSON-LD `Person` + `WebSite` ter-render sekali masing-masing.
+   - `/contact` → `<title>Contact | Hutama — Web Developer</title>` + canonical `https://htma.site/contact`.
+   - `/robots.txt` 200 (83 B), `/sitemap.xml` 200 (404 B), `/manifest.webmanifest` 200 (257 B), `/opengraph-image` 200 `image/png` 36.562 B, path tidak dikenal → **404**.
+5. **Kontrak Zod diuji ulang di luar browser** — skrip ad-hoc `bun run` (tidak di-commit): **7/7** kasus negatif mencocokkan pesan persis (`Name is required`, `Email is required`, `Enter a valid email address`, tiga pesan batas panjang, `Message must be 2000 characters or fewer`) plus asersi `trim()` untuk nama (`"  Hutama  "` → `Hutama`) dan email (`"  a@b.co  "` → `a@b.co`). Ini menggantikan sebagian uji form yang dulu dijalankan lewat browser.
+6. **BLOCKER: lingkungan ini tidak punya browser sama sekali.** Tidak ada `chromium`/`chrome`/`firefox`/`helium` di `PATH`, `/usr/bin`, `/opt`, maupun flatpak; `~/.cache/puppeteer` kosong dan tidak ada `puppeteer`/`playwright` di `node_modules`. Akibatnya dua butir Slice 5.3 **belum bisa dieksekusi di sesi ini**: (a) uji submit form kontak end-to-end lewat request interception ke `api.emailjs.com`, (b) uji cross-browser non-Chromium (fallback skeleton non-`background-attachment: fixed`, Lenis, `mix-blend-difference`). Keduanya butuh keputusan user (pasang browser atau verifikasi manual di mesin lain).
+   - Catatan tambahan: **skill global `lighthouse-audit-local` yang disebut di Session 12 tidak ada** di lingkungan ini. Skill global yang terpasang antara lain `browser-testing-with-devtools`, `performance-optimization`, `shipping-and-launch`, `computer-use`. Audit Lighthouse maupun audit performa berikutnya harus lewat skill itu, bukan nama lama.
+7. **Fallback cross-browser dicek dari sumber** (bukan tebakan): fallback skeleton bukan `@supports` eksplisit, melainkan degradasi yang memang didokumentasikan di komentar `src/styles/globals.css` ("Browsers that ignore fixed backgrounds (iOS Safari) fall back to a per-block sweep"). Blok `.skeleton` juga sudah punya `prefers-reduced-motion` (animasi dimatikan, bukan diputar 0,01 ms) dan `forced-colors: active` (wave disembunyikan, base jadi `GrayText`) — dua hal yang belum tercatat di DESIGN.md, jadi ikut dicatat di sana.
+
+---
+
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (ahead per commit lokal)
-- **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`)
-- **Branch lain:** `main`, `remotes/origin/develop`, `remotes/origin/main`
-- **Working tree:** **DIRTY** — perubahan Slice 5.2 (Session 12) sengaja **belum di-commit** atas permintaan user
-- **Commit terbaru:** `0901e68` (docs Session 11); kode terakhir `5d0c6fa`
+- **Branch aktif:** `feat/portfolio-update` — **sinkron penuh dengan `origin/feat/portfolio-update`** (`git rev-list --left-right --count origin/feat/portfolio-update...HEAD` → `0 0`). Tidak ada commit lokal yang tertinggal; branch juga **sudah di-push**, bukan lagi "ahead yang belum di-push".
+- **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`); `main` (di `5c96a1a`) sudah menerima PR #1 dari branch itu.
+- **Working tree:** **DIRTY** — hanya `package.json` + `bun.lock` (penambahan `use-sync-external-store@^1.7.0`, lihat Session 13 poin 2). Tidak ada perubahan kode lain yang menggantung.
+- **Commit terbaru:** `d7c2203` (docs Slice 5.2); kode terakhir `d97e616` (perf SSR home + perbaikan audit).
 
 ### File belum di-commit
 
 ```
- M BRAINSTORMING.md
- M MEMORY.md
- M src/app/layout.tsx
- M src/app/page.tsx
- M src/components/ui/modal/modal-card.tsx
- M src/components/ui/page-wrapper.tsx
- M src/modules/home-page/portfolio.tsx
- D src/modules/home-page/home-content.tsx
+ M package.json   (+ "use-sync-external-store": "^1.7.0")
+ M bun.lock      (+ entri use-sync-external-store@1.7.0)
 ```
 
 ---
@@ -464,12 +480,14 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Slice 5.1 — Metadata & SEO ✅** (commit `5d0c6fa`, Session 11)
    - **Slice 5.2 — Audit Kualitas Lighthouse ✅ SELESAI** (Session 12): `/` mobile **92**, `/contact` mobile **96**, desktop **100/100/100/100**; Best Practices & SEO 100.
      - Lever opsional yang belum diambil: hero masih client-gated; `image-delivery-insight` 190 KiB; `legacy-javascript`/`unused-javascript` dari chunk framework; `render-blocking` 140–180 ms dari `@import` Google Fonts.
-   - **Sisa Slice 5.3** = Cross-Browser & Final Build verification.
-     - `.env.local` tidak ada → submit form kontak belum terverifikasi end-to-end (pakai stub request interception kalau perlu).
-     - Cross-browser di luar Chromium: fallback skeleton non-`background-attachment: fixed` (iOS Safari) + perilaku Lenis/`mix-blend-difference` kursor.
-     - Audit Lighthouse: ikuti skill global **`lighthouse-audit-local`** (browser bersih + `--port=<cdp>`, tanpa unduhan browser baru).
-     - Gerbang: `format:check` → `lint:strict` → `typechecks` → `build`; **matikan dev/prod server dulu** (`.next` dipakai bersama).
-     - Branch `feat/portfolio-update` ahead dari `origin`, belum push, belum merge ke `main` → keputusan rilis di slice ini.
+   - **Slice 5.3 — Cross-Browser & Final Build** — sebagian selesai (Session 13):
+     - ✅ Gerbang `format:check` → `lint:strict` → `typechecks` → `build` semuanya lulus (10/10 static pages).
+     - ✅ Verifikasi runtime `next start` + `curl`: SSR home memuat konten nyata, 5 security header, JSON-LD, canonical `/contact`, `robots.txt`/`sitemap.xml`/`manifest.webmanifest`/`opengraph-image` semua 200, path tak dikenal 404.
+     - ✅ Kontrak Zod diuji ad-hoc di luar browser (7/7 kasus negatif + asersi trim).
+     - ⛔ **Terblokir — tidak ada browser di lingkungan ini**: uji submit form kontak end-to-end (stub request ke `api.emailjs.com`) dan uji cross-browser non-Chromium (fallback skeleton iOS Safari, Lenis, `mix-blend-difference`) belum bisa dijalankan. Butuh keputusan user: pasang browser, atau verifikasi manual di mesin lain.
+     - ⛔ `.env.local` tidak ada di lokal → jalur EmailJS nyata tetap belum terverifikasi di lingkungan mana pun tanpa kredensial.
+     - Catatan: skill global **`lighthouse-audit-local` tidak terpasang** di lingkungan ini; gunakan `browser-testing-with-devtools` / `performance-optimization` untuk audit berikutnya.
+     - Branch `feat/portfolio-update` **sudah sinkron dengan origin** (`0 0`) → sisa keputusan rilis hanyalah merge/PR ke `main`, bukan lagi push.
 
 **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
@@ -495,7 +513,10 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - Portfolio card: radius 24px, thumbnail `16/9` atas, content `p-6` `text-left` (WAJIB override `text-align: center` bawaan `<button>`)
 - Contact form (Session 7): validasi di `src/utils/contact-schema.ts` (`contactSchema` + `ContactFormValues`), field M3 Filled Text Field di `src/components/ui/input-form.tsx` (props `title` / `error` / `isTextArea`), label float via `placeholder=' '` + varian `peer-[:placeholder-shown:not(:focus)]`. Jangan pasang `placeholder` asli di field kontak — akan merusak mekanisme float.
 - Zod 4.6.5: pakai `z.email()` (top-level), **bukan** `z.string().email()` yang sudah deprecated. Kalau butuh `trim()` sebelum cek format, gunakan `.pipe(z.email({ message }))`.
-- **Working tree BERSIH** per akhir Session 9 (3 commit kode + 1 commit dokumen). Sama seperti akhir Session 8. **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
+- **Working tree** sejauh Session 13 hanya menyisakan `package.json` + `bun.lock` (dependency `use-sync-external-store`, lihat Session 13 poin 2). **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
+- **`use-sync-external-store@^1.7.0` wajib ada di `dependencies`**: `src/store/useStore.ts` memakai `createWithEqualityFn` dari `zustand/traditional`, yang mengimpor `use-sync-external-store/shim/with-selector.js`. Menghapusnya membuat `zustand/traditional` gagal resolve pada instalasi bersih.
+- **Lingkungan ini tidak punya browser** (nol chromium/chrome/firefox/helium, `~/.cache/puppeteer` kosong). Uji UI, form end-to-end, dan Lighthouse tidak bisa dijalankan sampai browser tersedia. Skill global `lighthouse-audit-local` yang disebut Session 12 **tidak terpasang** di sini — yang ada `browser-testing-with-devtools`, `performance-optimization`, `shipping-and-launch`, `computer-use`.
+- Verifikasi tanpa browser yang tetap berguna: `bun run start` + `curl` (SSR HTML, security header, title/canonical, rute metadata, status 404) dan `bun run` skrip ad-hoc untuk kontrak Zod di `src/utils/contact-schema.ts`.
 - `.env.local` belum ada di lokal; untuk uji submit, isi `NEXT_PUBLIC_EMAILJS_SERVICE_ID` / `_TEMPLATE_ID` / `_PUBLIC_KEY` (lihat `.env.example`) atau stub request ke `api.emailjs.com` lewat request interception supaya tidak mengirim email nyata.
 - **Indikator loading (Session 8)**: `src/components/ui/loading-spin.tsx` (render loop canvas) + `src/components/ui/loading-spin-shapes.ts` (7 bentuk M3, semua di-resample ke ray & jumlah titik yang sama). Canvas **bukan pilihan gaya**: morph M3 me-lerp titik searah, dan interpolasi `d` CSS tidak bisa karena outline beda jumlah cubic + beda titik awal. Jangan disederhanakan jadi CSS/SVG; kalau diubah, patuhi spec — morph **650ms**, rotasi **50deg/bentuk** + settle **90deg** (stiffness 200, ratio 0.6), box **48dp** dengan bentuk **38dp**.
 - Warna indikator dibaca dari `--color-primary` via computed style lalu dibaca ulang saat tema ditukar (`MutationObserver`). Sudah diverifikasi: light `#526600`, dark `#b4d34e`, termasuk ketika kelas `dark` ditukar selagi canvas hidup.
