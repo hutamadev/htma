@@ -42,6 +42,7 @@
     "react-icons": "^5.7.0",
     "sharp": "^0.35.4",
     "typescript": "6.0.3",
+    "use-sync-external-store": "^1.7.0",
     "zod": "4.6.5",
     "zustand": "^5.0.15"
   },
