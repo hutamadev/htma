@@ -1430,7 +1430,7 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
   - **⏳ Belum tuntas:**
     - **Cross-browser non-Chromium: known-unverified** (keputusan user, tanpa unduhan tambahan). Alasan: Chromium satu-satunya engine di mesin; Firefox tidak membuktikan kasus `background-attachment: fixed` milik iOS Safari, dan WebKit Linux Playwright pun bukan iOS Safari.
     - `.env.local` tidak ada → jalur EmailJS nyata belum terverifikasi; id dummy dipakai saat uji dan build akhir sudah direbuild bersih.
-    - **Skill global `lighthouse-audit-local` yang disebut Session 12 tidak terpasang** di lingkungan ini. Audit berikutnya lewat `browser-testing-with-devtools` / `performance-optimization`.
+    - **Rujukan lama ke skill `lighthouse-audit-local` tidak berlaku** (skill itu tidak ada). Penggantinya: skill global **`local-browser-verification`** + skrip milik project di `scripts/` (`bun run verify:form`, `bun run audit:lighthouse`, didokumentasikan di `scripts/README.md`).
     - Branch `feat/portfolio-update` sekarang **ahead dari origin** (2 commit lokal Session 13) dan **belum di-push**; user memutuskan **tanpa PR**.
 
 ---
