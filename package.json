@@ -16,6 +16,8 @@
     "typechecks": "tsc --noEmit --incremental false",
     "format": "prettier --write .",
     "format:check": "prettier -c .",
+    "audit:lighthouse": "bash scripts/lighthouse-median.sh",
+    "verify:form": "bun run scripts/contact-form-e2e.ts",
     "commitlint": "commitlint --edit"
   },
   "overrides": {
