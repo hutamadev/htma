@@ -836,6 +836,15 @@ Separator: TIDAK ditambahkan — Portfolio sudah pakai border-b border-outline-v
 
 ### 12.10 Contact Form (M3 Filled Text Fields & Filled Button)
 
+**Pemuatan (Session 13):** `ContactForm` dimuat lewat `next/dynamic(..., { ssr: false })` dari
+`src/modules/contact-page/contact-form-lazy.tsx`. Alasannya terukur: zod + react-hook-form +
+emailjs membentuk chunk 113.4 KiB yang, saat diimpor statis, selalu ikut jalur kritis dan menahan
+`/contact` mobile di **88** (target 90). Setelah split: First Load 311 → 202 kB, mobile median **92**.
+Placeholder-nya memakai `LoadingSkeleton` dengan geometri **hasil ukur DOM** — field **58 px**
+(`h-[3.625rem]`), textarea **161 px** (`h-[10.0625rem]`), tombol **45 px** (`h-[2.8125rem]`),
+gap 16 px, total 370 px pada `md` ke atas — sehingga swap placeholder → form tidak menghasilkan CLS.
+Mengubah tinggi field tanpa memperbarui placeholder ini akan memunculkan layout shift.
+
 ```
 Subtitle (di atas form): text-center text-body-md text-on-surface-variant md:text-body-lg
 
@@ -1177,7 +1186,7 @@ background-size: calc(100vw + var(--skeleton-wave-span) * 2) 100%;
 animation: skeleton-wave 2100ms linear infinite;
 ```
 
-- **Cakupan**: skeleton sekarang **hanya dipakai hero** (`hero-title`, `hero-images`, `hero-socials`). Gate hidrasi untuk About/Skills/Portfolio/Footer **dihapus di Slice 5.2** — keempatnya dirender SSR langsung dari `src/app/page.tsx`, karena gate itu menahan seluruh konten sampai hidrasi (HTML SSR hanya berisi skeleton ⇒ LCP = waktu hidrasi).
+- **Cakupan**: skeleton dipakai di hero (`hero-title`, `hero-images`, `hero-socials`) dan sebagai **placeholder form kontak** di `/contact` (`contact-form-lazy.tsx`, sejak form di-code-split supaya zod + react-hook-form + emailjs tidak ikut jalur kritis — lihat 12.10). Gate hidrasi untuk About/Skills/Portfolio/Footer **dihapus di Slice 5.2** — keempatnya dirender SSR langsung dari `src/app/page.tsx`, karena gate itu menahan seluruh konten sampai hidrasi (HTML SSR hanya berisi skeleton ⇒ LCP = waktu hidrasi).
 - **Aksesibilitas**: placeholder murni dekoratif dengan `aria-hidden="true"`, kontainer diberi `aria-busy="true"` selama fase pre-hidrasi (`!isClient`).
 - **Degradasi & mode paksa** (diverifikasi dari `src/styles/globals.css`, belum diuji di browser non-Chromium):
   - `background-attachment: fixed` yang diabaikan browser (iOS Safari) membuat sapuan jatuh ke mode **per-blok** — perilaku bawaan, bukan `@supports` terpisah.
