@@ -3,7 +3,7 @@ import { MdArrowForward } from 'react-icons/md';
 
 import { googleSansFlex } from '@utils/localFont';
 
-import ContactForm from './contact-form';
+import ContactForm from './contact-form-lazy';
 
 export default function Contact() {
   return (
