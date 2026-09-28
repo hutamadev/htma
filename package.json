@@ -6,6 +6,9 @@
   "engines": {
     "bun": ">= 1.1.0"
   },
+  "overrides": {
+    "postcss": "8.5.28"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
