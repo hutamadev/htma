@@ -5,6 +5,8 @@ import taskify from '@public/assets/images/portfolio/taskify-mockup.webp';
 import todoApp from '@public/assets/images/portfolio/todo-app-mockup.webp';
 import urban from '@public/assets/images/portfolio/urban-shop-mockup.webp';
 import shortfly from '@public/assets/images/portfolio/url-shortly-mockup.webp';
+import visionary from '@public/assets/images/portfolio/visionary-mockup.webp';
+import wedding from '@public/assets/images/portfolio/wedding-mockup.webp';
 
 export const portfolioData: IPortfolio[] = [
   {
@@ -13,7 +15,7 @@ export const portfolioData: IPortfolio[] = [
     description:
       'Validator site for Classic Chain with auto-compounding delegation and live network stats.',
     image: garuda.src,
-    url: 'https://garudaverse.tech/',
+    url: 'https://garuda-universe.vercel.app/',
     repo: undefined,
   },
   {
@@ -31,7 +33,7 @@ export const portfolioData: IPortfolio[] = [
     description:
       'Online fashion store with product catalog, wishlist, cart, and a full checkout flow.',
     image: urban.src,
-    url: 'https://urban-fashion.htma.my.id/',
+    url: 'https://urban-fashion-shop.vercel.app/',
     repo: 'https://github.com/hutamadev/urban-fashion-shop',
   },
   {
@@ -69,5 +71,23 @@ export const portfolioData: IPortfolio[] = [
     image: todoApp.src,
     url: 'https://todolist-app-project.vercel.app/',
     repo: 'https://github.com/hutamadev/todolist-app',
+  },
+  {
+    id: '08',
+    title: 'Visionary',
+    description:
+      'Digital agency site with Material You 3 theming and an interactive 3D globe hero.',
+    image: visionary.src,
+    url: 'https://visionary-material-you.vercel.app/',
+    repo: 'https://github.com/hutamadev/visionary-material-you',
+  },
+  {
+    id: '09',
+    title: 'Wedding Invitation',
+    description:
+      'Interactive dark editorial wedding invitation with RSVP and guestbook.',
+    image: wedding.src,
+    url: 'https://wedding-invitation-web-pink.vercel.app/',
+    repo: 'https://github.com/hutamadev/wedding-invitation-web',
   },
 ];
