@@ -18,14 +18,14 @@ export default function ErrorPage({
 
   return (
     <div className='col-start-5 col-end-10 flex h-screen w-full flex-col items-center justify-center gap-y-6 lg:col-start-7'>
-      <h2 className={clsx('text-center text-lg text-red-500', 'md:text-2xl')}>
+      <h2 className={clsx('text-center text-lg text-error', 'md:text-2xl')}>
         Something went wrong!
       </h2>
       <button
         className={clsx(
-          'mx-auto w-fit rounded bg-custom-black px-8 py-2 text-custom-green shadow-custom-shadow',
-          'disabled:cursor-not-allowed disabled:bg-custom-black/50 disabled:text-custom-green/50',
-          'dark:bg-custom-green dark:text-custom-black'
+          'mx-auto w-fit rounded-full bg-on-surface px-8 py-2 text-primary-container',
+          'disabled:cursor-not-allowed disabled:bg-on-surface/[0.12] disabled:text-on-surface/[0.38]',
+          'dark:enabled:bg-primary dark:enabled:text-surface'
         )}
         onClick={
           // Attempt to recover by trying to re-render the segment

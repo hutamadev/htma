@@ -8,8 +8,14 @@ import Portfolio from '@modules/home-page/portfolio';
 import Skills from '@modules/home-page/skills';
 
 export const metadata: Metadata = {
-  title: 'htma',
-  description: 'hutama portfolio website',
+  title: {
+    absolute: 'Hutama — Web Developer',
+  },
+  description:
+    'Portfolio of Hutama, showcasing web applications, responsive user interfaces, and full-stack engineering with React, Next.js, and TypeScript.',
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function HomePage() {

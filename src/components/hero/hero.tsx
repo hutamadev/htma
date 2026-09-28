@@ -5,16 +5,17 @@ import { useEffect } from 'react';
 
 import { useStore } from '@store/useStore';
 
-import useBaffle from '@hooks/useBaffle';
+import useTextScramble from '@hooks/useTextScramble';
 
 import HeroImages from './hero-images';
 import HeroSocials from './hero-socials';
 import HeroTitle from './hero-title';
 
 export default function Hero() {
-  const { newBaffle } = useBaffle('.nameBaffle');
+  const { scramble } = useTextScramble('.nameBaffle');
 
   const clientHandler = useStore((state) => state.clientHandler);
+  const isClient = useStore((state) => state.isClient);
 
   useEffect(() => {
     clientHandler();
@@ -23,7 +24,7 @@ export default function Hero() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      newBaffle();
+      scramble();
     }, 2700);
 
     return () => clearTimeout(timer);
@@ -34,14 +35,17 @@ export default function Hero() {
     <section
       className={clsx(
         'sticky top-0 z-[1080] col-start-1 col-end-3 flex h-screen flex-col items-center',
-        'lg:col-start-2 lg:col-end-5'
+        'lg:col-start-1 lg:col-end-5'
       )}
     >
       <div
+        // The placeholders stand in for the name, logos, and links until the
+        // store flips, so the region reports itself busy for assistive tech.
+        aria-busy={isClient ? undefined : true}
         className={clsx(
-          'flex h-full flex-col-reverse justify-between pb-24 pt-52',
-          'md:pb-36 md:pt-52',
-          'lg:flex-col lg:justify-center lg:gap-y-4 lg:pb-0 lg:pt-20',
+          'flex h-full flex-col-reverse justify-between pt-52 pb-24',
+          'md:pt-52 md:pb-36',
+          'lg:flex-col lg:justify-center lg:gap-y-4 lg:pt-20 lg:pb-0',
           '2xl:gap-y-6'
         )}
       >

@@ -7,13 +7,7 @@ interface ILoadingSkeletonProps {
 export default function LoadingSkeleton({
   className,
 }: Readonly<ILoadingSkeletonProps>) {
-  return (
-    <div
-      className={clsx(
-        className,
-        'animate-pulse rounded bg-slate-300',
-        'dark:bg-custom-green/40'
-      )}
-    ></div>
-  );
+  // Decorative only: the load itself is announced on the surrounding region
+  // (aria-busy), so the placeholder must stay out of the accessibility tree.
+  return <div aria-hidden='true' className={clsx('skeleton', className)} />;
 }

@@ -11,8 +11,7 @@ export default function Sidebar() {
         <ul
           className={clsx(
             'flex h-full flex-col items-center justify-center gap-y-12',
-            'lg:relative lg:top-4 lg:gap-y-16 lg:rounded-t-full lg:bg-custom-black',
-            'dark:lg:bg-custom-green'
+            'lg:relative lg:top-4 lg:gap-y-16 lg:rounded-t-[28px] lg:bg-surface-container-highest'
           )}
         >
           <SidebarLink />

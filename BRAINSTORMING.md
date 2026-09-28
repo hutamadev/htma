@@ -1,9 +1,9 @@
-# BRAINSTORMING — Portfolio Website Update (htma.site)
+# BRAINSTORMING — Portfolio Website Update (htma.my.id)
 
 > **Branch:** `feat/portfolio-update`
 > **Tanggal:** 2026-08-30
 > **Runtime & Package Manager:** Bun (full)
-> **Constraint Utama:** Layout vertical tetap dipertahankan. Tidak ada perubahan data portfolio (foto, list project, detail project tetap sama). Desain di-upgrade ke **Material You 3 (M3)** design system dari Google. Menerapkan standar kode dari **Global Rules (AGENTS.md)** dan menggunakan **Better T Stack** sebagai fondasi project.
+> **Constraint Utama:** Layout vertical tetap dipertahankan. Tidak ada perubahan data portfolio (foto, list project, detail project tetap sama). Desain di-upgrade ke **Material 3 Expressive (M3 Expressive)** design system dari Google (`m3.material.io`). Menerapkan standar kode dari **Global Rules (AGENTS.md)** dan menggunakan **Better T Stack** sebagai fondasi project.
 
 ---
 
@@ -30,30 +30,29 @@
 
 ### Tech Stack
 
-| Layer           | Teknologi            | Versi         |
-| --------------- | -------------------- | ------------- |
-| Framework       | Next.js (App Router) | 14.2.30       |
-| React           | React                | 18.3.1        |
-| Styling         | Tailwind CSS         | 3.4.13        |
-| Animation       | Framer Motion        | 10.18.0       |
-| Smooth Scroll   | Locomotive Scroll    | 5.0.0-beta.21 |
-| Text Scramble   | Baffle.js            | 0.3.6         |
-| State           | Zustand              | 4.5.7         |
-| Form            | React Hook Form      | 7.59.0        |
-| Email           | EmailJS              | 4.4.1         |
-| Icons           | React Icons          | 5.5.0         |
-| Theme           | next-themes          | 0.3.0         |
-| Analytics       | @vercel/analytics    | 1.5.0         |
-| Image           | sharp                | 0.33.5        |
-| Utility         | clsx                 | 2.1.1         |
-| Package Manager | pnpm                 | (current)     |
-| Runtime         | Node.js              | >= 18         |
+| Layer           | Teknologi Awal       | Status Aktual (Phase 0–3 Selesai)     | Catatan Migrasi                            |
+| --------------- | -------------------- | ------------------------------------- | ------------------------------------------ |
+| Framework       | Next.js 14.2.30      | **Next.js 15.5.25** (App Router)      | Turbopack stable, React 19 native support  |
+| React           | React 18.3.1         | **React 19.3.0**                      | Concurrent features, React 19 types        |
+| Styling         | Tailwind CSS 3.4.13  | **Tailwind CSS v4.3.3**               | CSS-first `@theme`, Lightning CSS          |
+| Animation       | Framer Motion 10     | **Motion / Framer Motion 13.3.0**     | M3 Expressive Spring Motion Physics specs  |
+| Smooth Scroll   | Locomotive Scroll 5  | **Lenis 1.3.26**                      | Native rAF loop, 3.7x lebih ringan         |
+| Text Scramble   | Baffle.js 0.3.6      | **Native useTextScramble Hook**       | Zero-dependency, TypeScript native         |
+| State           | Zustand 4.5.7        | **Zustand 5.0.15**                    | Concurrent-safe                            |
+| Form            | React Hook Form 7.59 | **React Hook Form 7.88.0**            | Integrasi Zod schema validation            |
+| Form Validation | —                    | **Zod 4.6.5** + `@hookform/resolvers` | Strict client validation & types inference |
+| Linter          | ESLint + plugins     | **Oxlint 1.83.0**                     | Rust-based, 50-100x lebih cepat            |
+| Git Hooks       | Husky + lint-staged  | **Lefthook 2.1.14**                   | Single yaml, zero dependency               |
+| Typography      | Local woff2 fonts    | **Google Sans Flex** (Variable Font)  | Full axes (`wght 100-1000`, `opsz 6-144`)  |
+| Design System   | Custom ad-hoc tokens | **Material 3 Expressive**             | Dynamic HCT palette, Tone-based surfaces   |
+| Package Manager | pnpm                 | **Bun 1.4.2** (`bun.lock`)            | Fast native package manager                |
+| Runtime         | Node.js >= 18        | **Bun >= 1.1.0**                      | Single unified runtime                     |
 
 ### Struktur Layout (Vertical — TIDAK BERUBAH)
 
 ```
 ┌─────────────────────────────────────────────┐
-│ Navigation (fixed top, grid-12)             │
+│ Navigation (fixed top, grid-12, transparan) │
 │ ┌──────┐                        ┌──────────┐│
 │ │ HTMA │                        │ Theme Btn││
 │ └──────┘                        └──────────┘│
@@ -69,13 +68,15 @@
 │  │          │ │ - Footer     │ │   top    ││
 │  └──────────┘ └──────────────┘ └──────────┘│
 ├─────────────────────────────────────────────┤
-│ Gradient Masks (fixed top & bottom)         │
+│ Gradient Mask (fixed bottom only)           │
 │ Custom Cursor (fixed, pointer-events-none)  │
 │ Modal Portal (portfolio detail)             │
 └─────────────────────────────────────────────┘
 ```
 
-**Layout ini tetap 100% dipertahankan.** Hero sticky di kiri, konten scroll di tengah, sidebar sticky di kanan. Gradient mask atas-bawah tetap ada.
+**Layout ini tetap 100% dipertahankan.** Hero sticky di kiri, konten scroll di tengah, sidebar sticky di kanan.
+
+**Catatan (Session 6):** Gradient mask atas **dihapus** dan header dijadikan **transparan** (`bg-transparent` + `pointer-events-none`) supaya konten scroll terlihat dari ujung atas viewport. Logo & tombol toggle tetap solid dan interaktif (`pointer-events-auto`). Gradient mask bawah tetap dipertahankan.
 
 ### Halaman
 
@@ -126,7 +127,7 @@ Migrasi penuh dari **pnpm + Node.js** ke **Bun** sebagai satu-satunya runtime da
 bun install
 ```
 
-Ini menghasilkan `bun.lockb` (binary lockfile) yang menggantikan `pnpm-lock.yaml`.
+Ini menghasilkan `bun.lock` (text lockfile, format Bun >=1.2) yang menggantikan `pnpm-lock.yaml`.
 
 #### 2.3 Update `package.json`
 
@@ -135,15 +136,14 @@ Ini menghasilkan `bun.lockb` (binary lockfile) yang menggantikan `pnpm-lock.yaml
   "packageManager": "bun",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --turbopack",
     "start": "next start",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
-    "lint:strict": "oxlint -D correctness -D suspicious -D perf -D react -D nextjs",
+    "lint:fix": "oxlint --fix && bun run format",
+    "lint:strict": "oxlint --deny-warnings",
     "typechecks": "tsc --noEmit --incremental false",
     "format": "prettier --write .",
     "format:check": "prettier -c .",
-    "prepare": "husky",
     "commitlint": "commitlint --edit"
   }
 }
@@ -153,7 +153,8 @@ Ini menghasilkan `bun.lockb` (binary lockfile) yang menggantikan `pnpm-lock.yaml
 
 - `next lint` & `eslint` → diganti menggunakan perintah `oxlint` (Linter berbasis Rust yang 50-100x lebih cepat)
 - `pnpm format` → `bun run format`
-- `next dev` → `next dev --turbopack` (Turbopack stable di Next 15, Bun-compatible)
+- `next dev` / `next build` → `--turbopack` (Turbopack stable di Next 15, Bun-compatible)
+- Tanpa `prepare: husky` - hooks ditangani Lefthook (§3.4)
 - Tambah `"packageManager": "bun"`
 
 #### 2.4 Update `engines` field
@@ -173,21 +174,17 @@ Hapus `"node": ">= 18"` karena Bun jadi primary runtime.
 Tambahkan:
 
 ```
-bun.lockb
+bun.lock
 ```
 
-Atau justru commit `bun.lockb` (recommended untuk reproducible builds). Pilih salah satu:
+Pilih salah satu:
 
-- **Commit `bun.lockb`** → reproducible, CI/CD konsisten (RECOMMENDED)
-- **Gitignore `bun.lockb`** → lockfile di-generate per machine
+- **Commit `bun.lock`** → reproducible, CI/CD konsisten (RECOMMENDED, dipakai project ini)
+- **Gitignore `bun.lock`** → lockfile di-generate per machine
 
-#### 2.6 Husky hooks compatibility
+#### 2.6 Git hooks compatibility
 
-Bun kompatibel penuh dengan Husky. `prepare` script (`husky`) berjalan normal via `bun install`.
-
-#### 2.7 lint-staged compatibility
-
-`lint-staged` berjalan normal dengan Bun. Tidak ada perubahan config.
+Husky + lint-staged **tidak dipakai**. Hooks dimigrasi penuh ke **Lefthook** (§3.4): `prepare` script dihapus, hook dijalankan via `bunx` dari `lefthook.yml`.
 
 #### 2.8 Environment variables
 
@@ -307,18 +304,22 @@ Oxlint bisa dijalankan tanpa config (zero-config), tapi demi strictness, kita bu
 ```json
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react", "nextjs"],
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn",
-    "perf": "warn",
-    "style": "off"
+    "perf": "warn"
   },
   "rules": {
+    "react/react-in-jsx-scope": "off",
     "nextjs/no-head-element": "error",
     "nextjs/no-async-client-component": "error",
     "react/no-children-prop": "error",
     "typescript/no-floating-promises": "error"
+  },
+  "env": {
+    "builtin": true,
+    "browser": true
   }
 }
 ```
@@ -338,12 +339,14 @@ Saat ini pakai Husky + lint-staged + commitlint.
 - Akan menjalankan `commitlint` di commit-msg hook
 
 **Yang dihapus saat migrasi:**
+
 - `husky` package
 - `.husky/` directory
 - `lint-staged` package + config
 - `"prepare": "husky"` dari `package.json` scripts
 
 **Yang ditambahkan:**
+
 - `lefthook` package (devDependency)
 - `lefthook.yml` config file
 
@@ -367,8 +370,24 @@ Better T Stack mendukung:
 | `oxlint`             | Ultra-fast Rust linter        | **Wajib di-install**          |
 | `turborepo`          | Monorepo                      | Tidak untuk sekarang          |
 | `pwa`                | Progressive Web App           | Opsional, bisa ditambah nanti |
-| `husky` / `lefthook` | Git hooks                     | Sudah ada Husky               |
+| `husky` / `lefthook` | Git hooks                     | Migrasi ke Lefthook           |
 | `ultracite`          | Agent-friendly linter rules   | Opsional                      |
+
+### 3.7 Quality Constraints Contract (constraint-driven-development)
+
+Kontrak kualitas tertulis yang mengikat setiap AI Agent yang mengeksekusi proyek ini (tidak boleh diturunkan secara diam-diam):
+
+| Dimensi              | Batasan / Target (Non-Negotiable)                                                                                                                                  | Cara Verifikasi                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| **Layout Invariant** | Layout vertical 100% terkunci (Hero kiri sticky, Content scroll, Sidebar kanan sticky, Gradient mask bawah). Header transparan agar konten scroll dari ujung atas. | Visual check & inspection                                                                       |
+| **Data Invariant**   | Data portfolio existing TIDAK berubah (foto, list project, URL, repo tetap). Field `description` **ditambahkan** di Session 6 untuk kebutuhan copywriting card.    | `git diff src/utils/portfolio-data.ts` — hanya penambahan `description`, 0 perubahan nilai lama |
+| **Type-Safety**      | 0 `any`, 0 `@ts-ignore`, 0 `@ts-expect-error`, strict mode aktif.                                                                                                  | `bun run typechecks` (0 errors)                                                                 |
+| **Lint Quality**     | 0 error, 0 warnings pada linter Oxlint.                                                                                                                            | `bun run lint:strict` (Oxlint `--deny-warnings`, 0 warnings/errors)                             |
+| **Scroll Parity**    | Perilaku & feel scroll Lenis wajib sama persis dengan Locomotive lama.                                                                                             | Runtime browser check                                                                           |
+| **Text Scramble**    | Native `useTextScramble` wajib identik visualnya dengan Baffle.js lama.                                                                                            | Runtime browser check                                                                           |
+| **Performance Bar**  | Lighthouse Core Web Vitals target: 90+ (Performance, Accessibility, Best Practices, SEO).                                                                          | Lighthouse CLI / DevTools audit                                                                 |
+| **Form Security**    | Validasi input sisi klien via Zod schema (nama, email valid, pesan).                                                                                               | Zod schema validation tests                                                                     |
+| **Security Headers** | Header statis dari `next.config.ts`: `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`, CSP minimal (tanpa `script-src`/`style-src`).    | `curl -I` pada response halaman / inspeksi `next.config.ts`                                     |
 
 ---
 
@@ -387,13 +406,13 @@ Setiap kode yang ditulis dalam project ini WAJIB mengikuti standar dari Global R
 
 ### 4.2 TypeScript Strict
 
-| Rule                        | Status Saat Ini                                              | Aksi                          |
-| --------------------------- | ------------------------------------------------------------ | ----------------------------- |
-| **Dilarang `any`**          | Ada 1 pelanggaran: `useCursorPosition.ts` line 11 (`e: any`) | FIX → ganti ke `PointerEvent` |
-| **Functional programming**  | Sudah diterapkan, semua komponen function-based              | Pertahankan                   |
-| **Immutability**            | Zustand store sudah immutable via `set()`                    | Pertahankan                   |
-| **Early returns**           | Belum konsisten                                              | Terapkan di semua fungsi baru |
-| **`interface` over `type`** | Sudah diterapkan (`IPortfolio`, `IClientSlice`, dll)         | Pertahankan                   |
+| Rule                        | Status Saat Ini                                                                                               | Aksi                          |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **Dilarang `any`**          | ✅ 0 pelanggaran — tipe `any` di `useCursorPosition.ts` sudah dihapus pada Slice 2.3 (diganti `PointerEvent`) | Terpenuhi                     |
+| **Functional programming**  | Sudah diterapkan, semua komponen function-based                                                               | Pertahankan                   |
+| **Immutability**            | Zustand store sudah immutable via `set()`                                                                     | Pertahankan                   |
+| **Early returns**           | Belum konsisten                                                                                               | Terapkan di semua fungsi baru |
+| **`interface` over `type`** | Sudah diterapkan (`IPortfolio`, `IClientSlice`, dll)                                                          | Pertahankan                   |
 
 ### 4.3 Keamanan (OWASP)
 
@@ -430,7 +449,12 @@ const contactSchema = z.object({
 
 type ContactFormInputs = z.infer<typeof contactSchema>;
 
-const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactFormInputs>({
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+  reset,
+} = useForm<ContactFormInputs>({
   resolver: zodResolver(contactSchema),
 });
 ```
@@ -476,43 +500,42 @@ Semua penggunaan `'use client'` sudah tepat. Tidak ada yang perlu diubah.
 
 ---
 
-## 5. Material You 3 — Strategi Penerapan
+## 5. Material 3 Expressive — Strategi Penerapan
 
-Material You 3 (M3) bukan berarti harus pakai Material Design Components library (MUI/Material Web). Yang kita ambil adalah **design language & principles**-nya, lalu diterapkan di atas Tailwind CSS yang sudah ada.
+Material 3 Expressive (M3 Expressive) bukan berarti harus mengimpor library komponen eksternal yang berat (seperti MUI atau Material Web Components). Yang kita ambil adalah **desain sistem, token matematika resmi, dan prinsip interaksinya** dari `m3.material.io`, lalu diterapkan 100% menggunakan Tailwind CSS utility classes dan CSS variables.
 
-### Prinsip M3 yang Akan Diterapkan
+### Prinsip M3 Expressive yang Diterapkan
 
-#### 2.1 Dynamic Color (Tonal Palette)
+#### 5.1 Dynamic Color & Tone-Based Surfaces
 
-- Satu **seed color** di-generate menjadi palet tonal (Primary, Secondary, Tertiary, Neutral, Error).
-- Light mode dan dark mode punya mapping warna berbeda dari palet tonal yang sama.
-- Ini menggantikan sistem warna hardcoded saat ini.
+- **Seed Color:** Satu seed `#D3F36A` di-generate via `@material/material-color-utilities` ke dalam color space HCT resmi Google.
+- **Tone-based Surfaces:** Menggantikan sistem elevasi lama. Kontainer menggunakan 5 tingkatan kontras: `surface-container-lowest`, `surface-container-low`, `surface-container` (default), `surface-container-high`, dan `surface-container-highest`.
+- Light mode dan Dark mode memiliki pemetaan matematis yang mempertahankan rasio kontras WCAG AA (min 4.5:1).
 
-#### 2.2 Shape System
+#### 5.2 Shape System & Shape Morphing
 
-- M3 menggunakan rounded corners dengan skala konsisten: `0px` (none), `8px` (extra-small), `12px` (small), `16px` (medium), `28px` (large), `full` (extra-large).
-- Saat ini komponen memakai `rounded` (4px) dan `rounded-sm` (2px) — terlalu kecil untuk M3. Akan di-upgrade ke skala M3.
+- M3 Expressive memperluas skala bentuk: `0px` (none), `4px` (xs), `8px` (sm), `12px` (md), `16px` (lg), `28px` (xl), dan `full` (pill).
+- **Shape morphing:** Komponen utama (seperti portfolio cards) bertransisi ke kurva yang lebih membulat saat hover (`rounded-2xl` 16px → `rounded-[28px]` 28px) untuk memberikan sensasi responsif yang hidup.
 
-#### 2.3 Elevation & Surface
+#### 5.3 Intentional Containment (Menggantikan Bayangan Brutalist)
 
-- M3 menghilangkan box-shadow tradisional dan menggantinya dengan **tonal elevation** (surface color berubah opacity berdasarkan level elevasi).
-- Portfolio cards saat ini pakai `shadow-[0.25rem_0.25rem_#24282C]` (brutalist offset shadow). Ini akan diganti ke **M3 surface tint elevation**.
+- Mengelompokkan elemen secara visual (_containment_) menggunakan warna permukaan yang kontras alih-alih bayangan hitam brutalist (`shadow-[0.25rem_0.25rem_#24282C]`).
+- Riset Google membuktikan containment yang tegas mempercepat penemuan elemen penting hingga 4x lebih cepat.
 
-#### 2.4 State Layers
+#### 5.4 State Layers & Interaction Feedback
 
-- Hover, focus, pressed, dragged memiliki opacity overlay yang konsisten.
-- Hover: 8% opacity overlay, Focused: 10%, Pressed: 10%, Dragged: 16%.
+- Lapisan state layer semi-transparan yang konsisten di atas komponen: Hover (8%), Focused (10%), Pressed (10%), Dragged (16%).
 
-#### 2.5 Motion
+#### 5.5 Motion Physics System (Spring Physics)
 
-- M3 menggunakan **emphasized easing** (`cubic-bezier(0.2, 0, 0, 1)`) untuk masuk dan `cubic-bezier(0.2, 0, 0, 1)` untuk keluar.
-- Duration: small (150ms), medium (300ms), large (500ms).
-- Framer Motion transition configs akan disesuaikan ke easing M3.
+- Mengikuti pedoman resmi `m3.material.io/styles/motion/overview/specs`:
+  - **Spatial Specs:** Animasi perubahan posisi, skala, dan bentuk menggunakan spring physics dengan overshoot lembut (`dampingRatio: 0.6`, `stiffness: 700` default).
+  - **Effects Specs:** Animasi perubahan warna dan opasitas menggunakan spring tanpa pantulan (`dampingRatio: 1.0`, `stiffness: 1600` default).
 
-#### 2.6 Typography Scale
+#### 5.6 Expressive Typography Scale & Optical Sizing
 
-- M3 punya 5 roles: Display, Headline, Title, Body, Label — masing-masing 3 sizes (Large, Medium, Small).
-- Kita map ini ke Tailwind utility classes.
+- Menggunakan **Google Sans Flex** dengan dukungan penuh sumbu variabel (`wght 100-1000`, `opsz 6-144`).
+- Skala hierarki M3 resmi: Display (Large/Medium/Small), Headline, Title, Body, dan Label.
 
 ---
 
@@ -635,11 +658,13 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Logo background → `primary-container` dengan teks `on-primary-container`
+- Logo background → tetap `bg-custom-black text-custom-green` (light) / `dark:bg-custom-green dark:text-custom-black`, shape `rounded-xl`.
 - Border radius logo → `rounded-xl` (12px, M3 small shape)
 - Theme toggle → Ganti ke ikon **Sun/Moon** (`MdLightMode` / `MdDarkMode` dari `react-icons/md`)
-- Navigation bar background: **solid `bg-surface`** (tanpa backdrop-blur)
-- Gradient mask atas (`mask-top`) tetap dipertahankan, tapi background-nya ikut warna `surface` baru
+- Navigation bar background → **`bg-transparent` + `pointer-events-none`** (diubah di Session 6; sebelumnya solid `bg-surface`). Konten scroll terlihat tembus dari ujung atas sampai bawah.
+- Logo & tombol toggle dibungkus `pointer-events-auto` supaya tetap bisa diklik meski header transparan.
+- Tombol toggle diberi background solid `bg-surface-container-high` + `shadow-sm` (hover `bg-surface-container-highest`) agar ikon tetap terlihat kontras di atas header transparan.
+- Gradient mask atas (`mask-top`) **dihapus** di Session 6.
 
 **Yang TIDAK berubah:**
 
@@ -668,10 +693,13 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 **Yang TIDAK berubah:**
 
 - Sticky behavior
-- Grid position
 - Baffle scramble effect (tetap ada, akan di-rewrite native — lihat bagian 6)
 - Rotate -90° pada mobile
 - Animasi Framer Motion (fade + slide)
+
+**Perubahan tambahan (Session 6):**
+
+- Grid position **diperlebar**: `lg:col-start-2 lg:col-end-5` → `lg:col-start-1 lg:col-end-5` (4 kolom, dimulai dari kolom 1) agar proporsi sisi kiri lebih seimbang dan tidak terlalu menempel ke konten utama.
 
 ---
 
@@ -685,11 +713,11 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Section header → M3 style: icon warna `primary`, teks warna `on-surface`
-- Hover effect → M3 state layer: `hover:bg-primary/8` (8% opacity overlay)
+- Section header → M3 **Interactive Magnetic Pill (Two-Stage Interaction)**:
+  - _Kursor masuk section:_ Judul section otomatis aktif (`bg-primary-container text-on-primary-container`, panah `-rotate-45`), sementara kursor dot **tetap ada** dan melayang bebas di atas konten.
+  - _Kursor ke judul section:_ Kursor dot **menyusut secara halus & fluid (_smooth fluid shrink_)** ke dalam pill (`scale: 1 → 0, opacity: 1 → 0`), dan pill merespons dengan pergeseran magnetik elastis (`origin-left ml-1 sm:ml-1.5`).
 - Border separator → `border-outline-variant` (lebih subtle, M3 guideline)
-- Highlighted name "Hutama" → `bg-primary-container text-on-primary-container rounded-md px-1.5 py-0.5`
-- Paragraf teks → `text-on-surface` dengan `Body Large` type scale
+- Paragraf teks → `text-on-surface` dengan `text-body-md md:text-body-lg leading-relaxed`
 
 **Yang TIDAK berubah:**
 
@@ -709,11 +737,12 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Section header → sama seperti About (M3 state layer)
+- Section header → sama seperti About (M3 Two-Stage Interactive Magnetic Pill: aktif saat kursor di section, kursor menyusut fluid saat hover langsung ke judul).
 - Skill icon containers → M3 **Surface Container** style:
-  - `bg-surface-container rounded-xl p-2` (M3 medium shape)
-  - Hover: `hover:bg-surface-container-high` + subtle scale `hover:scale-105`
-  - Transisi smooth 200ms
+  - Kontainer minimalis seragam `rounded-2xl` (`h-14 w-14` s/d `2xl:h-[4.5rem] 2xl:w-[4.5rem]`).
+  - Tonal M3: `bg-surface-container-low/70 dark:bg-surface-container/50 border border-outline-variant/25 dark:border-outline-variant/35`.
+  - Optical weight balancing per logo, padding ringkas `p-1.5 sm:p-2`.
+  - Kursor melebur langsung saat hover, memicu kartu bergerak magnetik halus dan elevate ke `hover:bg-surface-container`.
 - Subheading "Main" / "Library & Framework" → M3 `Title Medium` type scale, warna `on-surface-variant`
 - Border separator → `border-outline-variant`
 
@@ -731,27 +760,25 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 - Section header sama (arrow + "my portfolio")
 - Grid layout bento-style dengan posisi hardcoded per index (md:col-start/end, md:row-start/end)
-- Card style: brutalist offset shadow (`shadow-[0.25rem_0.25rem_#24282C]`)
 - Card bottom bar: title + arrow icon, `bg-custom-white` / `bg-custom-green`
 - Click → modal via Zustand + Portal
 
 **Perubahan M3:**
 
-- Card style → M3 **Filled Card** / **Elevated Card**:
-  - Hapus brutalist offset shadow
-  - Ganti ke: `bg-surface-container rounded-2xl overflow-hidden` (M3 large shape: 28px)
-  - Elevation via `shadow-md` atau M3 tonal surface tint
-  - Hover: `hover:shadow-lg hover:scale-[1.02]` + state layer 8%
-  - Active/pressed: `active:scale-[0.98]` (bukan translate shadow trick)
-- Card bottom overlay → `bg-surface/90 backdrop-blur-sm` dengan `rounded-xl m-2 p-3`
-- Arrow icon → M3 **Icon Button** style: `bg-primary text-on-primary rounded-full p-1`
-- GitHub link di bawah → teks `on-surface-variant`, link `primary`
-- Border separator → `border-outline-variant`
-
-**Yang TIDAK berubah:**
-
-- 7 portfolio items (data, foto, judul, URL, repo — semua TETAP)
-- Grid bento layout positions
+- Section header → sama seperti About & Skills (M3 Two-Stage Interactive Magnetic Pill).
+- Card style → **M3 Filled Card**, mengikuti referensi desain card (light & dark):
+  - Card: `bg-surface-container rounded-[24px] overflow-hidden` (M3 Large shape: 24px).
+  - **Anatomi:** thumbnail di atas (`rounded-[inherit]`, aspect `16/9`, `object-cover`) → content block di bawah dengan `p-6` (padding 24px) + `text-left`.
+  - **Penting:** elemen `<button>` punya `text-align: center` bawaan UA stylesheet — wajib di-override `text-left` agar judul & deskripsi rata kiri seperti referensi.
+  - Judul: `text-title-lg font-medium text-on-surface`. Deskripsi: `mt-2 text-body-md text-on-surface-variant`.
+  - **Shape morphing:** `hover:rounded-[28px]` (Extra Large) → `active:rounded-[16px]` (Medium) via `m3Motion.spatial.fast`.
+  - Hover: `hover:bg-surface-container-high hover:shadow-lg`.
+  - Active/pressed: `active:scale-[0.98]`.
+  - Kursor menyusut fluid & magnetic parallax via `.magnetic-item` (sudah aktif dari Slice 2.3).
+- **Grid diperbaiki:** `md:grid-cols-2` + auto rows (tinggi ikut konten) menggantikan bento span hardcoded yang membuat card terhimpit/tidak proporsional. Card index 0 memakai `md:col-span-2` sebagai featured. Semua thumbnail konsisten rasio `16/9`.
+- **Copywriting deskripsi:** field `description` ditambahkan ke `IPortfolio` + `portfolio-data.ts`, berisi 1 kalimat per project sesuai konten card-nya (Garuda Universe, Ibrahim Law, Urban Fashion Shop, Taskify, Crypto Price Watcher, Url Shortfly, Todolist App — plus Visionary dan Wedding Invitation sejak Session 14).
+- GitHub link di bawah → teks `on-surface-variant`, link `primary`.
+- Border separator → `border-outline-variant`.
 - Click → modal behavior
 - Modal portal system
 
@@ -766,12 +793,17 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 **Perubahan M3:**
 
-- Modal → M3 **Dialog** / **Bottom Sheet** style:
-  - `bg-surface-container-high rounded-[28px]` (M3 extra large shape)
-  - Padding: `p-6`
-  - Backdrop: `bg-on-surface/32` (M3 scrim: 32% opacity)
-  - Close button: M3 icon button `rounded-full`
-- Animasi: scale dari 0.9 → 1 dengan M3 emphasized easing
+- Modal → M3 **Basic Dialog** style:
+  - Container: `bg-surface-container-high rounded-xl` (28px) `p-6 shadow-2xl max-w-5xl max-h-[90vh] overflow-y-auto` (M3 Extra Large shape).
+  - Backdrop/Scrim: `bg-on-surface/32` (M3 official scrim opacity).
+  - Close button: M3 icon button `h-11 w-11 rounded-full bg-surface-container-highest` dengan hover state layer `bg-on-surface/8`.
+  - Elemen native `<dialog open inert>` (bukan `role="dialog"`) + `aria-label` — lolos rule `jsx-a11y(prefer-tag-over-role)`.
+  - Panel konten dalam: `bg-surface-container rounded-lg p-4`.
+  - Tombol Demo → M3 Filled Button (`bg-primary text-on-primary rounded-full`); Repository → Filled Tonal Button (`bg-secondary-container`). Shadow brutalist dihapus.
+- Animasi:
+  - Scale dialog: 0.92 → 1 via `m3Motion.spatial.default` (spring overshoot natural).
+  - Fade backdrop: opacity 0 → 1 via `m3Motion.effect.default`.
+- Modal menampilkan judul, deskripsi project, tombol Demo/Repository, dan gambar portfolio.
 
 **Yang TIDAK berubah:**
 
@@ -791,14 +823,18 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 - Scroll-to-top button di bawah
 - Desktop sidebar punya `bg-custom-black` rounded-t-full
 
-**Perubahan M3:**
+**Perubahan M3 (Slice 3.5 — SELESAI):**
 
-- Sidebar background → M3 **Navigation Rail** style:
-  - `bg-surface` dengan `border-l border-outline-variant` (atau tanpa border, cukup elevation)
-  - `rounded-t-full` → `rounded-t-[28px]` (M3 large shape) pada desktop
-- Active link → M3 **Active Indicator**: `bg-primary-container text-on-primary-container rounded-full px-4`
-- Inactive link → `text-on-surface-variant`
-- Scroll-to-top button → M3 **FAB (Small)**: `bg-primary-container text-on-primary-container rounded-xl`
+- Rail container (desktop) → `rounded-t-[28px]` (M3 Extra Large top shape) + `bg-surface-container-highest` (light `#E5E5E0`, dark `#353530`). Varian `dark:` dihapus karena CSS variable sudah auto-switch.
+- Active link → M3 **Active Indicator**: `bg-primary-container text-on-primary-container rounded-full px-4 py-1.5`
+- Inactive link → `text-on-surface-variant` + state layer `hover:bg-on-surface/8`, radius `rounded-full`, `transition-colors`
+- Tipografi link → `text-label-lg`
+- Animasi underline lama (`.menu-link`) **dihapus** dari `globals.css` — digantikan state layer M3. Class itu hanya dipakai di sini, jadi tidak ada orphan.
+- Scroll-to-top button → M3 **FAB (Small)**: `bg-primary-container text-on-primary-container rounded-xl p-2`, hover `-translate-y-1` + `shadow-md`, plus `focus-visible:outline-2` dan `aria-label="Scroll back to top"`.
+
+**Catatan teknis penting (temuan Slice 3.5):**
+
+- Rule magnetic parallax di `globals.css` bersifat **unlayered**, sehingga mengalahkan utility `translate-*` Tailwind yang berada di `@layer utilities` (unlayered selalu menang atas layered di CSS cascade layers). Akibatnya mekanisme sembunyi FAB (`translate-y-[999px]`) sempat mati dan FAB selalu terlihat. Fix: elemen yang butuh `translate` sendiri diberi atribut opt-out `data-no-magnetic`, dan selector magnetic memakai `:not([data-no-magnetic])`.
 
 **Yang TIDAK berubah:**
 
@@ -816,11 +852,11 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 - Simple text: "© Created with 🧠 by htma, {year}"
 - Teks `text-custom-black` / `text-custom-green`
 
-**Perubahan M3:**
+**Perubahan M3 (Slice 3.5 — SELESAI):**
 
-- Teks → `text-on-surface-variant` (subtle, secondary importance)
-- Icon brain → warna `tertiary` (M3 tertiary role untuk decorative elements)
-- Mungkin tambah subtle `border-t border-outline-variant` di atas footer
+- Teks → `text-body-sm` (12px) `text-on-surface-variant` (light `#46483C`, dark `#C7C8B8`). Varian `dark:` dan `md:text-base` dihapus — token surface sudah auto-switch.
+- Icon brain → `text-tertiary` (light `#3A665E`, dark `#A1D0C5`), menggantikan hardcoded `text-red-400` yang tidak mengikuti tema.
+- **Tidak** ditambah `border-t border-outline-variant`: Portfolio sudah memakai `border-b border-outline-variant`, sehingga dua garis akan berdempetan. (Keputusan berbeda dari draf awal dokumen.)
 
 **Yang TIDAK berubah:**
 
@@ -830,27 +866,32 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 ### 8.9 Custom Cursor (`src/components/ui/custom-cursor.tsx`)
 
-**Saat ini:**
+**Model Desain (Robbie Tilton Model + M3 Expressive Integration):**
+Mengadopsi model interaksi kursor presisi dari `robbietilton.com/more-info` yang dipadukan dengan palet warna dan sistem token Material 3 Expressive saat ini:
 
-- `motion.div` dengan `useSpring` (damping: 30, stiffness: 700)
-- CSS class `.cursor`: fixed, 24x24px, rounded-full, `bg-custom-white-2 mix-blend-difference` / `bg-custom-green`
-- Hidden pada mobile (w-0, h-0 pada max-width 768px)
-- Hook `useCursorPosition`: `mousemove` event listener → `useMotionValue`
+1. **Peniadaan Kursor Sistem Bawaan (Native Cursor Suppression):**
+   - Pada perangkat dengan pointer mouse/trackpad (`@media (pointer: fine)`), kursor bawaan OS/laptop dihilangkan secara global (`*, html, body { cursor: none !important; }`), hanya menyisakan kursor kustom web di layar.
+   - Pada layar sentuh / mobile (`pointer: coarse`), kursor kustom otomatis dinonaktifkan (`display: none`), menjaga interaksi sentuh alami.
 
-**Rencana Improve Performance:**
+2. **Warna & Tampilan Tetap:**
+   - Lingkaran dot: `bg-surface` / `bg-primary` dengan efek `mix-blend-difference` tetap dipertahankan sesuai tema warna saat ini.
+   - Dimensi resting: 40x40px (`--cursor-size: 2.5rem`, disamakan dengan tombol toggle tema `h-10 w-10`), fixed, pointer-events-none, z-index 1350. Offset centering dihitung dari `offsetWidth` elemen kursor agar tidak drift saat ukuran diubah.
+   - Umpan balik tekanan (_pressing_): mengecil halus ke `scale(0.85)` / 34px saat mouse ditekan (`mousedown`).
 
-1. **Ganti `mousemove` ke `pointermove`:** Lebih modern, support touch + mouse.
-2. **Tambah `{ passive: true }` pada event listener:** Menghindari blocking main thread.
-3. **Gunakan `requestAnimationFrame` throttle:** Saat ini setiap pixel movement trigger state update. Batasi ke 60fps max.
-4. **Tipe TypeScript perbaikan:** Ganti `any` di `updateMousePosition` ke `PointerEvent`.
-5. **Warna cursor:** `bg-surface` / `bg-primary` dengan `mix-blend-difference` tetap dipertahankan.
+3. **Interaksi Elemen Interaktif (Smooth Fluid Shrink & Respons Komponen):**
+   - Ketika kursor diarahkan ke elemen yang bisa di-hover (pill judul section, tombol, link, kartu portofolio, kartu skill, assist chip):
+     - **Kursor dot menyusut fluid (_Smooth Fluid Shrink_):** Kursor dot tidak sekadar menjadi transparan, melainkan menyusut lembut dari skala penuh ke nol (`scale: 1 → 0` berpadu dengan `opacity: 1 → 0`) menggunakan spring M3 (`stiffness: 350, damping: 26`). Efek visualnya: kursor dot mengembun dan terserap mulus ke dalam fisik komponen.
+     - **Komponen menyala sebagai penanda kursor sedang bergabung di dalamnya:** Elemen yang di-hover menampilkan indikator visual nyata:
+       - _Kontainer aktif:_ Menyala dengan `bg-primary-container` (pada judul section, chip, dan tautan) atau elevated surface (`bg-surface-container-high` pada kartu).
+       - _Pergeseran magnetik elastis (*Magnetic Parallax*):_ Komponen bergeser anggun mengikuti pergerakan pointer (`translate(var(--parallax-x), var(--parallax-y))` maks 3.5px).
+       - _Subtle spring lift:_ Mengembang sedikit (`scale: 1.03 - 1.04`) memberikan umpan balik taktil bahwa kursor berada di dalam.
+   - Saat pointer keluar dari elemen (`mouseleave`), kursor dot mengembang kembali secara mulus dari titik keluar (`scale: 0 → 1, opacity: 0 → 1`), dan komponen kembali rileks ke posisi netral via spring physics M3.
 
 **Yang TIDAK berubah:**
 
-- Visual appearance (circle, mix-blend-difference)
-- Spring physics (damping: 30, stiffness: 700)
-- Hidden pada mobile
-- Framer Motion sebagai engine
+- Palet warna (`bg-surface` / `bg-primary`, `mix-blend-difference`)
+- Engine Framer Motion / Motion
+- Nonaktif pada layar sentuh / mobile
 
 ---
 
@@ -866,10 +907,12 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 - Background → `bg-surface` (light) / `bg-surface` (dark)
 - Mask gradient tetap sama (efek fade in/out)
+- **Top mask DIHAPUS (Session 6)** — `layout-wrapper.tsx` sekarang hanya menyisakan bottom mask. Header dibuat transparan, sehingga konten bisa terlihat scroll dari ujung atas viewport tanpa tertutup layer solid.
 
 **Yang TIDAK berubah:**
 
-- Seluruh behavior dan posisi
+- Bottom mask: fixed, z-1050, 8% height, `bg-surface`, `mask-bottom`
+- CSS `mask-image: linear-gradient(to top, #000 0%, transparent 100%)`
 
 ---
 
@@ -896,7 +939,9 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 ```typescript
 // SEBELUM
 const LocomotiveScroll = (await import('locomotive-scroll')).default;
-const _locomotiveScroll = new LocomotiveScroll({ lenisOptions: { lerp: 0.06, smoothWheel: true } });
+const _locomotiveScroll = new LocomotiveScroll({
+  lenisOptions: { lerp: 0.06, smoothWheel: true },
+});
 
 // SESUDAH
 const Lenis = (await import('lenis')).default;
@@ -930,60 +975,66 @@ import { useCallback, useRef } from 'react';
 
 interface TextScrambleOptions {
   characters?: string;
-  speed?: number;       // interval ms per frame
+  speed?: number; // interval ms per frame
   revealDuration?: number; // total reveal time ms
-  revealDelay?: number;    // delay per character reveal ms
+  revealDelay?: number; // delay per character reveal ms
 }
 
 export default function useTextScramble(selector: string) {
   const frameRef = useRef<ReturnType<typeof setInterval>>();
 
-  const scramble = useCallback((options: TextScrambleOptions = {}) => {
-    const {
-      characters = 'xxxxxxxxxxxx',
-      speed = 100,
-      revealDuration = 1000,
-      revealDelay = 100,
-    } = options;
+  const scramble = useCallback(
+    (options: TextScrambleOptions = {}) => {
+      const {
+        characters = 'xxxxxxxxxxxx',
+        speed = 100,
+        revealDuration = 1000,
+        revealDelay = 100,
+      } = options;
 
-    const elements = document.querySelectorAll(selector);
+      const elements = document.querySelectorAll(selector);
 
-    elements.forEach((el) => {
-      const originalText = el.textContent ?? '';
-      const chars = characters.split('');
-      let revealedCount = 0;
+      elements.forEach((el) => {
+        const originalText = el.textContent ?? '';
+        const chars = characters.split('');
+        let revealedCount = 0;
 
-      // Scramble phase
-      frameRef.current = setInterval(() => {
-        const scrambled = originalText
-          .split('')
-          .map((char, i) => {
-            if (i < revealedCount) return originalText[i];
-            if (char === ' ') return ' ';
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join('');
-        el.textContent = scrambled;
-      }, speed);
+        // Scramble phase
+        frameRef.current = setInterval(() => {
+          const scrambled = originalText
+            .split('')
+            .map((char, i) => {
+              if (i < revealedCount) return originalText[i];
+              if (char === ' ') return ' ';
+              return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join('');
+          el.textContent = scrambled;
+        }, speed);
 
-      // Reveal phase — progressively reveal characters
-      const revealInterval = setInterval(() => {
-        revealedCount++;
-        if (revealedCount >= originalText.length) {
-          clearInterval(revealInterval);
-          clearInterval(frameRef.current);
-          el.textContent = originalText;
-        }
-      }, revealDelay);
+        // Reveal phase — progressively reveal characters
+        const revealInterval = setInterval(() => {
+          revealedCount++;
+          if (revealedCount >= originalText.length) {
+            clearInterval(revealInterval);
+            clearInterval(frameRef.current);
+            el.textContent = originalText;
+          }
+        }, revealDelay);
 
-      // Safety cleanup after total duration
-      setTimeout(() => {
-        clearInterval(frameRef.current);
-        clearInterval(revealInterval);
-        el.textContent = originalText;
-      }, revealDuration + revealDelay * originalText.length);
-    });
-  }, [selector]);
+        // Safety cleanup after total duration
+        setTimeout(
+          () => {
+            clearInterval(frameRef.current);
+            clearInterval(revealInterval);
+            el.textContent = originalText;
+          },
+          revealDuration + revealDelay * originalText.length
+        );
+      });
+    },
+    [selector]
+  );
 
   return { scramble };
 }
@@ -1000,7 +1051,12 @@ newBaffle();
 // SESUDAH
 import useTextScramble from '@hooks/useTextScramble';
 const { scramble } = useTextScramble('.nameBaffle');
-scramble({ characters: 'xxxxxxxxxxxx', speed: 100, revealDuration: 1000, revealDelay: 100 });
+scramble({
+  characters: 'xxxxxxxxxxxx',
+  speed: 100,
+  revealDuration: 1000,
+  revealDelay: 100,
+});
 ```
 
 ### 9.2 Package yang Di-update
@@ -1020,9 +1076,10 @@ scramble({ characters: 'xxxxxxxxxxxx', speed: 100, revealDuration: 1000, revealD
 | `@types/react-dom`   | 18.3.0  | 19.x                              | Pair with React 19                                                 |
 
 **Package manager migration:**
-| Dari | Ke | Aksi |
-|------|----|------|
-| `pnpm` (pnpm-lock.yaml) | `bun` (bun.lockb) | Hapus `pnpm-lock.yaml`, run `bun install` |
+
+| Dari                    | Ke               | Aksi                                      |
+| ----------------------- | ---------------- | ----------------------------------------- |
+| `pnpm` (pnpm-lock.yaml) | `bun` (bun.lock) | Hapus `pnpm-lock.yaml`, run `bun install` |
 
 ### 9.3 Package Baru yang Ditambahkan
 
@@ -1031,7 +1088,7 @@ scramble({ characters: 'xxxxxxxxxxxx', speed: 100, revealDuration: 1000, revealD
 | `lenis`                              | Pengganti `locomotive-scroll`, smooth scroll, 3.7x lebih kecil                  |
 | `@material/material-color-utilities` | Generate M3 tonal palette dari seed color (devDependency, hasilnya di-hardcode) |
 | `zod`                                | Schema validation untuk contact form (rules: validasi input end-to-end)         |
-| `@hookform/resolvers`                | Bridge Zod ↔ React Hook Form                                                   |
+| `@hookform/resolvers`                | Bridge Zod ↔ React Hook Form                                                    |
 | `oxlint`                             | Linter Rust-based super cepat, config recommended untuk T Stack                 |
 
 ### 9.4 Package yang Dihapus (Migrasi ke Oxlint)
@@ -1062,13 +1119,15 @@ scramble({ characters: 'xxxxxxxxxxxx', speed: 100, revealDuration: 1000, revealD
 
 ## 10. Performance Improvements
 
-### 10.1 Custom Cursor Optimization
+### 10.1 Custom Cursor Optimization (Robbie Tilton Interaction Model)
 
-(Sudah dijabarkan di bagian 5.9)
+(Sudah dijabarkan di bagian 8.9)
 
-- `pointermove` + `{ passive: true }`
-- `requestAnimationFrame` throttle
-- Fix TypeScript `any` → `PointerEvent`
+- `pointermove` + `{ passive: true }` untuk pelacakan kursor zero-lag tanpa menghambat rendering thread utama.
+- `requestAnimationFrame` throttle membatasi frekuensi pembaruan koordinat kursor tepat 60fps.
+- Peniadaan kursor bawaan OS/laptop via `@media (pointer: fine) { *, html, body { cursor: none !important; } }`.
+- Delegasi interaksi hover: kursor dot bertransisi lembut menghilang saat melintasi elemen interaktif, memicu umpan balik magnetik M3 pada komponen yang dituju.
+- Strict TypeScript: eliminasi tipe `any` pada event handler mouse menjadi `PointerEvent`.
 
 ### 10.2 Locomotive Scroll → Lenis
 
@@ -1119,10 +1178,11 @@ scramble({ characters: 'xxxxxxxxxxxx', speed: 100, revealDuration: 1000, revealD
 - **`use()` hook**: Suspend pada promise, bisa mengganti beberapa `useEffect` patterns
 - **Server Components by default**: Mengurangi client-side JS
 
-### 10.9 Scroll-to-Top Button (`scroll-top.tsx`)
+### 10.9 Scroll-to-Top Button (`scroll-top.tsx`) — ✅ SELESAI (Slice 3.5)
 
-- Saat ini pakai `window.addEventListener('scroll', handleScroll)` tanpa throttle
-- Fix: Tambah `passive: true` dan `requestAnimationFrame` throttle (atau gunakan `IntersectionObserver` sebagai trigger visibility)
+- Sebelumnya: `window.addEventListener('scroll', handleScroll)` tanpa opsi apa pun, dan `setScrollPosition(window.scrollY)` dipanggil pada setiap event scroll → re-render tiap event.
+- Fix: listener memakai `{ passive: true }`, dan state diganti dari offset mentah menjadi **boolean** `isVisible` (`window.scrollY > window.innerHeight / 4`). Set boolean yang sama adalah no-op bagi React, sehingga re-render hanya terjadi saat status visibilitas benar-benar berubah.
+- Efek samping yang ditemukan: karena rule magnetic parallax unlayered mengeset properti `translate` pada semua `button`, mekanisme sembunyi `translate-y-[999px]` tidak pernah aktif. FAB diberi opt-out `data-no-magnetic` (lihat Section 8.7).
 
 ---
 
@@ -1138,19 +1198,23 @@ scramble({ characters: 'xxxxxxxxxxxx', speed: 100, revealDuration: 1000, revealD
 
 ### Perubahan M3
 
-#### 11.1 Form Fields → M3 Text Fields
+#### 11.1 Form Fields → M3 Filled Text Fields
 
-- Saat ini: `border-b-2` underlined input (mirip M2 actually)
-- M3: **Outlined Text Field** → `border border-outline rounded-xs` dengan floating label
-- Atau **Filled Text Field** → `bg-surface-container-highest rounded-t-xs border-b-2 border-primary`
-- **Recommended: Filled Text Field** (lebih cocok dengan estetika M3, lebih mudah diimplementasi tanpa library)
+- Menggunakan spesifikasi resmi **M3 Filled Text Field**:
+  - Background container: `bg-surface-container-highest`
+  - Shape: `rounded-t-xs` (radius 4px di atas, flat di bawah)
+  - Active indicator: border bawah `border-b-2 border-outline`, saat fokus bertransisi menjadi `border-b-primary`
+  - Input text: `text-body-lg text-on-surface bg-transparent outline-none`
+  - Label: `text-label-lg text-on-surface-variant`, saat fokus/terisi mengecil ke `text-label-sm text-primary`
 
 #### 11.2 Send Button → M3 Filled Button
 
-- `bg-primary text-on-primary rounded-full px-6 py-3`
-- Disabled: `bg-on-surface/12 text-on-surface/38`
-- Hover state layer: `hover:bg-primary/92` (shadow + tint)
-- Loading: Spinner di dalam button (bukan text "Sending...")
+- Menggunakan spesifikasi resmi **M3 Filled Button**:
+  - Pill shape: `rounded-full px-8 py-3 font-medium text-label-lg`
+  - Color role: `bg-primary text-on-primary`
+  - Motion & state: `hover:shadow-md active:scale-95 transition-all` dengan `m3Motion.spatial.fast`
+  - Disabled state: `bg-on-surface/[0.12] text-on-surface/[0.38] cursor-not-allowed`
+  - Loading state: spinner indikator progres di dalam button
 
 #### 11.3 Input Labels
 
@@ -1210,66 +1274,170 @@ Sesuai Global Rules (validasi input end-to-end), contact form akan diperkuat den
 
 ---
 
-## 13. Urutan Eksekusi (Roadmap)
+## 13. Urutan Eksekusi (Roadmap & Slices)
 
-### Phase 0 — Runtime Migration (Paling Pertama)
+Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi dalam _thin vertical slices_ yang terverifikasi sebelum commit.
 
-1. ✅ Buat branch `feat/portfolio-update`
-2. Hapus `pnpm-lock.yaml`
-3. Update `package.json` — hapus referensi pnpm, tambah `"packageManager": "bun"`
-4. Update `engines` field ke Bun
-5. Migrasi `next.config.js` → `next.config.ts`
-6. Run `bun install` → generate `bun.lockb`
-7. Verify `bun run dev` berjalan normal
+### Phase 0 — Runtime Migration (Paling Pertama) — ✅ SELESAI
 
-### Phase 1 — Foundation
+- **Status**: Selesai (Commit `71eceea`, snapshot branch `feat/migrate-bun`).
+- **Hasil**: Hapus pnpm artifacts, `bun.lock` ter-generate, script package.json & husky hooks dimigrasi ke Bun. Typecheck & build lulus 100%.
 
-8. Update `package.json` — upgrade Next.js 15, React 19, Tailwind v4, Motion v12, dll
-9. Hapus `locomotive-scroll`, `baffle` dari dependencies
-10. Tambah `lenis`, `zod`, `@hookform/resolvers`
-11. Setup Oxlint — hapus ESLint artifacts, buat `oxlint.json`
-12. Generate M3 color palette dari seed `#D3F36A`
-13. Update `tailwind.config` dengan color tokens M3 baru
-14. Update `globals.css` untuk Tailwind v4 syntax
-15. Update/ganti font files (jika pakai opsi A atau B)
-16. Fix breaking changes dari package upgrades
-17. Fix TypeScript strict issues (hapus `any`, tambah `displayName`, dll)
+---
 
-### Phase 2 — Core Components
+### Phase 1 — Foundation (Dependencies, Tooling & Design Tokens) — ✅ SELESAI
 
-18. Migrasi `locomotive-scroll` → `lenis` di `page-wrapper.tsx`
-19. Rewrite `useBaffle` → `useTextScramble` (native)
-20. Improve `useCursorPosition` performance (hapus `any`, `pointermove`, passive)
-21. Update `layout-wrapper.tsx` — gradient masks, warna M3
-22. Update `navigation.tsx` — M3 styling
+- **Lead Skill**: `source-driven-development` + `incremental-implementation`
+- **Objective**: Membangun fondasi runtime, linter, css tokens, dan font tanpa merusak compile.
+- **Status**: ✅ **100% SELESAI** (Semua slice terverifikasi lulus gerbang kualitas)
 
-### Phase 3 — Sections (Home Page)
+- **Slice 1.1 — Package Upgrade & Peer Resolution (Mitigasi)**: ✅ SELESAI
+  - Action:
+    - Upgrade core: Next.js 15, React 19, `motion@^12`, `lenis`, `zod`, `@hookform/resolvers`, `@material/material-color-utilities`.
+    - Upgrade pendukung (hasil double-check): `next-themes@^0.4.4` (peer React 19 support) & `zustand@^5.0.0` (concurrent safe).
+    - Hapus `baffle` dari dependencies.
+    - **PENTING (Mitigasi)**: JANGAN hapus `locomotive-scroll` di Phase 1 ini agar `src/components/ui/page-wrapper.tsx` tidak langsung crash saat dev/build. `locomotive-scroll` baru dicabut di Slice 2.1 setelah Lenis aktif.
+  - Verifikasi: `bun install` berhasil 0 peer conflicts, dry-run compile pass. Commit `075609a`.
+- **Slice 1.2 — Tooling Overhaul (Oxlint & Lefthook)**: ✅ SELESAI
+  - Action: Setup `.oxlintrc.json`, hapus artifacts ESLint (`.eslintrc.js`, `.eslintignore`, paket eslint). Setup `next.config.ts` dengan `eslint: { ignoreDuringBuilds: true }`. Setup `lefthook.yml` (ganti Husky).
+  - Verifikasi: `bun run lint` (Oxlint) berjalan 0 warnings/errors, `bun run typechecks` lulus. Commit `61e6c28`.
+- **Slice 1.2.1 — Supporting Packages Maintenance (Update & Deprecations Pruning)**: ✅ SELESAI
+  - Action:
+    - Update paket utama & pendukung ke versi LATEST yang terbukti aman & stabil:
+      - React: `react@^19.3.0`, `react-dom@^19.3.0`, `@types/react@^19.3.0`, `@types/react-dom@^19.3.0`.
+      - Motion: `motion@^13.3.0`, `framer-motion@^13.3.0`.
+      - Form & Validation: `zod@4.6.5`, `@hookform/resolvers@5.9.1`, `react-hook-form@^7.88.0`.
+      - Tooling & Utilities: `@commitlint/*@^21.2.2`, `prettier@^3.9.6`, `prettier-plugin-tailwindcss@^0.8.1`, `postcss@8.5.28`, `cssnano@^9.0.4`, `@material/material-color-utilities@^0.4.0`, `@vercel/analytics@^2.0.1`, `sharp@^0.35.4`, `react-icons@^5.7.0`, `react-hot-toast@^2.6.0`, `lenis@^1.3.26`, `locomotive-scroll@5.0.1`, `next-themes@^0.4.6`, `zustand@^5.0.15`, `@types/node@^26.5.1`.
+    - Modernisasi `tsconfig.json` (`target: es2022`, `moduleResolution: bundler`, path aliases `./src/*`) & deklarasi CSS module di `types.d.ts`.
+    - Audit & eliminasi total paket usang/deprekasi: `eslint`, `eslint-config-next`, `@typescript-eslint/*`, `eslint-config-prettier`, `eslint-plugin-*`, `husky`, `lint-staged`.
+    - Perampingan [`commitlint.config.js`](<file:///home/hutamatr/git-repo(hutamadev)/htma/commitlint.config.js>) (menghapus redundant defaults & tipe monorepo tak terpakai).
+    - **PENTING (Mitigasi Doubt-Driven & Penahanan Terkalibrasi)**:
+      - _TypeScript_: Di-upgrade ke `typescript@6.0.3` (TS 6 terbukti 100% kompatibel dengan Next.js 15 config loader dan compile build).
+      - _Next.js_: Terkunci pada versi rilis penuh terbaru `next@15.5.25`.
+      - _Baffle_: Tahan `baffle@^0.3.6` secara temporer (sampai Slice 2.2 native scramble hook) agar `src/components/hero/hero.tsx` tidak crash pada instalasi baru.
+  - Verifikasi: `bun install` 0 peer conflicts, `bun run lint` (0 error), `bun run typechecks` (pass), `bun run build` (pass, 6/6 static pages). Commit `d09644e`.
+- **Slice 1.3 — M3 Expressive Palette & Backward-Compatible Aliases (Tailwind v4 Full Migration)**: ✅ SELESAI
+  - Action:
+    - Upgrade penuh ke `tailwindcss@4.3.3` & `@tailwindcss/postcss@4.3.3`.
+    - Hapus total `tailwind.config.js` dan `autoprefixer` (beralih ke 100% CSS-first `@theme` + Lightning CSS).
+    - Sediakan alias token lama di `@theme` (`--color-custom-black`, `--color-custom-green`, `--color-custom-white`, dll) yang memetakan ke token M3 baru agar 51 file komponen tidak broken styling.
+    - Sediakan CSS variables M3 resmi dari seed `#D3F36A` di `:root` dan `.dark`.
+  - Verifikasi: `bun run format:check` (pass), `bun run lint` (0 error), `bun run typechecks` (pass), `bun run build` (pass, 6/6 static pages). Commit `987a207`.
+- **Slice 1.4 — Typography Setup (Google Sans Flex)**: ✅ SELESAI
+  - Action:
+    - Setup Google Sans Flex variable font via Google Fonts CDN resmi (`@import` di `globals.css`), mencakup seluruh unicode-range dan variable axes (`wght 100-1000`, `opsz 6-144`).
+    - Hapus total 6 file font legacy (`KataGrotesk-*.woff2` & `NeutralFace*.woff2`).
+    - Refactor seluruh komponen ke export bersih `googleSansFlex` di `src/utils/localFont.ts` tanpa meninggalkan variabel lama.
+    - Bind `--font-sans`, `--font-display`, `--font-body`, serta selector `html, body` langsung ke `'Google Sans Flex'`.
+    - Implementasi best practices Next.js 15 App Router: fix prop `fill` di `next-image.tsx`, custom `not-found.tsx`, root `global-error.tsx`, dan metadata routes dinamis (`sitemap.ts`, `robots.ts`, `manifest.ts`).
+  - Verifikasi: `bun run build` menghasilkan 9/9 static pages/routes, `bun run lint` (0 error), `bun run typechecks` (0 error). Commit `f6893a6` & `4694f6e`.
 
-23. Update `hero/` components — M3 colors, typography
-24. Update `about.tsx` — M3 section header, typography, colors
-25. Update `skills.tsx` — M3 card containers, hover states
-26. Update `portfolio.tsx` — M3 card design, elevation
-27. Update modal components — M3 dialog style
-28. Update `sidebar/` — M3 navigation rail style
-29. Update `footer.tsx` — M3 colors
+---
 
-### Phase 4 — Contact Page
+### Phase 2 — Core Components & Mechanics — ✅ SELESAI
 
-30. Update `contact.tsx` — M3 section header
-31. Update `contact-form.tsx` — M3 text fields, button, Zod validation
-32. Update `input-form.tsx` — M3 input styling
+- **Lead Skill**: `doubt-driven-development` + `frontend-ui-engineering` (aktif)
+- **Objective**: Mengganti engine scroll, text scramble, dan cursor dengan performa tinggi & hasil visual identik.
+- **Status**: ✅ **100% SELESAI** (Seluruh slice 2.1–2.4 terverifikasi lulus gerbang kualitas)
 
-### Phase 5 — Polish & SEO
+- **Slice 2.1 — Lenis Smooth Scroll & Locomotive Cleanup**: ✅ SELESAI
+  - Action: Implementasi Lenis di `src/components/ui/page-wrapper.tsx` dengan rAF loop dan lifecycle cleanup. Hapus `locomotive-scroll` dari `package.json` dan `bun.lock`.
+  - Verifikasi: Parity check visual & feel scroll identik 100%. Commit `ef733db`.
+- **Slice 2.2 — Native Text Scramble Hook (Baffle.js Cleanup)**: ✅ SELESAI
+  - Action: Buat `src/hooks/useTextScramble.ts` (native rAF & timer cleanup), refactor `src/components/hero/hero.tsx`, hapus `useBaffle.ts`, shim `baffle` di `types.d.ts`, dan uninstall paket `baffle`.
+  - Verifikasi: Efek decoding scramble identik visualnya dengan Baffle.js. Commit `c4380aa`.
+- **Slice 2.3 — Cursor Optimization (Robbie Tilton Model Foundation)**: ✅ SELESAI
+  - Action: Refactor `src/hooks/useCursorPosition.ts` (`pointermove`, `passive: true`, `requestAnimationFrame` throttle, coarse pointer detection, hapus tipe `any`, tambahkan `aria-hidden="true"` pada `custom-cursor.tsx`, serta fondasi peniadaan kursor native `cursor: none !important`).
+  - Verifikasi: Performa 60fps tanpa frame drop, strict types `PointerEvent`, 0 linter warning. Commit `2c56188`.
+- **Slice 2.4 — Layout & Navigation (M3 Surface & Sun/Moon Toggle)**: ✅ SELESAI
+  - Action: Update `src/components/layout/layout-wrapper.tsx` & `src/components/navigation/navigation.tsx` (solid `bg-surface`, Sun/Moon icon toggle `MdLightMode`/`MdDarkMode` menggantikan `MdGraphicEq`, eliminasi rotated text, logo M3 `rounded-xl`, WCAG AA `aria-label`).
+  - Verifikasi: Toggle theme smooth, layout vertical tetap terkunci, build static 9/9 pages lulus penuh.
 
-33. SEO metadata overhaul
-34. Structured data (JSON-LD)
-35. Sitemap & robots
-36. Hapus `declare module 'baffle'` dari `types.d.ts`
-37. Performance audit (Lighthouse) — target 90+ semua kategori
-38. Cross-browser testing
-39. Dark/light mode polish & transition smoothness
-40. Final `bun run build` — pastikan zero errors
-41. Final `bun run lint` (atau `biome check`) — pastikan zero warnings
+---
+
+### Phase 3 — Sections (Home Page) — ✅ SELESAI
+
+- **Lead Skill**: `frontend-ui-engineering` + `impeccable`
+- **Objective**: Transformasi visual ke Material 3 Expressive (Shape, Size contrast, Tone-based containment, Spring motion) serta integrasi model interaksi kursor Robbie Tilton (peniadaan kursor native, hover dissolve & magnetic feedback pada elemen interaktif).
+
+- **Slice 3.1 — Hero Section (SELESAI)**: M3 typography hierarchy (`text-display-sm`), Assist Chip badge, Filled Tonal Button socials dengan magnetic hover delegation, dan spring motion specs. Commit `7b2ba93`.
+- **Slice 3.2 — About Section (SELESAI)**: M3 section header hover state layer, surface card containment, dan copywriting natural tanpa AI-isms. Commit `623127b`.
+- **Slice 3.3 — Skills Section (SELESAI)**: M3 Surface Container Low cards dengan optical weight balancing, kontras dark mode bersih, dan magnetic hover feedback.
+- **Slice 3.4 — Portfolio Section & Modal (SELESAI)**: M3 Filled Card (`bg-surface-container`, radius 24px) mengikuti referensi desain card (light & dark) — anatomi thumbnail `16/9` di atas + content `p-6` `text-left`, shape morphing hover (`24px → 28px → 16px`), Basic Dialog native `<dialog>` dengan Scrim `bg-on-surface/32`. Grid diperbaiki dari bento span hardcoded (invalid `md:grid-rows-[10]`) menjadi `md:grid-cols-2` + auto rows. Field `description` ditambahkan ke `IPortfolio` + `portfolio-data.ts`.
+- **Slice 3.5 — Sidebar & Footer (SELESAI)**: Navigation Rail M3 (`bg-surface-container-highest`, `rounded-t-[28px]`), Active Indicator pill `bg-primary-container`, inactive `text-on-surface-variant` + state layer, Small FAB scroll-top `rounded-xl`, footer `text-body-sm text-on-surface-variant` + brain `text-tertiary`. Animasi underline `.menu-link` lama dihapus dari `globals.css` (digantikan state layer M3).
+- **Phase 3 SELESAI PENUH.** Temuan penting Slice 3.5: rule magnetic parallax unlayered mengalahkan utility `translate-*` Tailwind → mekanisme sembunyi FAB sempat mati; diperbaiki dengan opt-out `data-no-magnetic`.
+- Verifikasi: `bun run typechecks`, `bun run lint`, `bun run build` sukses, visual responsive di desktop & mobile.
+
+**Pekerjaan tambahan di luar slice (Session 6) — sudah selesai:**
+
+- **Custom cursor smooth fluid shrink + magnetic parallax**: kursor dot menyusut fluid (`scale 1 → 0`, `opacity 1 → 0`) ke dalam elemen interaktif, elemen bergeser magnetik maks 3.5px. Commit `f69acd5`.
+- **Two-stage section header interaction**: kursor masuk section → pill judul aktif; kursor ke pill → dot menyusut masuk. Commit `b681783`.
+- **Header transparan + hero diperlebar**: commit `5cc2e39`.
+- **Ukuran kursor 24px → 40px** (disamakan tombol toggle tema), offset centering dibaca dari `offsetWidth` elemen.
+- **Cleanup**: `src/components/ui/svg/ArrowSVG.tsx` dihapus (tidak lagi punya caller setelah card bottom-bar lama diganti).
+
+---
+
+### Phase 4 — Contact Page — ✅ SELESAI
+
+- **Lead Skill**: `frontend-ui-engineering` + `security-and-hardening`
+- **Objective**: Redesain form kontak dengan text field M3 Expressive, validasi Zod schema yang aman, serta integrasi kursor Robbie Tilton pada input dan tombol kirim (cursor dissolve & button magnetic feedback).
+- **Status**: ✅ **100% SELESAI** (Slice 4.1–4.2 terverifikasi lulus gerbang kualitas)
+
+- **Slice 4.1 — Zod Schema & Validation (SELESAI)**: File baru `src/utils/contact-schema.ts` berisi `contactSchema` + tipe hasil inferensi `ContactFormValues`. Setiap field `trim()` lebih dulu, lalu `min(1)` (pesan "… is required") dan batas panjang untuk membatasi payload ke endpoint template publik: nama 80, email 254, subjek 120, pesan 2000 karakter. Email divalidasi lewat `.pipe(z.email({ message }))` — bukan `.email()` — karena Zod 4.6.5 sudah menandai `z.string().email()` **deprecated**; bentuk `pipe` dipakai supaya `trim()` tetap berjalan **sebelum** cek format (input `"  a@b.co  "` lolos, sedangkan `"   "` tetap "Email is required"). Tipe global `Inputs` yang sudah mati dihapus dari `types.d.ts`.
+- **Slice 4.2 — M3 Text Fields & UI (SELESAI)**: `src/components/ui/input-form.tsx` ditulis ulang sebagai M3 Filled Text Field — container `bg-surface-container-highest rounded-t-xs border-b-2 border-outline`, `focus-within:border-b-primary`, label float dari `text-label-lg text-on-surface-variant` ke `text-label-sm text-primary` memakai varian arbitrary `peer-[:placeholder-shown:not(:focus)]` (tanpa state JS tambahan). State error mengubah indicator + label jadi `text-error` dan menambah helper text `text-body-sm text-error`. `contact-form.tsx` memakai `react-hook-form` + `zodResolver` (menggantikan `useState` manual), memasang `aria-invalid` + `aria-describedby` ke setiap field, tombol Send jadi M3 Filled Button (`rounded-full`, `hover:bg-primary/92`, `active:scale-95`) dengan spinner in-button pada state disabled. Header section kontak memakai two-stage section header yang sama dengan About/Skills/Portfolio.
+
+**Temuan & catatan Phase 4:**
+
+- **`cursor-not-allowed` di tombol disabled tidak pernah aktif.** Rule global `@media (pointer: fine) { * { cursor: none !important } }` (DESIGN 12.11) selalu menang. Bukan bug — memang tabrakan dua spesifikasi DESIGN, dibiarkan apa adanya.
+- **`.env.local` sudah ada di lokal (diisi user 2026-09-28)** — jalur kirim nyata terverifikasi Session 14 (POST EmailJS 200, toast sukses, form reset). Sebelumnya variabel `undefined` sehingga submit selalu jatuh ke toast "Something went wrong". Di produksi variabel diisi lewat environment platform.
+- **Jangan jalankan `bun run build` selagi `next dev` hidup.** Keduanya berbagi direktori `.next`; build sempat menghapus `_buildManifest.js` milik dev sampai server error `ENOENT` dan berhenti melayani form. Hentikan dev dulu.
+- **Bundle `/contact` = 121 kB (First Load 305 kB)** — kenaikan dari zod + react-hook-form + resolvers. Kandidat ditinjau lagi di Phase 5 bila Lighthouse Performance turun.
+
+Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build` sukses 9/9 static pages. Uji browser (Chromium) pada `bun run dev`: submit kosong → 4 pesan error + indicator/label/helper merah + `aria-invalid="true"`; email salah format → "Enter a valid email address" dan fokus otomatis balik ke field email; fokus field valid → label terangkat (`top: 6px`, `font-size: 11px`) dan indicator jadi `rgb(180, 211, 78)` (dark) / pill hijau (light); submit loading → teks "Sending…", tombol `disabled`, spinner 16px `animation: spin 1s`, bg `on-surface/[0.12]`; response sukses (di-stub lewat request interception, tanpa email nyata) → toast "Message sent successfully", form reset, tombol kembali normal. Payload POST terverifikasi ke `https://api.emailjs.com/api/v1.0/email/send` dengan `template_params` = `from_name`, `from_email`, `subject`, `message` (nama variabel template tidak berubah). Mobile 390px: grid jatuh ke satu kolom, field 229px, tombol pill 97×45. Overflow horizontal 400px di `/contact` berasal dari nav rail sidebar dan **identik di `/`** (pre-existing, di luar lingkup Phase 4). Commit `1b4546f`.
+
+---
+
+### Phase 5 — Polish, SEO & Launch
+
+- **Lead Skill**: `performance-optimization` + `shipping-and-launch`
+- **Objective**: Validasi akhir, SEO, aksesibilitas, dan audit Lighthouse.
+
+- **Slice 5.0 — Pembersihan Token Legacy**: ✅ **SELESAI** (commit `948742d`) — migrasi seluruh caller custom colors ke token peran M3.
+- **Slice 5.0b — Indikator Loading M3 Expressive**: ✅ **SELESAI** (commit `c1afe20`) — 7 bentuk morph canvas 48dp (rotasi 50deg/shape + settle 90deg, morph 650ms).
+- **Slice 5.0c — Loading Skeletons & Hydration Swap**: ✅ **SELESAI** (commit `758168f`) — M3 expressive skeleton wave di `globals.css`, hydration gate `HomeContent`, a11y `aria-busy`/`aria-hidden`, 0px delta shift pada tablet/desktop.
+- **Slice 5.1 — Metadata & SEO**: ✅ **SELESAI** (commit `5d0c6fa`) — OpenGraph, Twitter card, dynamic `opengraph-image.tsx`, JSON-LD (`Person`, `WebSite`), `sitemap.ts`, `robots.ts`.
+- **Slice 5.2 — Audit Kualitas**: Audit Lighthouse (target 90+ semua metrik: Performance, Accessibility, Best Practices, SEO). ✅ **SELESAI**
+  - **Hasil terukur** (build produksi + `next start`, Lighthouse 13.5.0, Chromium bersih):
+    - `/` mobile: Perf **78 → 92** · A11y 100 · Best Practices **96 → 100** · SEO **92 → 100** (LCP **4.3 s → 2.7 s**, TBT 320 → 250 ms, CLS 0)
+    - `/contact` mobile: Perf **81 → 96** · A11y 100 · Best Practices **96 → 100** · SEO **92 → 100** (LCP **3.7 s → 2.2 s**, TBT 380 → 200 ms, CLS 0)
+    - `/` dan `/contact` desktop: **100 / 100 / 100 / 100** (LCP 0.6 s, TBT 0 ms, CLS 0)
+  - **Akar masalah LCP (ditemukan & diperbaiki):** seluruh konten di bawah hero dirender **hanya setelah hidrasi** — gate `isClient` di `home-content.tsx` plus `motion` wrapper `initial={{ opacity: 0 }}`. HTML SSR hanya berisi **86 div skeleton, 0 konten nyata**, jadi LCP = waktu hidrasi (~4 s pada 4× CPU throttle).
+  - **Perbaikan yang dipakai:** section di-SSR langsung dari `src/app/page.tsx` (`home-content.tsx` dihapus), dan entrance `PageWrapper` jadi **transform-only** (tanpa opacity) supaya isi terpaint di frame pertama.
+  - **Perbaikan kualitas lain yang ikut terangkat:** `<Analytics/>` digate `process.env.VERCEL` (hilang 404 `/_vercel/insights/script.js` + 2 console error), `aria-label` kartu portfolio dihapus agar accessible name memuat teks terlihat (WCAG 2.5.3), anchor Demo modal hanya dirender saat `portfolioData.url` ada (sebelumnya `href` undefined = anchor tanpa href), typo `}` pada `alt` gambar modal dibetulkan.
+  - **Pitfall lingkungan audit:** Helium (CachyOS) membawa **uBOL prainstal** → Lighthouse via `CHROME_PATH` tercemar (dokumen `/` termuat **2×**, body kedua 667 byte; `redirects` melaporkan 3.2–4.8 s palsu; `unminified-javascript` menunjuk `chrome-extension://…`). `--disable-extensions` tidak mematikannya. Audit bersih = Chromium tanpa extension + `bunx lighthouse --port=<cdp-port>`.
+  - **Lever yang sengaja belum diambil** (target sudah lewat): hero masih client-gated; `image-delivery-insight` 190 KiB (thumbnail portfolio 600×600 untuk slot ~212 px); `legacy-javascript` 14 KiB & `unused-javascript` 116–131 KiB dari chunk framework; `render-blocking` 140–180 ms dari `@import` Google Fonts di `globals.css`.
+  - **Slice 5.3 — Cross-Browser & Final Build**: Final `bun run build` & `bun run lint` zero errors/warnings + verifikasi runtime & cross-browser. **Status: mayoritas selesai (Session 13).**
+  - **Session 14 (2026-09-28) — perubahan user di luar slice:**
+    - Portfolio 7 → **9 item**: `08 Visionary` (agency site Material You 3 + 3D globe, demo `visionary-material-you.vercel.app`, repo `hutamadev/visionary-material-you`) dan `09 Wedding Invitation` (undangan dark editorial Elena & Julian + RSVP/guestbook, demo `wedding-invitation-web-pink.vercel.app`, repo `hutamadev/wedding-invitation-web`). Thumbnail webp baru 1280×720 dari screenshot Chromium asli (sharp q82, crop 16/9). Penempatan append di akhir supaya `md:col-span-2` kartu pertama tidak berubah.
+    - URL demo direfresh: Garuda `garudaverse.tech/` → `garuda-universe.vercel.app/`; Urban `urban-fashion.htma.my.id/` → `urban-fashion-shop.vercel.app/` (ketiganya HTTP 200 terverifikasi).
+    - Default tema `light` → **`dark`** (`src/app/layout.tsx:114`); visitor baru dapat dark, preferensi tersimpan user lama tidak terganggu.
+    - Commit: `319e482` (portfolio + URL), `3ec957e` (dark default). Verifikasi: typechecks/lint/prettier lulus, e2e form 18/18, cek grid/modal portfolio 9/9 di Chromium.
+    - Domain update (`htma.site` → `htma.my.id`): metadata base, author url, OpenGraph, JSON-LD, sitemap, robots, dan open graph image badge disinkronkan ke domain baru `htma.my.id`.
+  - **✅ Selesai di Session 13:**
+    - Gerbang verifikasi urut `format:check` → `lint:strict` → `typechecks` → `build` — semuanya lulus, build **10/10 static pages** (`/` First Load 199 kB, `/contact` 311 kB). Server dev/prod dimatikan lebih dulu (aturan Session 7: `.next` dipakai bersama).
+    - Verifikasi runtime tanpa browser (`next start` + `curl`): `/` 200 dengan HTML 95.980 byte berisi konten nyata dan hanya 6 kemunculan `skeleton` (hero) — jalur SSR hasil Slice 5.2 utuh; kelima security header tampil; JSON-LD `Person` + `WebSite`; `/contact` ber-canonical benar; `/robots.txt`, `/sitemap.xml`, `/manifest.webmanifest`, `/opengraph-image` semua 200; path tak dikenal → 404.
+    - Kontrak Zod `src/utils/contact-schema.ts` diuji ad-hoc lewat `bun run`: **7/7** kasus negatif cocok persis + asersi `trim()`.
+    - **Form kontak end-to-end di Chromium asli: 18/18 PASS** (hydration, 4 field, `POST api.emailjs.com` dengan `template_params` persis, toast sukses tunggal, form reset, tombol idle; jalur error 4 `aria-invalid` + 4 pesan Zod + nol request). Jarum pengukuran bergeser: percobaan pertama di **Lightpanda** memberi 17/18 dengan `reset()` no-op dan toast hantu tanpa error apa pun — itu **artifact engine**, bukan bug app (Chromium: 18/18, toast tunggal, field kosong). Detail + alasan menolak Lightpanda ada di MEMORY Session 13 poin 9.
+    - **Lighthouse 13.5.0** (versi identik baseline Session 12): desktop `/` & `/contact` **100/100/100/100** (LCP 0.6 s, TBT 10 ms, CLS 0.001); mobile median n=5 di host idle — **`/` 95** (TBT 179 ms) dan **`/contact` 92** (TBT 299 ms), LCP 2.4/2.2 s, **CLS 0**, a11y/BP/SEO 100 di semua target. **Kedua halaman lolos gerbang 90.**
+    - **Lever yang diambil: form kontak di-code-split.** Sebelum split, `/contact` mobile median **88** karena chunk zod + react-hook-form + emailjs (113.4 KiB) ada di jalur kritis demi widget di bawah fold; setelah `dynamic(..., { ssr: false })` bundle `/contact` turun **311 → 202 kB** (page 121 → 12.1 kB), TBT 433 → 299 ms, dan gate terpenuhi tanpa menjatuhkan `/` (94 → 95). Placeholder-nya memakai geometri hasil ukur DOM (58 px field, 161 px textarea, 45 px tombol) supaya swap tidak menghasilkan CLS. Detail di MEMORY Session 13 poin 16.
+    - Form e2e **18/18** diverifikasi ulang **setelah** split, dan build akhir direbuild bersih tanpa env dummy.
+    - **PinchTab audit** (`pinchtab audit --json`, versi 0.15.2): `/` TTFB 31.8 ms, LCP 1488 ms, CLS 0.000008, 42 request nol gagal; `/contact` TTFB 27.7 ms, LCP 2148 ms, 20 request nol gagal; screenshot di `/tmp/audit-home` dan `/tmp/audit-contact`. Field `summaryScore` = rata-rata skor aksesibilitas, **bukan** skala Lighthouse — jangan disamakan dengan Accessibility 100.
+  - **⏳ Belum tuntas:**
+    - **Cross-browser non-Chromium: known-unverified** (keputusan user, tanpa unduhan tambahan). Alasan: Chromium satu-satunya engine di mesin; Firefox tidak membuktikan kasus `background-attachment: fixed` milik iOS Safari, dan WebKit Linux Playwright pun bukan iOS Safari.
+    - ✅ `.env.local` sudah ada → jalur EmailJS nyata **terverifikasi Session 14** (dev + Chromium CDP: POST 200, toast sukses, reset, 0 error). Uji stub 18/18 dengan id dummy tetap valid untuk jalur validasi.
+    - **Rujukan lama ke skill `lighthouse-audit-local` tidak berlaku** (skill itu tidak ada). Penggantinya: skill global **`local-browser-verification`** + skrip milik project di `scripts/` (`bun run verify:form`, `bun run audit:lighthouse`, didokumentasikan di `scripts/README.md`).
+    - Branch `feat/portfolio-update` sekarang **ahead dari origin** (2 commit lokal Session 13) dan **belum di-push**; user memutuskan **tanpa PR**.
 
 ---
 
@@ -1277,19 +1445,19 @@ Sesuai Global Rules (validasi input end-to-end), contact form akan diperkuat den
 
 Semua pertanyaan sudah dijawab dan dikonfirmasi (2026-09-03):
 
-| # | Pertanyaan | Jawaban Final |
-|---|-----------|---------------|
-| 1 | **Font choice** | Full M3 Expressive — **Google Sans Flex** (variable font) untuk body & heading. Hapus Kata Grotesk & Neutral Face |
-| 2 | **Portfolio card style** | Full M3 Expressive elevated card — hapus brutalist offset shadow |
-| 3 | **Theme toggle icon** | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq` |
-| 4 | **Navbar backdrop blur** | **Tetap solid background** (`bg-surface`), tanpa `backdrop-blur` |
-| 5 | **M3 color palette** | Generate ulang pakai `@material/material-color-utilities` untuk nilai akurat. Estimasi di DESIGN.md akan di-replace saat implementasi |
-| 6 | **Tailwind v4** | ✅ Konfirmasi lanjut — migrasi config JS → CSS-based `@theme` |
-| 7 | **Motion v12** | ✅ Konfirmasi lanjut — `framer-motion` → `motion` |
-| 8 | **React 19 + Next.js 15** | ✅ Siap — terima potensi breaking changes |
-| 9 | **Bun lockfile** | **Commit `bun.lockb`** ke git (reproducible builds) |
-| 10 | **Monorepo** | **Tetap single app** — tidak convert ke Turborepo |
-| 11 | **Git hooks** | **Migrasi ke Lefthook** (ganti Husky) — menjalankan `oxlint` + `prettier --check` di pre-commit |
+| #   | Pertanyaan                | Jawaban Final                                                                                                                                                                                                                      |
+| --- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Font choice**           | Full M3 Expressive — **Google Sans Flex** (variable font) untuk body & heading. Hapus Kata Grotesk & Neutral Face                                                                                                                  |
+| 2   | **Portfolio card style**  | Full M3 Expressive elevated card — hapus brutalist offset shadow                                                                                                                                                                   |
+| 3   | **Theme toggle icon**     | Ganti ke **Sun/Moon** (`MdLightMode` / `MdDarkMode`). Hapus `MdGraphicEq`                                                                                                                                                          |
+| 4   | **Navbar backdrop blur**  | Awalnya solid `bg-surface` tanpa `backdrop-blur`. **Di-supersede Session 6**: header jadi `bg-transparent` + `pointer-events-none` (logo & toggle tetap solid via `pointer-events-auto`) agar konten scroll tembus dari ujung atas |
+| 5   | **M3 color palette**      | Generate ulang pakai `@material/material-color-utilities` untuk nilai akurat. Estimasi di DESIGN.md akan di-replace saat implementasi                                                                                              |
+| 6   | **Tailwind v4**           | ✅ Konfirmasi lanjut — migrasi config JS → CSS-based `@theme`                                                                                                                                                                      |
+| 7   | **Motion v12**            | ✅ Konfirmasi lanjut — `framer-motion` → `motion`                                                                                                                                                                                  |
+| 8   | **React 19 + Next.js 15** | ✅ Siap — terima potensi breaking changes                                                                                                                                                                                          |
+| 9   | **Bun lockfile**          | **Commit `bun.lock`** ke git (reproducible builds)                                                                                                                                                                                 |
+| 10  | **Monorepo**              | **Tetap single app** — tidak convert ke Turborepo                                                                                                                                                                                  |
+| 11  | **Git hooks**             | **Migrasi ke Lefthook** (ganti Husky) — menjalankan `oxlint` + `prettier --check` di pre-commit                                                                                                                                    |
 
 ---
 

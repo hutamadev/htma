@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+import Lenis from 'lenis';
 import { useEffect } from 'react';
 
 interface IPageWrapperProps {
@@ -10,16 +11,24 @@ interface IPageWrapperProps {
 
 export default function PageWrapper({ children }: Readonly<IPageWrapperProps>) {
   useEffect(() => {
-    (async () => {
-      const LocomotiveScroll = (await import('locomotive-scroll')).default;
-      // eslint-disable-next-line no-unused-vars
-      const _locomotiveScroll = new LocomotiveScroll({
-        lenisOptions: {
-          lerp: 0.06,
-          smoothWheel: true,
-        },
-      });
-    })();
+    const lenis = new Lenis({
+      lerp: 0.06,
+      smoothWheel: true,
+    });
+
+    let rafId: number;
+
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
   }, []);
 
   return (
@@ -29,9 +38,9 @@ export default function PageWrapper({ children }: Readonly<IPageWrapperProps>) {
         'md:px-0',
         'lg:col-start-5'
       )}
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0, transition: { duration: 0.7 } }}
-      exit={{ opacity: 0, y: 0 }}
+      initial={{ y: 24 }}
+      animate={{ y: 0, transition: { duration: 0.7 } }}
+      exit={{ y: 0 }}
     >
       {children}
     </motion.section>

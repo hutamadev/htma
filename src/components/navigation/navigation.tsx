@@ -4,16 +4,16 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
-import { MdGraphicEq } from 'react-icons/md';
+import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
 import LoadingSpin from '@components/ui/loading-spin';
 
 import { useStore } from '@store/useStore';
 
-import { neutral } from '@utils/localFont';
+import { googleSansFlex } from '@utils/localFont';
 
 export default function Navigation() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const { isClient, clientHandler } = useStore((state) => ({
     isClient: state.isClient,
     clientHandler: state.clientHandler,
@@ -24,52 +24,52 @@ export default function Navigation() {
   }, [clientHandler]);
 
   const toggleThemeHandler = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   return (
-    <header className='nav-height fixed top-0 z-[1090] flex w-full items-center'>
+    <header className='pointer-events-none fixed top-0 z-[1090] flex nav-height w-full items-center bg-transparent'>
       <nav className='layout flex justify-center'>
         <div className={clsx('grid-12 gap-1', 'md:gap-6')}>
-          <div className='col-start-1 flex w-fit items-center rounded bg-custom-black px-2 py-1'>
+          <div className='pointer-events-auto col-start-1 flex w-fit items-center'>
             <Link
               href='/'
               className={clsx(
-                neutral.className,
-                'whitespace-nowrap text-lg font-semibold text-custom-green'
+                googleSansFlex.className,
+                'flex items-center rounded-xl bg-on-surface px-3 py-1.5 text-title-md font-semibold tracking-wide text-primary-container duration-200',
+                'hover:bg-primary-container hover:text-on-primary-container',
+                'dark:bg-primary dark:text-surface dark:hover:bg-primary-container dark:hover:text-on-primary-container'
               )}
             >
               HTMA
             </Link>
           </div>
-          <div className='col-start-12 mx-auto block'>
+          <div className='pointer-events-auto col-start-12 mx-auto flex items-center justify-center'>
             {isClient ? (
               <button
                 onClick={toggleThemeHandler}
+                aria-label={
+                  resolvedTheme === 'dark'
+                    ? 'Switch to light mode'
+                    : 'Switch to dark mode'
+                }
                 className={clsx(
-                  'relative z-[60] mt-1 flex flex-col items-center text-custom-black',
-                  'lg:text-custom-green',
-                  'dark:text-custom-green dark:lg:text-custom-black'
+                  'relative z-[60] flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface shadow-sm duration-300',
+                  'hover:bg-surface-container-highest focus-visible:outline-2 focus-visible:outline-primary'
                 )}
               >
-                <MdGraphicEq
-                  className={clsx(
-                    'text-3xl duration-500',
-                    'lg:text-4xl',
-                    `${theme === 'dark' ? 'rotate-180' : 'rotate-45'}`
-                  )}
-                />
-                <span
-                  className={clsx(
-                    'absolute top-10 rotate-90 text-sm',
-                    'md:text-base'
-                  )}
-                >
-                  {theme === 'light' ? 'light' : 'dark'}
-                </span>
+                {resolvedTheme === 'dark' ? (
+                  <MdLightMode className='text-2xl text-primary transition-transform duration-300 hover:rotate-90' />
+                ) : (
+                  <MdDarkMode className='text-2xl text-primary transition-transform duration-300 hover:-rotate-12' />
+                )}
               </button>
             ) : (
-              <LoadingSpin className='h-8 w-8' />
+              // Chrome of the button above, so the grid row keeps the same
+              // 40px box while the indicator stands in for the icon.
+              <span className='flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface shadow-sm'>
+                <LoadingSpin className='h-6 w-6' />
+              </span>
             )}
           </div>
         </div>

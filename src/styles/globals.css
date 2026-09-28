@@ -1,124 +1,307 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,100..1000&display=swap');
+@import 'tailwindcss';
+@import 'lenis/dist/lenis.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Material 3 Expressive Core Roles */
+  --color-primary: var(--color-primary);
+  --color-on-primary: var(--color-on-primary);
+  --color-primary-container: var(--color-primary-container);
+  --color-on-primary-container: var(--color-on-primary-container);
+  --color-secondary: var(--color-secondary);
+  --color-on-secondary: var(--color-on-secondary);
+  --color-secondary-container: var(--color-secondary-container);
+  --color-on-secondary-container: var(--color-on-secondary-container);
+  --color-tertiary: var(--color-tertiary);
+  --color-on-tertiary: var(--color-on-tertiary);
+  --color-tertiary-container: var(--color-tertiary-container);
+  --color-on-tertiary-container: var(--color-on-tertiary-container);
+  --color-surface: var(--color-surface);
+  --color-surface-dim: var(--color-surface-dim);
+  --color-surface-bright: var(--color-surface-bright);
+  --color-surface-container-lowest: var(--color-surface-container-lowest);
+  --color-surface-container-low: var(--color-surface-container-low);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-container-high: var(--color-surface-container-high);
+  --color-surface-container-highest: var(--color-surface-container-highest);
+  --color-on-surface: var(--color-on-surface);
+  --color-on-surface-variant: var(--color-on-surface-variant);
+  --color-outline: var(--color-outline);
+  --color-outline-variant: var(--color-outline-variant);
+  --color-error: var(--color-error);
+  --color-on-error: var(--color-on-error);
+  --color-error-container: var(--color-error-container);
+  --color-inverse-surface: var(--color-inverse-surface);
+  --color-inverse-on-surface: var(--color-inverse-on-surface);
+  --color-inverse-primary: var(--color-inverse-primary);
+
+  /* M3 Expressive Shape Scale */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 28px;
+
+  /* M3 Expressive Typography Scale & Font Families */
+  --font-sans:
+    'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif;
+  --font-display:
+    'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif;
+  --font-body:
+    'Google Sans Flex', 'Google Sans Text', system-ui, -apple-system, sans-serif;
+
+  --text-display-lg: 57px;
+  --text-display-md: 45px;
+  --text-display-sm: 36px;
+  --text-headline-lg: 32px;
+  --text-headline-md: 28px;
+  --text-headline-sm: 24px;
+  --text-title-lg: 22px;
+  --text-title-md: 16px;
+  --text-title-sm: 14px;
+  --text-body-lg: 16px;
+  --text-body-md: 14px;
+  --text-body-sm: 12px;
+  --text-label-lg: 14px;
+  --text-label-md: 12px;
+  --text-label-sm: 11px;
+}
+
+:root {
+  /* Material 3 Expressive (Seed: #D3F36A) - Light Mode */
+  --color-primary: #526600;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #d0ef67;
+  --color-on-primary-container: #171e00;
+  --color-secondary: #5b6146;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #e0e6c4;
+  --color-on-secondary-container: #191e08;
+  --color-tertiary: #3a665e;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #bcece1;
+  --color-on-tertiary-container: #00201b;
+  --color-surface: #fdfcfa;
+  --color-surface-dim: #dadbd1;
+  --color-surface-bright: #fdfcfa;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f7f6f2;
+  --color-surface-container: #f1f1ec;
+  --color-surface-container-high: #ebebe6;
+  --color-surface-container-highest: #e5e5e0;
+  --color-on-surface: #1b1c17;
+  --color-on-surface-variant: #46483c;
+  --color-outline: #76786b;
+  --color-outline-variant: #c7c8b8;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-inverse-surface: #30312b;
+  --color-inverse-on-surface: #f3f1e9;
+  --color-inverse-primary: #b4d34e;
+
+  /* Custom Cursor dot size — matches the theme toggle button (h-10 w-10) */
+  --cursor-size: 2.5rem;
+
+  /* Half-width of the skeleton reveal wave's travel beyond the viewport edge */
+  --skeleton-wave-span: 40vw;
+}
+
+.dark {
+  /* Material 3 Expressive (Seed: #D3F36A) - Dark Mode */
+  --color-primary: #b4d34e;
+  --color-on-primary: #293500;
+  --color-primary-container: #3d4d00;
+  --color-on-primary-container: #d0ef67;
+  --color-secondary: #c4caa9;
+  --color-on-secondary: #2d331b;
+  --color-secondary-container: #444930;
+  --color-on-secondary-container: #e0e6c4;
+  --color-tertiary: #a1d0c5;
+  --color-on-tertiary: #053730;
+  --color-tertiary-container: #214e46;
+  --color-on-tertiary-container: #bcece1;
+  --color-surface: #1b1c17;
+  --color-surface-dim: #131410;
+  --color-surface-bright: #3a3a35;
+  --color-surface-container-lowest: #0e0f0b;
+  --color-surface-container-low: #1b1c17;
+  --color-surface-container: #1f201b;
+  --color-surface-container-high: #2a2a25;
+  --color-surface-container-highest: #353530;
+  --color-on-surface: #e4e3da;
+  --color-on-surface-variant: #c7c8b8;
+  --color-outline: #909283;
+  --color-outline-variant: #46483c;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-inverse-surface: #e4e3da;
+  --color-inverse-on-surface: #30312b;
+  --color-inverse-primary: #526600;
+}
 
 html,
 body {
   -ms-scroll-chaining: none;
   overscroll-behavior: none;
+  font-family:
+    'Google Sans Flex',
+    'Google Sans Text',
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
-/* * {
-  cursor: none !important;
-} */
-
-@layer base {
-  .layout {
-    @apply ml-auto mr-auto w-[90%] max-w-[68.75rem] 2xl:max-w-[80rem];
-  }
-
-  .grid-12 {
-    @apply grid w-full grid-cols-12;
-  }
-}
-
-@layer components {
-  .nav-height {
-    height: clamp(5.875rem, 0.0294rem + 7.7941vw, 7rem);
+@utility layout {
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  max-width: 68.75rem;
+  @media (min-width: 1536px) {
+    max-width: 80rem;
   }
 }
 
-@layer utilities {
-  .mask-top {
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      #000000 0%,
+@utility grid-12 {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+@utility nav-height {
+  height: clamp(5.875rem, 0.0294rem + 7.7941vw, 7rem);
+}
+
+@utility mask-top {
+  -webkit-mask-image: linear-gradient(to bottom, #000000 0%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000000 0%, transparent 100%);
+}
+
+@utility mask-bottom {
+  -webkit-mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
+  mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
+}
+
+/* M3 Expressive loading placeholder (mirrors the reference m3e-skeleton
+   defaults): a surface base carrying an on-surface tint, swept by an
+   on-surface reveal wave. The wave is viewport-anchored via
+   background-attachment: fixed, so every skeleton on screen is lit by one
+   sweep instead of each block restarting its own. Browsers that ignore fixed
+   backgrounds (iOS Safari) fall back to a per-block sweep. */
+@utility skeleton {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: color-mix(
+    in srgb,
+    var(--color-on-surface) 8%,
+    var(--color-surface)
+  );
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 35%,
+      var(--color-on-surface) 50%,
+      transparent 65%,
       transparent 100%
     );
-    mask-image: linear-gradient(to bottom, #000000 0%, transparent 100%);
+    background-attachment: fixed;
+    background-size: calc(100vw + var(--skeleton-wave-span) * 2) 100%;
+    background-position-x: calc(-1 * var(--skeleton-wave-span));
+    opacity: 0.06;
+    animation: skeleton-wave 2100ms linear infinite;
   }
 
-  .mask-bottom {
-    -webkit-mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
-    mask-image: linear-gradient(to top, #000000 0%, transparent 100%);
-  }
-
-  .menu-link {
-    @apply relative py-px;
-  }
-
-  .menu-link:before,
-  .menu-link:after {
-    @apply absolute -bottom-[2px] h-[2px] w-[0%];
-    content: '';
-  }
-
-  .menu-link:before {
-    @apply left-0;
-  }
-
-  .menu-link:after {
-    @apply right-0 bg-custom-green dark:md:bg-custom-black;
-    transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
-  }
-
-  .menu-link:hover:before {
-    @apply w-full bg-custom-green dark:md:bg-custom-black;
-    transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
-  }
-
-  .menu-link:hover:after {
-    @apply w-full bg-transparent;
-    transition: 0s;
-  }
-
-  /* Loading UI */
-
-  .loader,
-  .loader::before,
-  .loader::after {
-    @apply animate-[spin_2s_linear_infinite] rounded-xl border-2;
-  }
-
-  .loader {
-    @apply relative flex items-center justify-center border-custom-black dark:border-custom-white-2;
-  }
-
-  .loader::before,
-  .loader::after {
-    @apply absolute;
-    content: '';
-  }
-
-  .loader::before {
-    @apply h-[110%] w-[110%] border-custom-green dark:border-custom-black;
-    -webkit-animation-delay: 0.5s;
-    animation-delay: 0.5s;
-  }
-
-  .loader::after {
-    @apply h-[120%] w-[120%] border-custom-black dark:border-custom-green;
-    -webkit-animation-delay: 0.1s;
-    animation-delay: 0.1s;
-  }
-
-  /* Scroll-bar */
-
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  ::-webkit-scrollbar {
-    display: none;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  /* Custom Cursor */
-
-  .cursor {
-    @apply pointer-events-none fixed left-1 top-1 z-[1350] h-6 w-6 rounded-full bg-custom-white-2 mix-blend-difference dark:bg-custom-green;
-  }
-  @media screen and (max-width: 768px) {
-    .cursor {
-      @apply h-0 w-0;
+  /* Vestibular safety: drop the wave outright rather than let the global
+     reduced-motion rule spin an infinite animation at 0.01ms per cycle. */
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
     }
+  }
+
+  @media (forced-colors: active) {
+    background-color: GrayText;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@keyframes skeleton-wave {
+  from {
+    background-position-x: calc(-1 * var(--skeleton-wave-span));
+  }
+  to {
+    background-position-x: calc(100vw + var(--skeleton-wave-span));
+  }
+}
+
+/* Scroll-bar */
+::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Cursor (Robbie Tilton Model + M3 Expressive) */
+@media (pointer: fine) {
+  *,
+  html,
+  body {
+    cursor: none !important;
+  }
+}
+
+.cursor {
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1350;
+  height: var(--cursor-size);
+  width: var(--cursor-size);
+  border-radius: 9999px;
+  background-color: var(--color-surface);
+  mix-blend-mode: difference;
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+
+.dark .cursor {
+  background-color: var(--color-primary);
+}
+
+/* Magnetic Parallax for interactive elements (Independent CSS translate property).
+   This rule is unlayered, so it beats Tailwind's layered translate-* utilities.
+   Elements that need their own translate (e.g. the scroll-top FAB sliding out of
+   view) opt out with data-no-magnetic. */
+a:not([data-no-magnetic]),
+button:not([data-no-magnetic]),
+[role='button']:not([data-no-magnetic]),
+.magnetic-item:not([data-no-magnetic]) {
+  translate: var(--parallax-x, 0px) var(--parallax-y, 0px);
+  will-change: translate;
+  transition: translate 0.35s cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (pointer: coarse), screen and (max-width: 768px) {
+  .cursor {
+    display: none !important;
+  }
+  a:not([data-no-magnetic]),
+  button:not([data-no-magnetic]),
+  [role='button']:not([data-no-magnetic]),
+  .magnetic-item:not([data-no-magnetic]) {
+    translate: none !important;
   }
 }
