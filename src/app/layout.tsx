@@ -1,4 +1,4 @@
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from '@vercel/analytics/next';
 import clsx from 'clsx';
 
 import Layout from '@components/layout/layout-wrapper';
