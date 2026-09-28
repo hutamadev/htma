@@ -111,7 +111,7 @@ export default function RootLayout({ children }: Readonly<IRootLayoutProps>) {
         <ThemeProvider
           attribute='class'
           storageKey='htma-theme'
-          defaultTheme='light'
+          defaultTheme='dark'
         >
           <Layout>{children}</Layout>
         </ThemeProvider>
