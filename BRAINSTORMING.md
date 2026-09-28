@@ -1,4 +1,4 @@
-# BRAINSTORMING — Portfolio Website Update (htma.site)
+# BRAINSTORMING — Portfolio Website Update (htma.my.id)
 
 > **Branch:** `feat/portfolio-update`
 > **Tanggal:** 2026-08-30
@@ -776,7 +776,7 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
   - Active/pressed: `active:scale-[0.98]`.
   - Kursor menyusut fluid & magnetic parallax via `.magnetic-item` (sudah aktif dari Slice 2.3).
 - **Grid diperbaiki:** `md:grid-cols-2` + auto rows (tinggi ikut konten) menggantikan bento span hardcoded yang membuat card terhimpit/tidak proporsional. Card index 0 memakai `md:col-span-2` sebagai featured. Semua thumbnail konsisten rasio `16/9`.
-- **Copywriting deskripsi:** field `description` ditambahkan ke `IPortfolio` + `portfolio-data.ts`, berisi 1 kalimat per project sesuai konten card-nya (Garuda Universe, Ibrahim Law, Urban Fashion Shop, Taskify, Crypto Price Watcher, Url Shortfly, Todolist App).
+- **Copywriting deskripsi:** field `description` ditambahkan ke `IPortfolio` + `portfolio-data.ts`, berisi 1 kalimat per project sesuai konten card-nya (Garuda Universe, Ibrahim Law, Urban Fashion Shop, Taskify, Crypto Price Watcher, Url Shortfly, Todolist App — plus Visionary dan Wedding Invitation sejak Session 14).
 - GitHub link di bawah → teks `on-surface-variant`, link `primary`.
 - Border separator → `border-outline-variant`.
 - Click → modal behavior
@@ -1390,7 +1390,7 @@ Setiap fase dipandu oleh **Lead Skill** dari _Agent Skills Suite_ dan dieksekusi
 **Temuan & catatan Phase 4:**
 
 - **`cursor-not-allowed` di tombol disabled tidak pernah aktif.** Rule global `@media (pointer: fine) { * { cursor: none !important } }` (DESIGN 12.11) selalu menang. Bukan bug — memang tabrakan dua spesifikasi DESIGN, dibiarkan apa adanya.
-- **`.env.local` tidak ada di lokal** sehingga `NEXT_PUBLIC_EMAILJS_*` `undefined` dan submit langsung jatuh ke toast "Something went wrong". Di produksi variabel diisi lewat environment platform.
+- **`.env.local` sudah ada di lokal (diisi user 2026-09-28)** — jalur kirim nyata terverifikasi Session 14 (POST EmailJS 200, toast sukses, form reset). Sebelumnya variabel `undefined` sehingga submit selalu jatuh ke toast "Something went wrong". Di produksi variabel diisi lewat environment platform.
 - **Jangan jalankan `bun run build` selagi `next dev` hidup.** Keduanya berbagi direktori `.next`; build sempat menghapus `_buildManifest.js` milik dev sampai server error `ENOENT` dan berhenti melayani form. Hentikan dev dulu.
 - **Bundle `/contact` = 121 kB (First Load 305 kB)** — kenaikan dari zod + react-hook-form + resolvers. Kandidat ditinjau lagi di Phase 5 bila Lighthouse Performance turun.
 
@@ -1417,7 +1417,13 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
   - **Perbaikan kualitas lain yang ikut terangkat:** `<Analytics/>` digate `process.env.VERCEL` (hilang 404 `/_vercel/insights/script.js` + 2 console error), `aria-label` kartu portfolio dihapus agar accessible name memuat teks terlihat (WCAG 2.5.3), anchor Demo modal hanya dirender saat `portfolioData.url` ada (sebelumnya `href` undefined = anchor tanpa href), typo `}` pada `alt` gambar modal dibetulkan.
   - **Pitfall lingkungan audit:** Helium (CachyOS) membawa **uBOL prainstal** → Lighthouse via `CHROME_PATH` tercemar (dokumen `/` termuat **2×**, body kedua 667 byte; `redirects` melaporkan 3.2–4.8 s palsu; `unminified-javascript` menunjuk `chrome-extension://…`). `--disable-extensions` tidak mematikannya. Audit bersih = Chromium tanpa extension + `bunx lighthouse --port=<cdp-port>`.
   - **Lever yang sengaja belum diambil** (target sudah lewat): hero masih client-gated; `image-delivery-insight` 190 KiB (thumbnail portfolio 600×600 untuk slot ~212 px); `legacy-javascript` 14 KiB & `unused-javascript` 116–131 KiB dari chunk framework; `render-blocking` 140–180 ms dari `@import` Google Fonts di `globals.css`.
-- **Slice 5.3 — Cross-Browser & Final Build**: Final `bun run build` & `bun run lint` zero errors/warnings + verifikasi runtime & cross-browser. **Status: mayoritas selesai (Session 13).**
+  - **Slice 5.3 — Cross-Browser & Final Build**: Final `bun run build` & `bun run lint` zero errors/warnings + verifikasi runtime & cross-browser. **Status: mayoritas selesai (Session 13).**
+  - **Session 14 (2026-09-28) — perubahan user di luar slice:**
+    - Portfolio 7 → **9 item**: `08 Visionary` (agency site Material You 3 + 3D globe, demo `visionary-material-you.vercel.app`, repo `hutamadev/visionary-material-you`) dan `09 Wedding Invitation` (undangan dark editorial Elena & Julian + RSVP/guestbook, demo `wedding-invitation-web-pink.vercel.app`, repo `hutamadev/wedding-invitation-web`). Thumbnail webp baru 1280×720 dari screenshot Chromium asli (sharp q82, crop 16/9). Penempatan append di akhir supaya `md:col-span-2` kartu pertama tidak berubah.
+    - URL demo direfresh: Garuda `garudaverse.tech/` → `garuda-universe.vercel.app/`; Urban `urban-fashion.htma.my.id/` → `urban-fashion-shop.vercel.app/` (ketiganya HTTP 200 terverifikasi).
+    - Default tema `light` → **`dark`** (`src/app/layout.tsx:114`); visitor baru dapat dark, preferensi tersimpan user lama tidak terganggu.
+    - Commit: `319e482` (portfolio + URL), `3ec957e` (dark default). Verifikasi: typechecks/lint/prettier lulus, e2e form 18/18, cek grid/modal portfolio 9/9 di Chromium.
+    - Domain update (`htma.site` → `htma.my.id`): metadata base, author url, OpenGraph, JSON-LD, sitemap, robots, dan open graph image badge disinkronkan ke domain baru `htma.my.id`.
   - **✅ Selesai di Session 13:**
     - Gerbang verifikasi urut `format:check` → `lint:strict` → `typechecks` → `build` — semuanya lulus, build **10/10 static pages** (`/` First Load 199 kB, `/contact` 311 kB). Server dev/prod dimatikan lebih dulu (aturan Session 7: `.next` dipakai bersama).
     - Verifikasi runtime tanpa browser (`next start` + `curl`): `/` 200 dengan HTML 95.980 byte berisi konten nyata dan hanya 6 kemunculan `skeleton` (hero) — jalur SSR hasil Slice 5.2 utuh; kelima security header tampil; JSON-LD `Person` + `WebSite`; `/contact` ber-canonical benar; `/robots.txt`, `/sitemap.xml`, `/manifest.webmanifest`, `/opengraph-image` semua 200; path tak dikenal → 404.
@@ -1429,7 +1435,7 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
     - **PinchTab audit** (`pinchtab audit --json`, versi 0.15.2): `/` TTFB 31.8 ms, LCP 1488 ms, CLS 0.000008, 42 request nol gagal; `/contact` TTFB 27.7 ms, LCP 2148 ms, 20 request nol gagal; screenshot di `/tmp/audit-home` dan `/tmp/audit-contact`. Field `summaryScore` = rata-rata skor aksesibilitas, **bukan** skala Lighthouse — jangan disamakan dengan Accessibility 100.
   - **⏳ Belum tuntas:**
     - **Cross-browser non-Chromium: known-unverified** (keputusan user, tanpa unduhan tambahan). Alasan: Chromium satu-satunya engine di mesin; Firefox tidak membuktikan kasus `background-attachment: fixed` milik iOS Safari, dan WebKit Linux Playwright pun bukan iOS Safari.
-    - `.env.local` tidak ada → jalur EmailJS nyata belum terverifikasi; id dummy dipakai saat uji dan build akhir sudah direbuild bersih.
+    - ✅ `.env.local` sudah ada → jalur EmailJS nyata **terverifikasi Session 14** (dev + Chromium CDP: POST 200, toast sukses, reset, 0 error). Uji stub 18/18 dengan id dummy tetap valid untuk jalur validasi.
     - **Rujukan lama ke skill `lighthouse-audit-local` tidak berlaku** (skill itu tidak ada). Penggantinya: skill global **`local-browser-verification`** + skrip milik project di `scripts/` (`bun run verify:form`, `bun run audit:lighthouse`, didokumentasikan di `scripts/README.md`).
     - Branch `feat/portfolio-update` sekarang **ahead dari origin** (2 commit lokal Session 13) dan **belum di-push**; user memutuskan **tanpa PR**.
 

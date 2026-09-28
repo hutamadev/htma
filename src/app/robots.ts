@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://htma.site/sitemap.xml',
+    sitemap: 'https://htma.my.id/sitemap.xml',
   };
 }

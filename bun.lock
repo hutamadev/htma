@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "htma.site",
+      "name": "htma.my.id",
       "dependencies": {
         "@emailjs/browser": "^4.4.1",
         "@hookform/resolvers": "5.9.1",

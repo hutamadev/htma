@@ -1,6 +1,6 @@
-# MEMORY — Portfolio Website Update (htma.site)
+# MEMORY — Portfolio Website Update (htma.my.id)
 
-> **Last Updated:** 2026-09-23
+> **Last Updated:** 2026-09-28
 > **Project:** `/home/hutamatr/git-repo(hutamadev)/htma`
 > **Branch Aktif:** `feat/portfolio-update` (dibuat dari `main`)
 
@@ -269,7 +269,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Bug ditemukan**: `<button>` punya `text-align: center` bawaan UA stylesheet → judul/deskripsi jadi center. Diperbaiki dengan `text-left`.
    - **Grid diperbaiki**: `md:grid-rows-[10]` (CSS invalid, baris pertama jadi 10px) + bento span hardcoded membuat card terhimpit (gambar 55px, teks 5 baris) → diganti `md:grid-cols-2` + auto rows, card index 0 `md:col-span-2`.
    - **Modal** → M3 Basic Dialog: elemen native `<dialog open inert>` (lolos rule `jsx-a11y(prefer-tag-over-role)`), radius 28px, scrim `bg-on-surface/32`, tombol Demo `bg-primary` / Repository `bg-secondary-container`, close button `h-11 w-11 rounded-full`.
-   - **Copywriting**: field `description` ditambahkan ke `IPortfolio` (`types.d.ts`) + `portfolio-data.ts` untuk 7 project.
+   - **Copywriting**: field `description` ditambahkan ke `IPortfolio` (`types.d.ts`) + `portfolio-data.ts` untuk 7 project (9 sejak Session 14: + Visionary, Wedding Invitation).
    - **Cleanup**: `src/components/ui/svg/ArrowSVG.tsx` dihapus (tidak ada caller setelah bottom-bar card lama diganti).
    - **Verifikasi**: `lint` ✅ `typechecks` ✅ `format:check` ✅ `build` 9/9 ✅, plus verifikasi runtime via CDP (resting/hover/pressed, modal open/close, cursor merge).
 7. **Ukuran Custom Cursor 24px → 40px**:
@@ -466,7 +466,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
     - Placeholder memakai `LoadingSkeleton` (utility `.skeleton` yang sudah ada) dengan **geometri hasil ukur DOM, bukan tebakan**: field 58 px (`h-[3.625rem]`), textarea 161 px (`h-[10.0625rem]`), tombol 45 px (`h-[2.8125rem]`), gap 16 px → total form 370 px pada `md` ke atas. Placeholder pertama gua salah 7 px (textarea) dan 1 px (tombol), dan itu memang muncul sebagai CLS desktop 0.002; setelah dikoreksi jadi 0.001 — sama dengan `/` yang tidak punya placeholder, jadi sisa 0.001 itu pre-existing, bukan dari swap.
     - **Hasil terukur**: bundle `/contact` **121 kB → 12.1 kB** (First Load **311 kB → 202 kB**), chunk di HTML turun 16 → 14, chunk form **tidak** lagi di-preload. n=5 median di host idle: **`/` 95** (TBT 245 → **179 ms**) dan **`/contact` 92** (TBT 433 → **299 ms**), LCP 2.4/2.2 s, **CLS 0** di kedua halaman mobile — keduanya lolos gerbang 90. Desktop tetap **100/100/100/100** (LCP 0.6 s), CLS 0.001/0.001.
     - **Verifikasi ulang setelah split**: gate `format`/`lint:strict`/`typechecks`/`build` lulus (10/10 static pages), form e2e **18/18 PASS** di build ber-split (dijalankan ulang, bukan diwarisi), dan build akhir sudah direbuild bersih tanpa env dummy (0 string `dummy_service` di chunk).
-    - Sisa TBT setelah split didominasi `react-dom` (`c2d8dfc9e40000eb.js`, ~1.3 s scripting di bawah throttle 4×), bukan kode kita — itu batas framework, bukan regresi section.
+17. **Session 14 (2026-09-28) — Penambahan Portfolio, Theme Default, Verifikasi Email, & Domain Update**:
+    - **Portfolio update**: 7 → 9 item (+ `08 Visionary`, + `09 Wedding Invitation`) di `src/utils/portfolio-data.ts`. Thumbnail webp responsif 1280×720 dari screenshot asli Chromium. URL demo Garuda diperbarui ke `https://garuda-universe.vercel.app/`, Urban Fashion Shop ke `https://urban-fashion-shop.vercel.app/`.
+    - **Default theme**: `src/app/layout.tsx` diubah dari `defaultTheme='light'` ke `'dark'`.
+    - **Email test nyata**: `.env.local` diisi user. Pengujian submit via Chromium CDP langsung ke `api.emailjs.com/api/v1.0/email/send` berhasil (HTTP 200, toast `Message sent successfully`, form ter-reset, 0 error).
+    - **Domain update (`htma.site` → `htma.my.id`)**: metadata base, author url, OpenGraph url, JSON-LD schema (Person & WebSite), sitemap (`baseUrl`), robots (`sitemap` URL), dynamic OpenGraph badge text, serta `package.json` dan `bun.lock` disinkronkan ke `htma.my.id`.
 
 ---
 
@@ -517,7 +521,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - ✅ **Gerbang perf mobile 90+ TUNTAS**: n=5 median di host idle — `/` **95** (TBT 179 ms), `/contact` **92** (TBT 299 ms), LCP 2.4/2.2 s, CLS 0. Desktop `/` & `/contact` **100/100/100/100**. Dicapai setelah form kontak di-code-split (First Load `/contact` 311 → 202 kB; detail + bukti di Session 13 poin 16).
      - ✅ **Form kontak e2e diverifikasi ulang setelah split: 18/18** di Chromium asli.
      - ⚠️ **Cross-browser dicatat known-unverified** atas keputusan user: mesin hanya punya Chromium, dan engine lain tidak bisa membuktikan kasus `background-attachment: fixed` milik iOS Safari.
-     - ⚠️ `.env.local` tidak ada → jalur EmailJS nyata tetap belum terverifikasi; validasi klien sudah, dengan id dummy yang di-inline saat uji (build akhir sudah direbuild bersih).
+     - ⚠️ `.env.local` sudah ada (diisi user Session 14) → jalur EmailJS nyata **terverifikasi** (dev + Chromium CDP: POST 200, toast sukses, reset, 0 error). Uji stub 18/18 dengan id dummy tetap valid untuk jalur validasi.
      - Catatan: rujukan lama ke skill **`lighthouse-audit-local` tidak berlaku** (skill itu tidak pernah ada). Penggantinya: skill global **`local-browser-verification`**, plus skrip milik project `bun run verify:form` dan `bun run audit:lighthouse`.
      - Branch `feat/portfolio-update` punya commit lokal baru di atas `origin` (dependency `use-sync-external-store` + dokumen) — **belum di-push**, dan user memutuskan **tanpa PR**: push/merge diserahkan ke keputusan sendiri nanti.
 
@@ -554,7 +558,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **Form kontak di-load lewat `dynamic(..., { ssr: false })`** (`src/modules/contact-page/contact-form-lazy.tsx`): zod + react-hook-form + emailjs (~113 KiB) sengaja dikeluarkan dari jalur kritis `/contact`. Jangan diganti kembali jadi import statis tanpa mengukur ulang — import statis itulah yang menahan `/contact` mobile di 88 (target 90). Kalau mengubah placeholder, **ukur dulu** tinggi form aslinya di DOM (58 px field, 161 px textarea, 45 px tombol) karena selisih beberapa piksel muncul sebagai CLS desktop.
 - **Variansi Lighthouse di mesin ini besar** (mobile perf 69–93 untuk kode yang sama) karena agent sendiri memakan ~40% CPU di WSL 4 GB. Satu-satunya angka yang boleh dipakai untuk keputusan adalah **median n=5 di host idle** (`/tmp/lh-median.sh`); angka yang diukur sambil agent bekerja bisa meleset 5–10 poin ke bawah.
 - Verifikasi tanpa browser yang tetap berguna: `bun run start` + `curl` (SSR HTML, security header, title/canonical, rute metadata, status 404) dan `bun run` skrip ad-hoc untuk kontrak Zod di `src/utils/contact-schema.ts`.
-- `.env.local` belum ada di lokal; untuk uji submit, isi `NEXT_PUBLIC_EMAILJS_SERVICE_ID` / `_TEMPLATE_ID` / `_PUBLIC_KEY` (lihat `.env.example`) atau stub request ke `api.emailjs.com` lewat request interception supaya tidak mengirim email nyata.
+- `.env.local` sudah ada di lokal (diisi user Session 14); untuk uji ulang submit, pakai kredensial itu langsung — tidak perlu dummy lagi. Stub request ke `api.emailjs.com` tetap berguna kalau tidak mau mengirim email nyata.
 - **Indikator loading (Session 8)**: `src/components/ui/loading-spin.tsx` (render loop canvas) + `src/components/ui/loading-spin-shapes.ts` (7 bentuk M3, semua di-resample ke ray & jumlah titik yang sama). Canvas **bukan pilihan gaya**: morph M3 me-lerp titik searah, dan interpolasi `d` CSS tidak bisa karena outline beda jumlah cubic + beda titik awal. Jangan disederhanakan jadi CSS/SVG; kalau diubah, patuhi spec — morph **650ms**, rotasi **50deg/bentuk** + settle **90deg** (stiffness 200, ratio 0.6), box **48dp** dengan bentuk **38dp**.
 - Warna indikator dibaca dari `--color-primary` via computed style lalu dibaca ulang saat tema ditukar (`MutationObserver`). Sudah diverifikasi: light `#526600`, dark `#b4d34e`, termasuk ketika kelas `dark` ditukar selagi canvas hidup.
 - `global-error.tsx` **self-contained by necessity**: Next.js tidak memuat stylesheet app ke root error boundary, jadi utility Tailwind maupun `--color-*` tidak tersedia. Gaya ditulis inline di `globalErrorStyles` dan keyed ke `prefers-color-scheme`. Jangan dialihkan ke utility — hasilnya tak bergaya.

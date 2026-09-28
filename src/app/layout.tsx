@@ -10,7 +10,7 @@ import { ThemeProvider } from '@utils/theme-provider';
 import '@styles/globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://htma.site'),
+  metadataBase: new URL('https://htma.my.id'),
   title: {
     default: 'Hutama — Web Developer',
     template: '%s | Hutama — Web Developer',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     'Personal portfolio of Hutama, a Web Developer crafting high-performance, modern web applications with React, Next.js, and TypeScript.',
   applicationName: 'Hutama Portfolio',
-  authors: [{ name: 'Hutama', url: 'https://htma.site' }],
+  authors: [{ name: 'Hutama', url: 'https://htma.my.id' }],
   creator: 'Hutama',
   keywords: [
     'Hutama',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://htma.site',
+    url: 'https://htma.my.id',
     title: 'Hutama — Web Developer',
     description:
       'Personal portfolio of Hutama, a Web Developer crafting high-performance, modern web applications with React, Next.js, and TypeScript.',
@@ -69,21 +69,21 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Person',
-      '@id': 'https://htma.site/#person',
+      '@id': 'https://htma.my.id/#person',
       name: 'Hutama',
-      url: 'https://htma.site',
+      url: 'https://htma.my.id',
       jobTitle: 'Web Developer',
       sameAs: ['https://github.com/hutamadev'],
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://htma.site/#website',
-      url: 'https://htma.site',
+      '@id': 'https://htma.my.id/#website',
+      url: 'https://htma.my.id',
       name: 'Hutama — Web Developer Portfolio',
       description:
         'Personal portfolio of Hutama, a Web Developer crafting high-performance, modern web applications with React, Next.js, and TypeScript.',
       publisher: {
-        '@id': 'https://htma.site/#person',
+        '@id': 'https://htma.my.id/#person',
       },
     },
   ],

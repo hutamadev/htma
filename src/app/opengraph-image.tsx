@@ -35,7 +35,7 @@ export default function Image() {
             fontWeight: 600,
           }}
         >
-          htma.site
+          htma.my.id
         </div>
       </div>
 
