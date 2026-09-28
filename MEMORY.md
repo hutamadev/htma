@@ -476,18 +476,11 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` — **punya commit lokal yang belum di-push** (2 commit Session 13: `0d1969b` dependency, `bc05e4f` dokumen; plus commit dokumen 5.3 menyusul). Sebelum Session 13 branch ini sinkron penuh dengan origin (`0 0`); sekarang **ahead**. Push **tidak** dilakukan — user memutuskan tanpa PR dan menyerahkan push/merge ke keputusan sendiri.
+- **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (telah di-push pada 2026-09-28 mencakup Session 13 & 14).
 - **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`); `main` (di `5c96a1a`) sudah menerima PR #1 dari branch itu.
-- **Working tree:** bersih kecuali perubahan dokumen sesi ini (`MEMORY.md`, `BRAINSTORMING.md`, `DESIGN.md`). Dependency `use-sync-external-store` **sudah di-commit**, bukan lagi menggantung.
-- **Commit Octopus terakhir:** `bc05e4f` (docs Session 13 tahap 1); kode terakhir `d97e616` (perf SSR home + perbaikan audit).
-- **Build aktif di `.next`:** build bersih TANPA env dummy (diverifikasi: tidak ada string `dummy_service` di chunk). Server produksi sedang hidup di `127.0.0.1:3000` untuk keperluan protokol ukur `/tmp/lh-median.sh`.
-
-### File belum di-commit
-
-```
- M MEMORY.md
- M BRAINSTORMING.md
-```
+- **Working tree:** bersih.
+- **Commit terakhir:** `8e69c7f` (`feat(seo): update domain from htma.site to htma.my.id and sync docs`).
+- **Build aktif di `.next`:** build bersih (10/10 static pages).
 
 ---
 
