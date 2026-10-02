@@ -137,7 +137,7 @@ Tonal palette resmi di bawah di-generate langsung menggunakan `@material/materia
 | **Surface Container Lowest**  | `surface-container-lowest`  | `#FFFFFF` | Card background paling terang               |
 | **Surface Container Low**     | `surface-container-low`     | `#F7F6F2` | Low elevation container                     |
 | **Surface Container**         | `surface-container`         | `#F1F1EC` | Default card/container bg                   |
-| **Surface Container High**    | `surface-container-high`    | `#EBEBE6` | Elevated card, modal bg                     |
+| **Surface Container High**    | `surface-container-high`    | `#EBEBE6` | Elevated card, portfolio card hover         |
 | **Surface Container Highest** | `surface-container-highest` | `#E5E5E0` | Highest elevation (nav rail bg)             |
 | **On Surface**                | `on-surface`                | `#1B1C17` | Teks utama body                             |
 | **On Surface Variant**        | `on-surface-variant`        | `#46483C` | Teks secondary, subtitle, caption           |
@@ -292,15 +292,15 @@ M3 Expressive memperluas type scale dengan emphasis pada **kontras ukuran** yang
 
 M3 Expressive memperkenalkan **35 shape baru** dan memperluas skala shape. Untuk web (CSS), kita fokus pada rounded corner scale:
 
-| Shape Token | Radius | Tailwind Class                          | Penggunaan                     |
-| ----------- | ------ | --------------------------------------- | ------------------------------ |
-| None        | 0px    | `rounded-none`                          | Flat edges                     |
-| Extra Small | 4px    | `rounded-xs` (custom)                   | Small chips, badges            |
-| Small       | 8px    | `rounded-sm` atau `rounded-lg`          | Input fields, small cards      |
-| Medium      | 12px   | `rounded-xl`                            | Buttons, medium cards          |
-| Large       | 16px   | `rounded-2xl`                           | Cards, containers              |
-| Extra Large | 28px   | `rounded-3xl` (custom `rounded-[28px]`) | Modal, dialog, prominent cards |
-| Full        | 9999px | `rounded-full`                          | FAB, pills, avatar, chips      |
+| Shape Token | Radius | Tailwind Class                          | Penggunaan                                        |
+| ----------- | ------ | --------------------------------------- | ------------------------------------------------- |
+| None        | 0px    | `rounded-none`                          | Flat edges                                        |
+| Extra Small | 4px    | `rounded-xs` (custom)                   | Small chips, badges                               |
+| Small       | 8px    | `rounded-sm` atau `rounded-lg`          | Input fields, small cards                         |
+| Medium      | 12px   | `rounded-xl`                            | Buttons, medium cards                             |
+| Large       | 16px   | `rounded-2xl`                           | Cards, containers                                 |
+| Extra Large | 28px   | `rounded-3xl` (custom `rounded-[28px]`) | Bottom sheet top corners, dialog, prominent cards |
+| Full        | 9999px | `rounded-full`                          | FAB, pills, avatar, chips                         |
 
 ### 6.2 M3 Expressive Shape Morphing (CSS Implementation)
 
@@ -326,19 +326,19 @@ Shape morphing = border-radius berubah saat interaksi. Implementasi CSS:
 
 ### 6.3 Shape Usage di Portfolio
 
-| Elemen                    | Current            | M3 Expressive                                                       |
-| ------------------------- | ------------------ | ------------------------------------------------------------------- |
-| Navigation logo           | `rounded` (4px)    | `rounded-xl` (12px)                                                 |
-| Portfolio card            | `rounded` (4px)    | `rounded-[24px]`, hover: `rounded-[28px]`, active: `rounded-[16px]` |
-| Modal dialog              | Unknown            | `rounded-[28px]` (Extra Large)                                      |
-| Social button             | `rounded-3xl`      | `rounded-full` (pill)                                               |
-| Skill icon container      | `rounded-sm` (2px) | `rounded-xl` (12px)                                                 |
-| Input fields              | Border-bottom only | `rounded-t-xs` (4px top) filled style                               |
-| Send button               | `rounded` (4px)    | `rounded-full` (pill)                                               |
-| Scroll-to-top             | `rounded` (4px)    | `rounded-xl` (12px)                                                 |
-| Active sidebar link       | `rounded` (4px)    | `rounded-full` (pill)                                               |
-| Sidebar rail (desktop)    | `rounded-t-full`   | `rounded-t-[28px]` (Extra Large top)                                |
-| Highlighted name "Hutama" | `rounded` (4px)    | `rounded-lg` (8px)                                                  |
+| Elemen                    | Current             | M3 Expressive                                                                                 |
+| ------------------------- | ------------------- | --------------------------------------------------------------------------------------------- |
+| Navigation logo           | `rounded` (4px)     | `rounded-xl` (12px)                                                                           |
+| Portfolio card            | `rounded` (4px)     | `rounded-[24px]`, hover: `rounded-[28px]`, active: `rounded-[16px]`                           |
+| Bottom sheet (portfolio)  | `rounded-xl` (28px) | `rounded-t-xl` 28px atas / 0 bawah; `lg:rounded-xl` 28px semua sudut saat center (Session 15) |
+| Social button             | `rounded-3xl`       | `rounded-full` (pill)                                                                         |
+| Skill icon container      | `rounded-sm` (2px)  | `rounded-xl` (12px)                                                                           |
+| Input fields              | Border-bottom only  | `rounded-t-xs` (4px top) filled style                                                         |
+| Send button               | `rounded` (4px)     | `rounded-full` (pill)                                                                         |
+| Scroll-to-top             | `rounded` (4px)     | `rounded-xl` (12px)                                                                           |
+| Active sidebar link       | `rounded` (4px)     | `rounded-full` (pill)                                                                         |
+| Sidebar rail (desktop)    | `rounded-t-full`    | `rounded-t-[28px]` (Extra Large top)                                                          |
+| Highlighted name "Hutama" | `rounded` (4px)     | `rounded-lg` (8px)                                                                            |
 
 ---
 
@@ -393,14 +393,14 @@ Desktop: hero name → text-display-md/lg (45px-57px)
 Semua breakpoint mengikuti **default Tailwind CSS v4** apa adanya — proyek tidak
 mendefinisikan `--breakpoint-*` di `@theme`, jadi tidak ada breakpoint kustom.
 
-| Prefix  | Minimum width  | CSS                       | Dipakai di proyek untuk             |
-| ------- | -------------- | ------------------------- | ----------------------------------- |
-| (tanpa) | 0              | —                         | Mobile — nilai dasar (mobile-first) |
-| `sm`    | 40rem (640px)  | `@media (width >= 40rem)` | Kartu portfolio, skill icon         |
-| `md`    | 48rem (768px)  | `@media (width >= 48rem)` | Body copy, grid 2 kolom, navbar     |
-| `lg`    | 64rem (1024px) | `@media (width >= 64rem)` | Sidebar rail, modal 2 kolom, hero   |
-| `xl`    | 80rem (1280px) | `@media (width >= 80rem)` | (belum dipakai)                     |
-| `2xl`   | 96rem (1536px) | `@media (width >= 96rem)` | Hero display-lg, skill icon besar   |
+| Prefix  | Minimum width  | CSS                       | Dipakai di proyek untuk                         |
+| ------- | -------------- | ------------------------- | ----------------------------------------------- |
+| (tanpa) | 0              | —                         | Mobile — nilai dasar (mobile-first)             |
+| `sm`    | 40rem (640px)  | `@media (width >= 40rem)` | Kartu portfolio, skill icon                     |
+| `md`    | 48rem (768px)  | `@media (width >= 48rem)` | Body copy, grid 2 kolom, navbar                 |
+| `lg`    | 64rem (1024px) | `@media (width >= 64rem)` | Sidebar rail, hero (bottom sheet tetap 1 kolom) |
+| `xl`    | 80rem (1280px) | `@media (width >= 80rem)` | (belum dipakai)                                 |
+| `2xl`   | 96rem (1536px) | `@media (width >= 96rem)` | Hero display-lg, skill icon besar               |
 
 Sumber: `https://tailwindcss.com/docs/responsive-design` (Tailwind v4 docs, tabel
 "Breakpoint prefix / Minimum width"). Tailwind mobile-first: utility tanpa prefix
@@ -420,8 +420,8 @@ modal, dan body 404.
 | Body copy (5 tempat)  | `text-body-md md:text-body-lg`                               | 14px → 16px                 |
 | Kartu portfolio title | `text-title-md sm:text-title-lg`                             | 16px → 22px                 |
 | Kartu portfolio desc  | `text-body-sm sm:text-body-md`                               | 12px → 14px                 |
-| Modal title           | `text-4xl md:text-5xl`                                       | 36px → 48px                 |
-| Modal desc            | `text-body-md md:text-body-lg`                               | 14px → 16px                 |
+| Bottom sheet title    | `text-headline-sm md:text-headline-md`                       | 24px → 28px                 |
+| Bottom sheet desc     | `text-body-md md:text-body-lg`                               | 14px → 16px                 |
 | Footer icon           | `text-xl md:text-2xl`                                        | 20px → 24px                 |
 
 **Sengaja TIDAK scaling (dengan alasan):**
@@ -465,7 +465,7 @@ modal, dan body 404.
 | Portfolio card               | Background + shape           | `bg-surface-container rounded-[24px] overflow-hidden`                    |
 | Skills icon grid             | Background container         | `bg-surface-container rounded-xl p-2.5` per icon                         |
 | Hero badge "--web developer" | Background + shape           | `bg-primary-container rounded-lg px-3 py-1`                              |
-| Modal dialog                 | Elevation + shape + backdrop | `bg-surface-container-high rounded-xl (28px) shadow-2xl` + scrim         |
+| Bottom sheet (portfolio)     | Elevation + shape + backdrop | `bg-surface-container-low rounded-t-xl (28px top) shadow-2xl` + scrim    |
 | Contact form fields          | Filled container             | `bg-surface-container-highest rounded-t-xs border-b-2 border-outline`    |
 | Active sidebar link          | Background + pill shape      | `bg-primary-container rounded-full px-4`                                 |
 | Navigation bar               | Transparent (Session 6)      | `bg-transparent pointer-events-none` + logo/toggle `pointer-events-auto` |
@@ -541,15 +541,15 @@ export const m3Easing = {
 
 ### 9.4 Animation Usage di Portfolio
 
-| Elemen                   | Target Properti      | M3 Expressive Motion Token         | Implementasi                                  |
-| :----------------------- | :------------------- | :--------------------------------- | :-------------------------------------------- |
-| **Hero Title Reveal**    | y, opacity           | Spatial Default + Effect Default   | `m3Motion.spatial.default` + stagger          |
-| **Hero Images Reveal**   | scale, opacity       | Spatial Slow + Effect Slow         | `m3Motion.spatial.slow`                       |
-| **Page Wrapper Enter**   | y (transform only)   | Spatial Default, **tanpa opacity** | `m3Motion.spatial.default` + `duration: 0.7`  |
-| **Portfolio Card Hover** | scale, border-radius | Spatial Fast                       | `m3Motion.spatial.fast` (hover scale & morph) |
-| **Modal Open/Close**     | scale, opacity       | Spatial Default + Effect Default   | `m3Motion.spatial.default` + backdrop fade    |
-| **Theme Toggle**         | rotate, scale        | Spatial Fast                       | `m3Motion.spatial.fast`                       |
-| **Custom Cursor**        | x, y                 | Spring (High Stiffness)            | `damping: 30, stiffness: 700` (rAF throttle)  |
+| Elemen                      | Target Properti      | M3 Expressive Motion Token         | Implementasi                                                                            |
+| :-------------------------- | :------------------- | :--------------------------------- | :-------------------------------------------------------------------------------------- |
+| **Hero Title Reveal**       | y, opacity           | Spatial Default + Effect Default   | `m3Motion.spatial.default` + stagger                                                    |
+| **Hero Images Reveal**      | scale, opacity       | Spatial Slow + Effect Slow         | `m3Motion.spatial.slow`                                                                 |
+| **Page Wrapper Enter**      | y (transform only)   | Spatial Default, **tanpa opacity** | `m3Motion.spatial.default` + `duration: 0.7`                                            |
+| **Portfolio Card Hover**    | scale, border-radius | Spatial Fast                       | `m3Motion.spatial.fast` (hover scale & morph)                                           |
+| **Bottom Sheet Open/Close** | y, opacity           | Spatial Default + Effect Default   | `m3Motion.spatial.default` + **damping 53**; close = slide down (y 0→100%) + scrim fade |
+| **Theme Toggle**            | rotate, scale        | Spatial Fast                       | `m3Motion.spatial.fast`                                                                 |
+| **Custom Cursor**           | x, y                 | Spring (High Stiffness)            | `damping: 30, stiffness: 700` (rAF throttle)                                            |
 
 **Catatan penting (Slice 5.2 / Session 12):** entrance animation `PageWrapper` **tidak lagi
 menganimasikan opacity**. `motion` menulis gaya `initial` ke HTML SSR, dan `opacity: 0` di
@@ -557,6 +557,13 @@ elemen pembungkus membuat seluruh isi halaman tidak terpaint sampai hidrasi — 
 tertahan di ~4 s. Dengan animasi transform-only isi sudah terpaint di frame pertama
 (LCP `/` mobile 4.3 s → 2.7 s). Jangan kembalikan `opacity: 0` ke wrapper ini; kalau butuh
 fade, terapkan ke elemen di dalamnya yang bukan kandidat LCP.
+
+**Catatan penting (Session 15):** baris **Bottom Sheet Open/Close** memakai spring
+`m3Motion.spatial.default` dengan `damping: 53` (dampingRatio 1.0), **bukan** sample
+`damping: 16` (ratio 0.6) seperti baris lain. Overshoot ±9% pada translasi vertikal yang
+dipakukan ke tepi bawah viewport mengangkat sheet dari tepi bawah dan memunculkan
+kilasan halaman di belakangnya. Animasi berbasis `scale` (mis. kartu) tetap memakai nilai
+bouncy; yang dikunci hanya translasi edge-anchored.
 
 ---
 
@@ -576,13 +583,13 @@ M3 Expressive meniadakan ketergantungan pada layer opasitas elevasi numerik (+1 
 | **Surface Container Lowest**  | `bg-surface-container-lowest`  | Kontras paling rendah / permukaan paling murni  | Area kontras tinggi di light mode (misal inner card) |
 | **Surface Container Low**     | `bg-surface-container-low`     | Grouping subtle tanpa distraksi                 | Skill icon resting container                         |
 | **Surface Container**         | `bg-surface-container`         | **Default container** untuk komponen terisolasi | Portfolio card resting state, about card             |
-| **Surface Container High**    | `bg-surface-container-high`    | Container dengan hierarki lebih tinggi          | Portfolio card hover state, Modal Dialog             |
+| **Surface Container High**    | `bg-surface-container-high`    | Container dengan hierarki lebih tinggi          | Portfolio card hover state                           |
 | **Surface Container Highest** | `bg-surface-container-highest` | Hierarki permukaan tertinggi                    | Sidebar Navigation Rail, Filled Input background     |
 
 ### 10.2 Peran Bayangan (Shadow) di M3 Expressive
 
 - **Surface shift sebagai fondasi utama:** Perbedaan kedalaman dan grouping dicapai 90% melalui pergeseran token `surface-container`.
-- **Shadow murni sebagai aksen floating:** Box-shadow (`shadow-md`, `shadow-xl`) HANYA digunakan saat elemen benar-benar melayang di atas konten lain (_overlapping scrim_), seperti pada **Modal Dialog**, **Floating Action Button (FAB)**, atau saat kartu di-hover secara aktif.
+- **Shadow murni sebagai aksen floating:** Box-shadow (`shadow-md`, `shadow-xl`) HANYA digunakan saat elemen benar-benar melayang di atas konten lain (_overlapping scrim_), seperti pada **Bottom Sheet**, **Floating Action Button (FAB)**, atau saat kartu di-hover secara aktif.
 
 ### 10.3 Mapping Surface di Portfolio
 
@@ -591,7 +598,7 @@ M3 Expressive meniadakan ketergantungan pada layer opasitas elevasi numerik (+1 
 | **Page Background**  | `bg-surface`                   | —                           | None                                                |
 | **Navigation Bar**   | `bg-transparent` (Session 6)   | —                           | None (logo & toggle punya background solid sendiri) |
 | **Portfolio Cards**  | `bg-surface-container`         | `bg-surface-container-high` | Resting: `none`, Hover: `shadow-lg`                 |
-| **Modal Dialog**     | `bg-surface-container-high`    | —                           | `shadow-2xl` + Scrim `bg-on-surface/32`             |
+| **Bottom Sheet**     | `bg-surface-container-low`     | —                           | `shadow-2xl` + Scrim `bg-on-surface/32`             |
 | **Sidebar Rail**     | `bg-surface-container-highest` | —                           | None (Slice 3.5)                                    |
 | **Skill Containers** | `bg-surface-container-low`     | `bg-surface-container`      | Resting: `none`, Hover: subtle scale                |
 | **Gradient Masks**   | `bg-surface`                   | —                           | None (fade gradient)                                |
@@ -774,30 +781,172 @@ GitHub paragraph: text-center text-body-md text-on-surface-variant md:flex-row m
 GitHub link: text-primary underline (ukuran mengikuti paragraf induk)
 ```
 
-### 12.7 Modal / Dialog (M3 Basic Dialog)
+### 12.7 Portfolio Bottom Sheet (M3 Modal Bottom Sheet)
+
+Session 15: modal portfolio berubah dari dialog center (semua ukuran) menjadi **bottom
+sheet** yang menempel di tepi bawah viewport, **kecuali desktop (`lg`, ≥1024px)** yang kembali
+ke dialog **center** dengan keempat sudut membulat. Spec mengacu ke dokumentasi resmi
+M3 — [m3.material.io/components/bottom-sheets/specs](https://m3.material.io/components/bottom-sheets/specs):
+
+| Item                | Spec resmi M3                                                | Implementasi project                                                 |
+| :------------------ | :----------------------------------------------------------- | :------------------------------------------------------------------- |
+| Corner atas         | 28dp (Extra Large)                                           | `rounded-t-xl` (28px)                                                |
+| Corner bawah        | 0dp                                                          | `lg:rounded-xl` (28px semua sudut di desktop)                        |
+| Container           | `surface-container-low`                                      | `bg-surface-container-low`                                           |
+| Drag handle         | 32×4dp, `on-surface-variant`, ≥48dp hit target, padding 22dp | `h-1 w-8 rounded-full bg-on-surface-variant` di dalam `h-12 w-12`    |
+| Scrim               | token `scrim`                                                | `bg-on-surface/32` (spec lama DESIGN, lihat catatan)                 |
+| Max width           | 640dp                                                        | `max-w-[640px]`                                                      |
+| >640dp              | margin atas & samping min 56dp                               | `sm:px-14` — samping 56px, **bawah 0px** (deviasi sengaja)           |
+| ≥1024px (`lg`)      | — (M3 tidak punya varian center)                             | dialog **center**, lebar **1024px**, **2 kolom**, tinggi ikut konten |
+| ≤640dp              | edge-to-edge, margin samping 0                               | tanpa padding (default)                                              |
+| Tinggi awal (modal) | cap 50% screen height                                        | **band 60–65dvh** di mobile, cap 50dvh ≥640px, **konten di `lg`**    |
+| Tinggi maksimum     | bisa di-expand penuh + scroll internal                       | `max-h-[90dvh]` (jaring pengaman saat konten panjang)                |
 
 ```
-Backdrop: bg-on-surface/32 (M3 official scrim)
-  transition: m3Motion.effect.default (opacity fade)
-Dialog container (native <dialog>):
-  bg-surface-container-high rounded-xl (28px) p-6 shadow-2xl max-w-5xl w-full
-  max-h-[90vh] overflow-y-auto
-  enter: scale(0.92) → scale(1), opacity 0→1
-  exit: scale(1) → scale(0.92), opacity 1→0
-  motion: m3Motion.spatial.default (spring overshoot)
-  a11y: elemen <dialog open inert> + aria-label (bukan role="dialog")
-Inner content panel:
-  bg-surface-container rounded-lg p-4
-Typography:
-  Title:       text-4xl md:text-5xl uppercase text-on-surface (heading font)
-  Description: mt-3 text-start text-body-md text-on-surface-variant md:text-body-lg
-Buttons (M3 Filled Button / Filled Tonal Button):
-  Demo: bg-primary text-on-primary rounded-full px-4 py-3
-  Repository: bg-secondary-container text-on-secondary-container rounded-full
-Close button (M3 Icon Button):
-  bg-surface-container-highest text-on-surface rounded-full h-11 w-11
-  hover: bg-on-surface/8
+Wrapper positioning:
+  section  fixed inset-0 z-[1300] flex items-end justify-center lg:items-center
+           sm:px-14                      (samping 56dp hanya >640px; bawah 0)
+  motion.div  max-w-[640px] lg:max-w-5xl flex justify-center
+
+Sheet container (native <dialog> — tetap <dialog open inert> + aria-label):
+  static m-0 flex w-full max-w-[640px] lg:max-w-5xl flex-col overflow-hidden
+  rounded-t-xl lg:rounded-xl border-0 bg-surface-container-low p-0
+  min-h-[60dvh] sm:min-h-0
+  peek   max-h-[65dvh] sm:max-h-[50dvh] lg:max-h-[90dvh]   (konten, bukan cap)
+  expand max-h-[90dvh]
+  shadow-2xl
+  enter: y 100% → 0 + opacity 0 → 1   (m3Motion.spatial.default, damping 53)
+  exit : y 0 → 100% + opacity 1 → 0   (slide down, searah kebalikan enter)
+
+Isi — grid 2 kolom dari lg (satu kolom di bawahnya):
+  div  min-h-0 overflow-y-auto overscroll-contain
+       lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-6 lg:p-6
+  Kolom 1: thumbnail 16/9 (lg: 4/3 = `lg:aspect-[4/3]`) — padding px-4 sm:px-6 lg:p-0
+  Kolom 2: judul + deskripsi + tombol — lg:flex lg:h-full lg:flex-col
+           (padding px-4 pt-5 pb-6 sm:px-6 lg:p-0)
+  Judul → deskripsi : mt-2 lg:mt-4   (M3 16dp)
+  Deskripsi → tombol: mt-6           (M3 24dp)
+  Tombol            : lg:mt-auto → menempel bawah kolom (anatomi M3 dialog)
+
+Drag handle + tombol tutup (satu baris, shrink-0):
+  div  relative flex items-center justify-center pt-3 pb-1
+       lg:h-18 lg:pt-6 lg:pb-0        (72dp = 24dp padding + 48dp tombol)
+  button  h-12 w-12 rounded-full, aria-expanded + aria-controls, lg:hidden
+          hover:bg-on-surface/8  → berisi span h-1 w-8 rounded-full bg-on-surface-variant
+  ModalClose  absolute top-3 right-3 lg:top-6 lg:right-6 h-12 w-12 rounded-full
+              bg-surface-container-highest hover:bg-on-surface/8, ikon w-6 (24dp)
+
+Isi (scroll container):
+  div  id=portfolio-sheet-content, min-h-0 overflow-y-auto overscroll-contain
+       data-lenis-prevent
+  Thumbnail  16/9, rounded-lg, padding px-4 sm:px-6
+  Title      text-headline-sm md:text-headline-md uppercase text-on-surface
+  Desc       mt-2 text-body-md text-on-surface-variant md:text-body-lg
+  Buttons    Demo bg-primary / Repository bg-secondary-container, rounded-full
 ```
+
+**Center di desktop (`lg`) + exit animation (Session 15, lanjutan 2).** Permintaan user:
+
+- **≥1024px → dialog center, lebar 1024px, 2 kolom, tinggi ikut konten.** `lg:items-center`
+  pada wrapper; keempat sudut ikut membulat karena tidak lagi menempel ke tepi
+  (`lg:rounded-xl` menimpa `rounded-t-xl` untuk sudut atas). Gap atas/bawah datang otomatis
+  dari centering, bukan padding. `lg` (1024) dipilih sebagai batas desktop karena itu
+  breakpoint yang sudah memisahkan layout desktop di project ini; tablet (768) tetap bottom
+  sheet. Diukur 1440×900: `1024×332`, `left=208`, `top=284`, `scrollHeight == clientHeight`
+  (**nol scroll**); dua kolom `476px 476px`.
+- **Di desktop cap peek dilepas** (`lg:max-h-[90dvh]`) supaya tinggi mengikuti konten — cap
+  50dvh itulah yang dulu memaksa scroll. `max-h-[90dvh]` tetap ada sebagai jaring pengaman:
+  deskripsi yang sangat panjang tetap terpotong dan scroll internal daripada keluar layar.
+- **Drag handle/tombol expand disembunyikan di desktop** (`lg:hidden` pada tombol handle):
+  setelah 2 kolom, konten selalu muat, jadi tombolnya tidak punya fungsi. Barisnya tetap ada
+  di layout agar tombol tutup (yang absolute di baris itu) tetap punya tempat — tidak ada
+  overlap dengan judul/​gambar.
+- **Exit animation slide-down.** `animate` sudah punya varian `closed: { y: '100%', opacity: 0 }`,
+  tapi sebelumnya tidak pernah terlihat karena `key` pada `<ModalCard>` memuat `isModalShow`:
+  begitu sheet ditutup, key berubah → komponen **remount** → varian keluar dilewati dan sheet
+  hilang mendadak. Key sekarang hanya `portfolioData.id` (reset scroll saat ganti project),
+  dan state tinggi dipindah ke store (`isModalExpanded` + `toggleModalExpandedHandler`).
+  Alasan pindah ke store: `showModalHandler` adalah satu-satunya jalur buka/tutup, jadi reset
+  bisa dilakukan **di event yang menyebabkan perubahan** — dan hanya saat _membuka_, karena
+  mengecilkan sheet saat menutup akan mengubah ukuran di tengah animasi keluar.
+
+**Kesesuaian spec M3 dialog (Session 15, lanjutan 3).** Angka di bawah diverifikasi dari
+computed style di browser (`[FACT]`, 1440×900), bukan hanya dari kode:
+
+| Properti                   | Spec M3 ([dialogs/specs](https://m3.material.io/components/dialogs/specs)) | Project                 | Status        |
+| :------------------------- | :------------------------------------------------------------------------- | :---------------------- | :------------ |
+| Container padding          | 24dp                                                                       | 24px (`lg:p-6`)         | ✅            |
+| Title → body               | 16dp                                                                       | 16px (`lg:mt-4`)        | ✅ diperbaiki |
+| Body → actions             | 24dp                                                                       | 24px (`mt-6`)           | ✅            |
+| Jarak antar action         | 8dp                                                                        | 8px (`gap-x-2`)         | ✅ diperbaiki |
+| Icon button                | 48dp target, ikon 24dp                                                     | 48px, ikon 24px         | ✅ diperbaiki |
+| Corner                     | 28dp                                                                       | 28px                    | ✅            |
+| Actions di bawah container | anatomi dasar dialog                                                       | `lg:mt-auto`            | ✅            |
+| Media aspect desktop       | — (tidak diatur M3)                                                        | 4:3 (`lg:aspect-[4/3]`) | komposisi     |
+| Max width                  | **560dp**                                                                  | **1024px**              | ⚠️ deviasi    |
+
+- **Dua pelanggaran nyata** yang baru ketahuan setelah diukur: `title → body` cuma **8px**
+  (spec 16dp) dan jarak antar action **12px** (spec 8dp); plus tombol tutup 44px dengan ikon
+  20px (spec 48dp/24dp). Semua sudah diperbaiki, termasuk di mobile/tablet untuk target
+  sentuh 48dp.
+- **Bug header (nyata, dari pengukuran):** saat handle di-`lg:hidden`, baris header kolaps jadi
+  **16px** (sisa `pt-3 pb-1` saja) sehingga tombol tutup yang `absolute top-3` **meluber 36px**
+  ke area konten. Fix: tinggi eksplisit `lg:h-18` (72dp) + inset `lg:top-6 lg:right-6`.
+  Terukur sekarang: header 72dp, `closeBottom = contentTop` (nol overlap).
+- **Ruang mati kolom teks:** kolom teks hanya 178px sementara gambar 357px → ~179px kosong di
+  bawah tombol. Fix: grid `lg:items-stretch` + kolom `lg:flex lg:h-full lg:flex-col` + tombol
+  `lg:mt-auto`. Terukur: judul `top=307.5` = gambar `top=307.5`, tombol berakhir `664.5` =
+  kolom berakhir `664.5`.
+- Hasil desktop: **1024×477** (rasio **2.15:1**, sebelumnya 1024×332 = 3.09:1), gambar
+  **476×357** (4:3), `scrollHeight == clientHeight` (nol scroll).
+- **Deviasi max width** dicatat sengaja: M3 basic dialog dibatasi 560dp, dan di layar lebar M3
+  akan memakai side sheet / supporting pane, bukan dialog 1024dp. Ini pilihan user dan sudah
+  disepakati; semua spacing/shape/type lain tetap ikut spec.
+
+**Tinggi peek & deviasi margin bawah (Session 15, lanjutan).** Dua penyesuaian atas permintaan user:
+
+- **Mobile 60–65dvh.** Cap saja tidak cukup: konten terpanjang hanya ~54dvh di 390×844,
+  jadi `max-h` tidak pernah mengikat dan sheet tetap pendek. Ditambah `min-h-[60dvh]` supaya
+  sheet benar-benar jatuh di band 60–65dvh. `min-h` juga wajib bertahan di state expanded —
+  kalau tidak, meng-expand konten pendek justru **mengecilkan** sheet.
+- **≥640px: margin bawah 0.** Spec M3 minta margin bawah min 56dp; di sini sengaja dinolkan
+  (sheet nempel tepi bawah) atas permintaan user. Margin samping 56dp tetap.
+- Di ≥640px cap 50dvh **mengikat** (konten versi tablet ~600px > 512px), jadi tombol expand
+  berguna di sana. Di mobile konten sudah muat, jadi expand tidak mengubah tinggi —
+  itu konsekuensi yang diterima, bukan bug.
+
+**Catatan pengukuran `dvh`:** di emulasi mobile Chrome, `dvh` dihitung dari _small viewport_
+(844) sementara `innerHeight` melaporkan 870, jadi assertion berbasis `innerHeight` meleset
+~3%. `scripts/portfolio-sheet-e2e.ts` karena itu mengukur `100dvh` secara langsung.
+
+**PENTING — `static` bersifat load-bearing.** UA stylesheet memberi `<dialog>`
+`position: absolute; inset-inline-start: 0`. Dengan itu dialog keluar dari flow flex,
+sehingga `items-end`/`justify-center` tidak berlaku: sheet menggantung satu tinggi penuh
+di bawah viewport dan menempel kiri, bukan center. Sebagai flex item (position static),
+posisinya ditentukan ancestor. Bug ini pernah lolos ke runtime dan tertangkap assertion
+`dialog participates in the flex layout (position static)`.
+
+**Toggle tinggi:** spec M3 mensyaratkan kontrol single-pointer kalau sheet punya lebih dari
+satu preset height tanpa drag gesture. Karena sheet ini sengaja tanpa drag gesture, drag
+handle-nya sendiri yang jadi tombol (`aria-expanded`, `aria-controls` ke container isi).
+
+**Reset ke peek:** state tinggi tinggal di store (`isModalExpanded` +
+`toggleModalExpandedHandler`) dan di-reset oleh `showModalHandler` **saat membuka**. Ini
+menggantikan dua pendekatan yang sama-sama gagal: (a) `key` pada anak tidak me-reset state
+parent, (b) key berbasis nilai (`id-isModalShow`) juga salah karena nilainya kembali sama
+saat proyek yang sama dibuka ulang — dan justru mematikan animasi keluar (lihat di atas).
+
+**Dismiss:** tap scrim, tombol tutup, dan `Escape` (listener keydown; `<dialog open>`
+bukan `showModal()` sehingga Esc tidak otomatis).
+
+**Catatan scrim (belum diubah):** DESIGN menetapkan `bg-on-surface/32`. Spec M3 memakai
+token `scrim` (hitam, 32%), yang **meredupkan** backdrop; `on-surface/32` justru
+mencerahkan backdrop di dark mode. Perilaku sekarang dipertahankan sesuai DESIGN.
+
+Verifikasi: `bun run verify:sheet` — 42 assertion (geometry mobile/tablet/desktop, shape,
+warna token aktif, peek/expand, exit animation slide-down, 2 kolom tanpa scroll di desktop,
+**angka M3: aspect 4:3, title→body 16dp, action gap 8dp, tombol tutup 48dp/ikon 24dp,
+header 72dp tanpa overlap**, tiga jalur dismiss) di Chromium asli.
 
 ### 12.8 Sidebar / Navigation Rail (M3 Navigation Rail)
 

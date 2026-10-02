@@ -1,28 +1,23 @@
-import clsx from 'clsx';
-
 import { useStore } from '@store/useStore';
 
 import CloseSVG from '../svg/CloseSVG';
 
+/**
+ * Sheet-anchored M3 icon button. Positioning is left to the parent (the sheet
+ * header) — the old fixed screen top-right placement does not make sense for a
+ * bottom-anchored sheet.
+ */
 export default function ModalClose() {
-  const { isModalShow, showModalHandler } = useStore((state) => state);
+  const showModalHandler = useStore((state) => state.showModalHandler);
 
   return (
-    <div
-      className={clsx(
-        'fixed top-4 right-4 z-[1400] duration-300',
-        'md:top-6 md:right-6',
-        isModalShow ? 'opacity-100' : 'pointer-events-none opacity-0'
-      )}
+    <button
+      type='button'
+      onClick={showModalHandler}
+      aria-label='Close portfolio detail'
+      className='absolute top-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-surface-container-highest text-on-surface transition-colors duration-200 hover:bg-on-surface/8 lg:top-6 lg:right-6'
     >
-      <button
-        type='button'
-        onClick={showModalHandler}
-        aria-label='Close portfolio detail'
-        className='flex h-11 w-11 items-center justify-center rounded-full bg-surface-container-highest text-on-surface shadow-lg transition-colors duration-200 hover:bg-on-surface/8'
-      >
-        <CloseSVG className='w-5' fill='currentColor' />
-      </button>
-    </div>
+      <CloseSVG className='w-6' fill='currentColor' />
+    </button>
   );
 }

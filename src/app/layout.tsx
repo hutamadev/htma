@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/next';
 import clsx from 'clsx';
 import type { Metadata } from 'next';
 
@@ -10,6 +9,7 @@ import { ThemeProvider } from '@utils/theme-provider';
 import '@styles/globals.css';
 
 export const metadata: Metadata = {
+  // pi-lens-ignore: unchecked-throwing-call-js -- argument is a compile-time string literal, so it cannot be malformed at runtime; `metadataBase` is typed `URL` (not string), and wrapping it in try/catch would make it possibly-undefined, silently degrading canonical/OG URLs to relative instead of failing the build loudly on a typo.
   metadataBase: new URL('https://htma.my.id'),
   title: {
     default: 'Hutama — Web Developer',
@@ -107,7 +107,6 @@ export default function RootLayout({ children }: Readonly<IRootLayoutProps>) {
         />
         <div id='modal-card'></div>
         <div id='modal-backdrop'></div>
-        <div id='modal-close'></div>
         <ThemeProvider
           attribute='class'
           storageKey='htma-theme'
@@ -115,9 +114,6 @@ export default function RootLayout({ children }: Readonly<IRootLayoutProps>) {
         >
           <Layout>{children}</Layout>
         </ThemeProvider>
-        {/* Vercel only serves /_vercel/insights/script.js, so skip it elsewhere
-            instead of letting the request 404 and log console errors. */}
-        {process.env.VERCEL ? <Analytics /> : null}
       </body>
     </html>
   );
