@@ -3,11 +3,12 @@
 Local-only tooling for verifying the site in a real browser. Nothing here runs in
 CI or ships to production.
 
-| Script                 | What it proves                                                                                                            |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `contact-form-e2e.ts`  | The contact form validates, posts the right EmailJS payload, toasts, resets, and sends nothing while invalid (18 checks). |
-| `lighthouse-median.sh` | Mobile Lighthouse performance as a median of n runs, per page.                                                            |
-| `cdp-client.ts`        | Minimal Chrome DevTools Protocol client over Bun's WebSocket — imported by the e2e script, no puppeteer dependency.       |
+| Script                   | What it proves                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `contact-form-e2e.ts`    | The contact form validates, posts the right EmailJS payload, toasts, resets, and sends nothing while invalid (18 checks).                                                                                                                                                                                                                                                                                                                                                                |
+| `portfolio-sheet-e2e.ts` | The portfolio bottom sheet matches the M3 spec it is built from: bottom-edge anchoring (mobile/tablet), centred two-column 1024dp dialog with all four corners rounded and no internal scroll (desktop), 640dp cap below lg, 28/0dp shape, the 60-65dvh peek band + expand, the slide-down exit animation, the M3 dialog numbers (4:3 media, title→body 16dp, action gap 8dp, 48dp close target with a 24dp icon, 72dp header with no overlap), and all three dismiss paths (42 checks). |
+| `lighthouse-median.sh`   | Mobile Lighthouse performance as a median of n runs, per page.                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `cdp-client.ts`          | Minimal Chrome DevTools Protocol client over Bun's WebSocket — imported by the e2e script, no puppeteer dependency.                                                                                                                                                                                                                                                                                                                                                                      |
 
 ## Rules that came out of using them
 
@@ -23,6 +24,18 @@ CI or ships to production.
 - **`NEXT_PUBLIC_*` is inlined at build time.** The form's success path is
   unreachable without dummy EmailJS ids baked into the build, and the production
   build must be rebuilt without them afterwards.
+- **Disable the browser cache in the script, and never reuse a stale server.**
+  Next serves prerendered HTML with a long max-age, so a reused
+  `--user-data-dir` replays the previous bundle and every assertion silently
+  measures code that is no longer in the build. Both scripts call
+  `Network.setCacheDisabled` and reload with `ignoreCache` for that reason.
+- **Never pipe `bun run build` through `head`.** The closed pipe SIGPIPEs the
+  build, leaving `.next` half-written: chunks referenced by the served HTML go
+  missing and hydration dies with no console error at all.
+- **`fuser -k 3000/tcp` is not reliable here.** A surviving `next start` keeps
+  serving the old prerender from memory (and from still-open deleted file
+  handles after a `rm -rf .next`), which looks exactly like a regression in the
+  code. Kill it by the PID from `ss -ltnp` and confirm the port is free.
 
 ## Contact form end-to-end
 
@@ -46,6 +59,23 @@ bun run build
 ```
 
 `CDP_WS` overrides the debugger endpoint, `BASE_URL` the site under test.
+
+## Portfolio bottom sheet
+
+Same three steps as above, without the dummy EmailJS ids:
+
+```bash
+bun run build
+bun run start
+/usr/bin/chromium --headless=new --remote-debugging-port=9222 \
+  --user-data-dir=/tmp/cr-sheet --no-sandbox --disable-gpu \
+  --disable-dev-shm-usage --disable-extensions --no-first-run about:blank
+bun run verify:sheet
+```
+
+The viewport is overridden per case (390×844, 768×1024 and 1440×900) because the sheet
+switches from a bottom-anchored sheet to a centred two-column dialog at the 1024px `lg:`
+breakpoint, and each case disables the cache before reloading.
 
 ## Lighthouse median
 

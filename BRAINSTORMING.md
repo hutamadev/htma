@@ -786,30 +786,24 @@ Label Small     → text-[11px] leading-[16px] tracking-[0.5px] font-medium
 
 ### 8.6 Modal (`src/components/ui/modal/`)
 
-**Saat ini:**
+**Saat ini (Session 15 — M3 Modal Bottom Sheet):**
 
-- Portal ke 3 target div: `modal-card`, `modal-backdrop`, `modal-close`
-- Modal card, backdrop, close button (perlu baca detail implementasi)
-
-**Perubahan M3:**
-
-- Modal → M3 **Basic Dialog** style:
-  - Container: `bg-surface-container-high rounded-xl` (28px) `p-6 shadow-2xl max-w-5xl max-h-[90vh] overflow-y-auto` (M3 Extra Large shape).
-  - Backdrop/Scrim: `bg-on-surface/32` (M3 official scrim opacity).
-  - Close button: M3 icon button `h-11 w-11 rounded-full bg-surface-container-highest` dengan hover state layer `bg-on-surface/8`.
-  - Elemen native `<dialog open inert>` (bukan `role="dialog"`) + `aria-label` — lolos rule `jsx-a11y(prefer-tag-over-role)`.
-  - Panel konten dalam: `bg-surface-container rounded-lg p-4`.
-  - Tombol Demo → M3 Filled Button (`bg-primary text-on-primary rounded-full`); Repository → Filled Tonal Button (`bg-secondary-container`). Shadow brutalist dihapus.
-- Animasi:
-  - Scale dialog: 0.92 → 1 via `m3Motion.spatial.default` (spring overshoot natural).
-  - Fade backdrop: opacity 0 → 1 via `m3Motion.effect.default`.
-- Modal menampilkan judul, deskripsi project, tombol Demo/Repository, dan gambar portfolio.
+- Portal ke 2 target div: `modal-card`, `modal-backdrop` (`modal-close` sudah tidak dipakai — tombol tutup hidup di dalam sheet, jadi target portal ketiga dihapus dari `layout.tsx`).
+- Modal diganti dari dialog tengah menjadi **bottom sheet** yang menempel di tepi bawah viewport — kecuali di **desktop (`lg`, ≥1024px)** yang kembali ke dialog **center**, lebar **1024px**, **2 kolom** (gambar kiri 4:3, teks+tombol kanan), tinggi **ikut konten** sehingga tidak ada scroll. Tablet (768) tetap bottom sheet.
+- Spacing desktop mengikuti spec M3 dialog: padding container 24dp, title→body 16dp, body→actions 24dp, jarak antar action 8dp, icon button 48dp dengan ikon 24dp, header 72dp (24 padding + 48 tombol), tombol menempel bawah kolom (`lg:mt-auto`, anatomi actions-di-bawah). Rasio dialog 1024×477 ≈ **2.15:1**. Deviasi yang disetujui: max width 1024px (spec M3 basic dialog = 560dp).
+- Spec resmi M3 (m3.material.io/components/bottom-sheets/specs): corner atas 28dp / bawah 0dp, container `surface-container-low`, drag handle 32×4dp `on-surface-variant`, max width 640dp, margin min 56dp di atas/samping untuk >640dp (bawah sengaja 0 di project ini), edge-to-edge di ≤640dp, tinggi awal band 60–65dvh di mobile / cap 50dvh di ≥640px + bisa expand ke 90dvh.
+- Detail lengkap + catatan jebakan (UA `position: absolute` pada `<dialog>`, state tinggi di store, damping spring yang dikunci) ada di `DESIGN.md` bagian 12.7.
+- Elemen native `<dialog open inert>` (bukan `role="dialog"`) + `aria-label` — lolos rule `jsx-a11y(prefer-tag-over-role)`.
+- Tombol Demo → M3 Filled Button (`bg-primary text-on-primary rounded-full`); Repository → Filled Tonal Button (`bg-secondary-container`).
+- Animasi: **enter** `y 100% → 0` + fade, **exit** `y 0 → 100%` (slide turun) + fade — keduanya via `m3Motion.spatial.default` (damping 53, tanpa overshoot — lihat DESIGN 9.4); fade scrim `duration-200 ease-[cubic-bezier(0.2,0,0,1)]`.
+- Isi sheet: thumbnail 16/9, judul, deskripsi, tombol Demo/Repository, drag handle + tombol tutup. Drag handle:
+  `lg:hidden` (di desktop 2 kolom konten selalu muat, jadi tidak ada yang bisa di-expand).
+- **Dismiss:** tap scrim, tombol tutup, `Escape`.
 
 **Yang TIDAK berubah:**
 
-- Portal system (3 div targets)
-- Zustand state management (`isModalShow`, `portfolioData`)
-- Konten modal (gambar portfolio, judul, link)
+- Zustand state management (`isModalShow`, `isModalExpanded`, `portfolioData`)
+- Konten data modal (gambar portfolio, judul, link)
 
 ---
 

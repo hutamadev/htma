@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "htma",
+  "compatibility_date": "2026-10-02",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "keep_vars": true,
+  "assets": { "binding": "ASSETS", "directory": ".open-next/assets" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "htma" }],
+  "images": { "binding": "IMAGES" },
+}
