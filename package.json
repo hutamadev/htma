@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "opennextjs-cloudflare build",
+    "build:next": "next build --turbopack",
     "start": "next start",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix && bun run format",
