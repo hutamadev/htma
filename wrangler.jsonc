@@ -5,6 +5,13 @@
   "compatibility_date": "2026-10-02",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "keep_vars": true,
+  "previews": {
+    "vars": {
+      "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "mOGadpyPTWnn2gI4L",
+      "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "service_3bekg8c",
+      "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "template_zwkk43w",
+    },
+  },
   "assets": { "binding": "ASSETS", "directory": ".open-next/assets" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "htma" }],
   "images": { "binding": "IMAGES" },
