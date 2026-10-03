@@ -110,6 +110,12 @@ If the build command is left at `npm run build`, only `next build` runs, and the
 `NEXT_PUBLIC_EMAILJS_*` must be set as **Build variables**: they are inlined at build time,
 and `previews.vars` in `wrangler.jsonc` is runtime-only.
 
+The dashboard `Retry build` button is not always offered (it disappears after the Git
+integration is disconnected and reconnected). A push to `main` is the reliable trigger —
+merging a pull request is enough. Confirm a CI deploy actually landed with
+`bunx wrangler versions list`: a new version ID means it did, otherwise deploy manually with
+`bun run deploy`.
+
 Browser note: on this host `/usr/bin/chromium` is not installed. Helium
 (`/opt/helium-browser-bin/helium`, Chromium 154) works as the CDP browser for these checks;
 **do not** use it for Lighthouse — its bundled uBOL contaminates the audit.
