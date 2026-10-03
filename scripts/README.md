@@ -77,6 +77,26 @@ The viewport is overridden per case (390×844, 768×1024 and 1440×900) because 
 switches from a bottom-anchored sheet to a centred two-column dialog at the 1024px `lg:`
 breakpoint, and each case disables the cache before reloading.
 
+## Cloudflare Worker preview
+
+The production runtime is Cloudflare Workers (OpenNext), so also verify against `wrangler dev`
+— not only `next start`.
+
+```bash
+bun run preview            # opennextjs-cloudflare build && wrangler dev (localhost:8787)
+# in another shell, with the same CDP browser setup:
+BASE_URL=http://127.0.0.1:8787 bun run verify:sheet
+BASE_URL=http://127.0.0.1:8787 bun run verify:form
+```
+
+`bun run build` stays `next build --turbopack`. OpenNext runs `bun run build` itself
+(`@opennextjs/aws` `buildNextApp`), so **never** put `opennextjs-cloudflare build` in the
+`build` script — it recurses forever and never finishes.
+
+Browser note: on this host `/usr/bin/chromium` is not installed. Helium
+(`/opt/helium-browser-bin/helium`, Chromium 154) works as the CDP browser for these checks;
+**do not** use it for Lighthouse — its bundled uBOL contaminates the audit.
+
 ## Lighthouse median
 
 ```bash

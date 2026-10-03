@@ -30,23 +30,24 @@
 
 ### Tech Stack
 
-| Layer           | Teknologi Awal       | Status Aktual (Phase 0–3 Selesai)     | Catatan Migrasi                            |
-| --------------- | -------------------- | ------------------------------------- | ------------------------------------------ |
-| Framework       | Next.js 14.2.30      | **Next.js 15.5.25** (App Router)      | Turbopack stable, React 19 native support  |
-| React           | React 18.3.1         | **React 19.3.0**                      | Concurrent features, React 19 types        |
-| Styling         | Tailwind CSS 3.4.13  | **Tailwind CSS v4.3.3**               | CSS-first `@theme`, Lightning CSS          |
-| Animation       | Framer Motion 10     | **Motion / Framer Motion 13.3.0**     | M3 Expressive Spring Motion Physics specs  |
-| Smooth Scroll   | Locomotive Scroll 5  | **Lenis 1.3.26**                      | Native rAF loop, 3.7x lebih ringan         |
-| Text Scramble   | Baffle.js 0.3.6      | **Native useTextScramble Hook**       | Zero-dependency, TypeScript native         |
-| State           | Zustand 4.5.7        | **Zustand 5.0.15**                    | Concurrent-safe                            |
-| Form            | React Hook Form 7.59 | **React Hook Form 7.88.0**            | Integrasi Zod schema validation            |
-| Form Validation | —                    | **Zod 4.6.5** + `@hookform/resolvers` | Strict client validation & types inference |
-| Linter          | ESLint + plugins     | **Oxlint 1.83.0**                     | Rust-based, 50-100x lebih cepat            |
-| Git Hooks       | Husky + lint-staged  | **Lefthook 2.1.14**                   | Single yaml, zero dependency               |
-| Typography      | Local woff2 fonts    | **Google Sans Flex** (Variable Font)  | Full axes (`wght 100-1000`, `opsz 6-144`)  |
-| Design System   | Custom ad-hoc tokens | **Material 3 Expressive**             | Dynamic HCT palette, Tone-based surfaces   |
-| Package Manager | pnpm                 | **Bun 1.4.2** (`bun.lock`)            | Fast native package manager                |
-| Runtime         | Node.js >= 18        | **Bun >= 1.1.0**                      | Single unified runtime                     |
+| Layer           | Teknologi Awal       | Status Aktual (Phase 0–3 Selesai)     | Catatan Migrasi                               |
+| --------------- | -------------------- | ------------------------------------- | --------------------------------------------- |
+| Framework       | Next.js 14.2.30      | **Next.js 15.5.25** (App Router)      | Turbopack stable, React 19 native support     |
+| React           | React 18.3.1         | **React 19.3.0**                      | Concurrent features, React 19 types           |
+| Styling         | Tailwind CSS 3.4.13  | **Tailwind CSS v4.3.3**               | CSS-first `@theme`, Lightning CSS             |
+| Animation       | Framer Motion 10     | **Motion / Framer Motion 13.3.0**     | M3 Expressive Spring Motion Physics specs     |
+| Smooth Scroll   | Locomotive Scroll 5  | **Lenis 1.3.26**                      | Native rAF loop, 3.7x lebih ringan            |
+| Text Scramble   | Baffle.js 0.3.6      | **Native useTextScramble Hook**       | Zero-dependency, TypeScript native            |
+| State           | Zustand 4.5.7        | **Zustand 5.0.15**                    | Concurrent-safe                               |
+| Form            | React Hook Form 7.59 | **React Hook Form 7.88.0**            | Integrasi Zod schema validation               |
+| Form Validation | —                    | **Zod 4.6.5** + `@hookform/resolvers` | Strict client validation & types inference    |
+| Linter          | ESLint + plugins     | **Oxlint 1.83.0**                     | Rust-based, 50-100x lebih cepat               |
+| Git Hooks       | Husky + lint-staged  | **Lefthook 2.1.14**                   | Single yaml, zero dependency                  |
+| Typography      | Local woff2 fonts    | **Google Sans Flex** (Variable Font)  | Full axes (`wght 100-1000`, `opsz 6-144`)     |
+| Design System   | Custom ad-hoc tokens | **Material 3 Expressive**             | Dynamic HCT palette, Tone-based surfaces      |
+| Package Manager | pnpm                 | **Bun 1.4.2** (`bun.lock`)            | Fast native package manager                   |
+| Runtime         | Node.js >= 18        | **Bun >= 1.1.0**                      | Single unified runtime                        |
+| Deployment      | Vercel               | **Cloudflare Workers (OpenNext)**     | Menggantikan Vercel; Vercel Analytics dihapus |
 
 ### Struktur Layout (Vertical — TIDAK BERUBAH)
 
@@ -192,10 +193,13 @@ Bun membaca `.env` secara otomatis (built-in dotenv). Tidak perlu install `doten
 
 #### 2.9 CI/CD
 
-Jika menggunakan Vercel deployment:
+**Deploy: Cloudflare Workers via OpenNext** (keputusan Session 16; menggantikan Vercel).
 
-- Vercel sudah support Bun sebagai package manager
-- Set `ENABLE_EXPERIMENTAL_COREPACK=1` atau pilih Bun di Vercel dashboard → Settings → General → Node.js Version
+- `bun run build` = `next build --turbopack` (build Node, output `.next`) — **bukan** `opennextjs-cloudflare build`. OpenNext memanggil `bun run build` sendiri (`node_modules/@opennextjs/aws/dist/build/buildNextApp.js`), jadi menaruh `opennextjs-cloudflare build` di script `build` membuat rekursi tak terbatas (BUG `ad0d6fc`, diperbaiki 2026-10-03).
+- Artefak Worker (`.open-next/worker.js` + `.open-next/assets`) dibuat oleh `preview` / `deploy` / `upload`, yang menjalankan `opennextjs-cloudflare build && opennextjs-cloudflare ...`.
+- `bun run preview` = build + jalankan Worker lokal; `bun run deploy` = build + deploy; `bun run upload` = build + upload versi tanpa mempromosikan.
+- `bun run cf-typegen` menghasilkan `cloudflare-env.d.ts` untuk tipe binding (belum di-generate; belum ada binding yang dibaca runtime).
+- Vercel tidak dipakai lagi; `@vercel/analytics` sudah dihapus.
 
 #### 2.10 next.config migration
 
@@ -352,15 +356,15 @@ Saat ini pakai Husky + lint-staged + commitlint.
 
 ### 3.5 Deployment (Better T Stack Standard)
 
-Saat ini: Deploy ke Vercel (implisit, ada `@vercel/analytics`).
+Saat ini: Deploy ke **Cloudflare Workers via OpenNext** (diputuskan Session 16; menggantikan Vercel yang implisit lewat `@vercel/analytics` yang kini sudah dihapus).
 
 Better T Stack mendukung:
 
-- **Vercel** (recommended untuk Next.js)
-- **Cloudflare Pages**
+- **Vercel**
+- **Cloudflare Workers / Pages**
 - **Docker**
 
-**Keputusan: Tetap Vercel.** Paling optimal untuk Next.js.
+**Keputusan: Cloudflare Workers via OpenNext.** Adapter `@opennextjs/cloudflare` menjalankan output Next.js 15 di Workers runtime; konfigurasi di `wrangler.jsonc` + `open-next.config.ts`. Rincian teknis di MEMORY.md Session 16.
 
 ### 3.6 Better T Stack Addons yang Relevan
 
@@ -1098,16 +1102,15 @@ scramble({
 
 ### 9.5 Package yang Tetap
 
-| Package             | Alasan Tetap                    |
-| ------------------- | ------------------------------- |
-| `clsx`              | Ringan, utility, banyak dipakai |
-| `react-hook-form`   | Form handling, no issue         |
-| `@emailjs/browser`  | Email service, no issue         |
-| `react-hot-toast`   | Toast notification, no issue    |
-| `react-icons`       | Icon library, no issue          |
-| `next-themes`       | Theme switching, no issue       |
-| `@vercel/analytics` | Analytics, no issue             |
-| `sharp`             | Image optimization, no issue    |
+| Package            | Alasan Tetap                    |
+| ------------------ | ------------------------------- |
+| `clsx`             | Ringan, utility, banyak dipakai |
+| `react-hook-form`  | Form handling, no issue         |
+| `@emailjs/browser` | Email service, no issue         |
+| `react-hot-toast`  | Toast notification, no issue    |
+| `react-icons`      | Icon library, no issue          |
+| `next-themes`      | Theme switching, no issue       |
+| `sharp`            | Image optimization, no issue    |
 
 ---
 
@@ -1401,6 +1404,7 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
 - **Slice 5.0b — Indikator Loading M3 Expressive**: ✅ **SELESAI** (commit `c1afe20`) — 7 bentuk morph canvas 48dp (rotasi 50deg/shape + settle 90deg, morph 650ms).
 - **Slice 5.0c — Loading Skeletons & Hydration Swap**: ✅ **SELESAI** (commit `758168f`) — M3 expressive skeleton wave di `globals.css`, hydration gate `HomeContent`, a11y `aria-busy`/`aria-hidden`, 0px delta shift pada tablet/desktop.
 - **Slice 5.1 — Metadata & SEO**: ✅ **SELESAI** (commit `5d0c6fa`) — OpenGraph, Twitter card, dynamic `opengraph-image.tsx`, JSON-LD (`Person`, `WebSite`), `sitemap.ts`, `robots.ts`.
+- **Deploy — Cloudflare Workers via OpenNext**: ✅ **SELESAI & TERVERIFIKASI** (commit `866a26b`, `38aafec`, `ad0d6fc`, Session 16) — `wrangler.jsonc` + `open-next.config.ts`, `@vercel/analytics` dihapus, bug rekursi `build` diperbaiki. Verifikasi 2026-10-03 di runtime Worker (`wrangler dev :8787`): opennext build sukses, semua rute/metadata/security header benar (`/` 200, `/contact` 200, `/robots.txt`, `/sitemap.xml`, `/manifest.webmanifest`, `/opengraph-image` 200, path asing 404), `verify:sheet` **42/42**, `verify:form` **18/18**. Custom domain: `routes: [{ pattern: 'htma.my.id', custom_domain: true }]` sudah ditambahkan (zone di Cloudflare); `wrangler deploy --dry-run` exit 0, gzip **1.73 MiB** (aman). Sisa: `wrangler login`/`CLOUDFLARE_API_TOKEN` lalu `bun run deploy`; untuk CI isi build-time EmailJS vars.
 - **Slice 5.2 — Audit Kualitas**: Audit Lighthouse (target 90+ semua metrik: Performance, Accessibility, Best Practices, SEO). ✅ **SELESAI**
   - **Hasil terukur** (build produksi + `next start`, Lighthouse 13.5.0, Chromium bersih):
     - `/` mobile: Perf **78 → 92** · A11y 100 · Best Practices **96 → 100** · SEO **92 → 100** (LCP **4.3 s → 2.7 s**, TBT 320 → 250 ms, CLS 0)
@@ -1408,7 +1412,7 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
     - `/` dan `/contact` desktop: **100 / 100 / 100 / 100** (LCP 0.6 s, TBT 0 ms, CLS 0)
   - **Akar masalah LCP (ditemukan & diperbaiki):** seluruh konten di bawah hero dirender **hanya setelah hidrasi** — gate `isClient` di `home-content.tsx` plus `motion` wrapper `initial={{ opacity: 0 }}`. HTML SSR hanya berisi **86 div skeleton, 0 konten nyata**, jadi LCP = waktu hidrasi (~4 s pada 4× CPU throttle).
   - **Perbaikan yang dipakai:** section di-SSR langsung dari `src/app/page.tsx` (`home-content.tsx` dihapus), dan entrance `PageWrapper` jadi **transform-only** (tanpa opacity) supaya isi terpaint di frame pertama.
-  - **Perbaikan kualitas lain yang ikut terangkat:** `<Analytics/>` digate `process.env.VERCEL` (hilang 404 `/_vercel/insights/script.js` + 2 console error), `aria-label` kartu portfolio dihapus agar accessible name memuat teks terlihat (WCAG 2.5.3), anchor Demo modal hanya dirender saat `portfolioData.url` ada (sebelumnya `href` undefined = anchor tanpa href), typo `}` pada `alt` gambar modal dibetulkan.
+  - **Perbaikan kualitas lain yang ikut terangkat:** `<Analytics/>` digate `process.env.VERCEL` (hilang 404 `/_vercel/insights/script.js` + 2 console error) — **tidak berlaku lagi sejak Session 16: `@vercel/analytics` dihapus seluruhnya**; `aria-label` kartu portfolio dihapus agar accessible name memuat teks terlihat (WCAG 2.5.3), anchor Demo modal hanya dirender saat `portfolioData.url` ada (sebelumnya `href` undefined = anchor tanpa href), typo `}` pada `alt` gambar modal dibetulkan.
   - **Pitfall lingkungan audit:** Helium (CachyOS) membawa **uBOL prainstal** → Lighthouse via `CHROME_PATH` tercemar (dokumen `/` termuat **2×**, body kedua 667 byte; `redirects` melaporkan 3.2–4.8 s palsu; `unminified-javascript` menunjuk `chrome-extension://…`). `--disable-extensions` tidak mematikannya. Audit bersih = Chromium tanpa extension + `bunx lighthouse --port=<cdp-port>`.
   - **Lever yang sengaja belum diambil** (target sudah lewat): hero masih client-gated; `image-delivery-insight` 190 KiB (thumbnail portfolio 600×600 untuk slot ~212 px); `legacy-javascript` 14 KiB & `unused-javascript` 116–131 KiB dari chunk framework; `render-blocking` 140–180 ms dari `@import` Google Fonts di `globals.css`.
   - **Slice 5.3 — Cross-Browser & Final Build**: Final `bun run build` & `bun run lint` zero errors/warnings + verifikasi runtime & cross-browser. **Status: mayoritas selesai (Session 13).**

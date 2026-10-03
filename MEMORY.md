@@ -1,12 +1,12 @@
 # MEMORY — Portfolio Website Update (htma.my.id)
 
-> **Last Updated:** 2026-09-28
-> **Project:** `/home/hutamatr/git-repo(hutamadev)/htma`
+> **Last Updated:** 2026-10-03
+> **Project:** `/home/hutamatr/gitrepo(hutamadev)/htma`
 > **Branch Aktif:** `feat/portfolio-update` (dibuat dari `main`)
 
 ---
 
-## Status Saat Ini: PHASE 4 — CONTACT PAGE — ✅ SELESAI (berikutnya Phase 5)
+## Status Saat Ini: PHASE 5 — POLISH, SEO & LAUNCH — ⏳ HAMPIR SELESAI (deploy pindah ke Cloudflare Workers)
 
 - **Phase 0 — Runtime Migration**: ✅ Selesai (Bun runtime & package manager, `bun.lock` stabil).
 - **Phase 1 — Foundation (Tooling, Next 15, Tailwind v4, M3 Palette, Google Sans Flex)**: ✅ **100% Selesai**.
@@ -20,7 +20,8 @@
 - **Phase 4 — Contact Page**: ✅ **100% Selesai** (commit `1b4546f`)
   - Slice 4.1 Zod Schema & Validation — ✅ Selesai (`src/utils/contact-schema.ts`)
   - Slice 4.2 M3 Text Fields & UI — ✅ Selesai
-- **Phase 5 — Polish, SEO & Launch**: ⏳ Berjalan (Slice 5.0–5.2 selesai; Slice 5.3 **sebagian** — gerbang build + verifikasi SSR/header/metadata lulus, sisa uji browser yang terblokir lingkungan tanpa browser)
+- **Phase 5 — Polish, SEO & Launch**: ⏳ Hampir selesai (Slice 5.0–5.2 ✅; Slice 5.3 mayoritas ✅ — gate build, verifikasi SSR/header/metadata, form e2e Chromium, Lighthouse mobile 90+, code-split form kontak). Sisa: cross-browser non-Chromium dicatat _known-unverified_.
+- **Deploy**: ✅ **Cloudflare Workers via OpenNext** (menggantikan Vercel) — commit `866a26b`, `38aafec`, `ad0d6fc` (Session 16).
 
 Dokumentasi arsitektur & panduan teknis:
 
@@ -107,7 +108,7 @@ Dokumentasi arsitektur & panduan teknis:
 | 11  | Halaman contact               | Ikut di-update (M3 Expressive text fields, Zod validation)                                                                                                                              |
 | 12  | Global Rules                  | Diterapkan (strict TS, no `any`, immutability, input validation, zero hardcoded secrets)                                                                                                |
 | 13  | Better T Stack                | Diterapkan sebagai fondasi (tsconfig strict, full Oxlint untuk linter, tetap single app)                                                                                                |
-| 14  | Deployment                    | Tetap Vercel                                                                                                                                                                            |
+| 14  | Deployment                    | **Cloudflare Workers via OpenNext** — menggantikan Vercel (Session 16). `@vercel/analytics` dihapus.                                                                                    |
 | 15  | Linter                        | Full menggunakan Oxlint (50-100x lebih cepat, native support Next.js/React/TS)                                                                                                          |
 | 16  | Font                          | Full M3 Expressive — **Google Sans Flex** (fallback: **Google Sans Text**). Hapus Kata Grotesk & Neutral Face                                                                           |
 | 17  | Portfolio card                | Full M3 Expressive elevated card — hapus brutalist offset shadow                                                                                                                        |
@@ -520,13 +521,38 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ---
 
+### Session 16 — 2026-10-02/03
+
+1. **Pindah deploy dari Vercel ke Cloudflare Workers via OpenNext** (commit `866a26b`, `38aafec`, `ad0d6fc`).
+   - `package.json` v`1.2.0`: `build` = `next build --turbopack` (Node, output `.next`), `build:next` dihapus, dan artefak Worker dibuat oleh `preview`/`deploy`/`upload` yang menjalankan `opennextjs-cloudflare build && opennextjs-cloudflare ...`. Script `cf-typegen` ditambahkan. Dependency baru: `@opennextjs/cloudflare@^1.20.7`, `wrangler@^4.146.0` (devDependencies).
+   - `wrangler.jsonc`: `main` = `.open-next/worker.js`, `name` = `htma`, `compatibility_date` = `2026-10-02`, flags `nodejs_compat` + `global_fetch_strictly_public`, `keep_vars: true`, binding `ASSETS` (`.open-next/assets`), `IMAGES`, dan service `WORKER_SELF_REFERENCE`. EmailJS **public** id (service/template/public key) disematkan di `previews.vars` — aman karena memang dikirim ke browser.
+   - `open-next.config.ts`: `defineCloudflareConfig({})` **tanpa** `incrementalCache`. Alasan tertulis di file: tidak ada ISR, `revalidate`, maupun dynamic route, jadi R2 binding hanya jadi beban mati. Tambahkan kembali bersama binding `r2_buckets` kalau ISR diperkenalkan.
+   - `.gitignore` bertambah: `.open-next`, `.dev.vars`, `.wrangler`.
+   - `@vercel/analytics` **dihapus**; `<Analytics/>` tidak lagi dirender di `src/app/layout.tsx` (grep `analytics` di `src/` = 0 hasil). Ini sesuai karena gate Analytics sebelumnya hanya hidup kalau `process.env.VERCEL`.
+   - **BUG (ditemukan & diperbaiki 2026-10-03): script `build` self-referential.** Commit `ad0d6fc` mengubah `build` menjadi `opennextjs-cloudflare build`, tetapi OpenNext sendiri menjalankan `${packager} run build` sebagai langkah `Building Next.js app` (`[FACT — node_modules/@opennextjs/aws/dist/build/buildNextApp.js:12-17]`). Akibatnya `bun run build` memanggil dirinya tanpa henti: log build berisi **46 header bersarang**, **0× `next build`**, dan tidak pernah selesai. Fix root-cause: `build` dikembalikan ke `next build --turbopack` dan `build:next` dihapus; OpenNext memanggilnya lewat `preview`/`deploy`/`upload`.
+   - **Verifikasi pipeline Worker (2026-10-03)** — semua di runtime Worker (`wrangler dev :8787`), bukan `next start`:
+     - `bunx opennextjs-cloudflare build` exit 0, 1 header (tidak rekursif), 1× `next build`; `.open-next/worker.js` + `.open-next/assets` terbentuk (`.open-next` 39 MB). Bundle `/` 199 kB, `/contact` 201 kB.
+     - Rute: `/` **200** (97.898 B, konten SSR nyata — `Garuda Universe`/`Ibrahim Law` ada, hanya 6 `skeleton` hero), `/contact` **200** dengan `<title>Contact | Hutama — Web Developer</title>` + canonical `https://htma.my.id/contact`, `/robots.txt` 200, `/sitemap.xml` 200, `/manifest.webmanifest` 200, `/opengraph-image` 200 `image/png` (36.884 B), path tak dikenal **404**. JSON-LD 2× ter-render.
+     - Kelima security header tampil dari Worker (`nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`, CSP minimal) plus header adapter `x-opennext: 1`.
+     - `bun run verify:sheet` → **42/42 PASS**; `bun run verify:form` → **18/18 PASS** (payload `template_params` benar, toast sukses, reset, jalur invalid nol request).
+   - **Deviasi lingkungan**: `/usr/bin/chromium` yang tercatat Session 13 **tidak ada** di host ini; browser yang tersedia adalah **Helium 0.18.2.1 (Chromium 154.0.8037.92)** di `/opt/helium-browser-bin/helium`. Dipakai untuk e2e (`--headless=new --remote-debugging-port=9222`) — tetap valid karena Chromium-based + CDP. Untuk Lighthouse, aturan anti-adblock tetap berlaku: uBOL bawaan Helium mencemari audit, jadi audit Lighthouse di host ini tidak boleh memakai Helium tanpa catatan.
+2. **Belum dipasang (sengaja)**: `initOpenNextCloudflareForDev()` di `next.config.ts` dan `cloudflare-env.d.ts` (hasil `bun run cf-typegen`). Belum ada binding yang dibaca runtime, jadi belum dibutuhkan — tambahkan saat mulai memakai KV/R2/images binding.
+3. **`.env.local` sudah diisi user** (2026-10-03) → build lokal meng-inline EmailJS id (terbukti di chunk client). **Catatan CI**: `.env.local` gitignored, jadi Workers Builds/CI wajib mengisi build-time vars sendiri atau form kontak rusak di sana.
+4. **Kesiapan deploy (2026-10-03)**:
+   - `wrangler whoami` → **belum login**. `bun run deploy` butuh `wrangler login` atau `CLOUDFLARE_API_TOKEN`.
+   - `bunx wrangler deploy --dry-run` **exit 0**: `Total Upload: 7099.57 KiB / gzip: 1775.80 KiB` (aman — limit Worker free 3 MiB compressed, paid 10 MiB); binding `WORKER_SELF_REFERENCE`, `IMAGES`, `ASSETS` semuanya resolve.
+   - `NEXT_PUBLIC_EMAILJS_*` terbukti ter-inline di chunk client: `api.emailjs.com` ada, id `service_3bek…` + `template_zwkk…` cocok `wrangler.jsonc`, nol string `dummy_*`.
+   - `routes: [{ pattern: 'htma.my.id', custom_domain: true }]` ditambahkan ke `wrangler.jsonc` (zone `htma.my.id` sudah di Cloudflare) → deploy berikutnya memasang domain otomatis, tidak perlu set manual di dashboard.
+
+---
+
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` — sinkron dengan `origin/feat/portfolio-update` (telah di-push pada 2026-09-28 mencakup Session 13 & 14).
-- **Branch migrasi Bun:** `feat/migrate-bun` (menunjuk ke commit `71eceea`); `main` (di `5c96a1a`) sudah menerima PR #1 dari branch itu.
+- **Branch aktif:** `feat/portfolio-update` — **sinkron** dengan `origin/feat/portfolio-update` (`git rev-list --left-right --count origin/feat/portfolio-update...HEAD` → `0 0`).
+- **Branch lain:** `main`, `legacy` (remote), dan `feat/migrate-bun` (lokal, menunjuk commit `71eceea`).
 - **Working tree:** bersih.
-- **Commit terakhir:** `8e69c7f` (`feat(seo): update domain from htma.site to htma.my.id and sync docs`).
-- **Build aktif di `.next`:** build bersih (10/10 static pages).
+- **Commit terakhir:** `ad0d6fc` (`fix(deploy): use opennextjs-cloudflare build in package.json build script`).
+- **Build aktif di `.next`:** build Node lama (10/10 static pages); **`.open-next/` belum pernah di-build** di checkout ini.
 
 ---
 
@@ -562,7 +588,8 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - ⚠️ **Cross-browser dicatat known-unverified** atas keputusan user: mesin hanya punya Chromium, dan engine lain tidak bisa membuktikan kasus `background-attachment: fixed` milik iOS Safari.
      - ⚠️ `.env.local` sudah ada (diisi user Session 14) → jalur EmailJS nyata **terverifikasi** (dev + Chromium CDP: POST 200, toast sukses, reset, 0 error). Uji stub 18/18 dengan id dummy tetap valid untuk jalur validasi.
      - Catatan: rujukan lama ke skill **`lighthouse-audit-local` tidak berlaku** (skill itu tidak pernah ada). Penggantinya: skill global **`local-browser-verification`**, plus skrip milik project `bun run verify:form` dan `bun run audit:lighthouse`.
-     - Branch `feat/portfolio-update` punya commit lokal baru di atas `origin` (dependency `use-sync-external-store` + dokumen) — **belum di-push**, dan user memutuskan **tanpa PR**: push/merge diserahkan ke keputusan sendiri nanti.
+     - Branch `feat/portfolio-update` **sudah sinkron** dengan `origin` (0 ahead / 0 behind per 2026-10-03); user memutuskan **tanpa PR**: merge diserahkan ke keputusan sendiri nanti.
+   - **Deploy** Cloudflare Workers via OpenNext (Session 16): pipeline build→preview→e2e terverifikasi, `routes` custom domain `htma.my.id` sudah ditambahkan, gzip 1.73 MiB (aman). Sisa: `wrangler login` (atau `CLOUDFLARE_API_TOKEN`) lalu `bun run deploy`; untuk CI isi build-time EmailJS vars.
 
 **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
@@ -589,11 +616,12 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - Portfolio detail = **M3 Modal Bottom Sheet** (Session 15), bukan dialog tengah: `<dialog>` **WAJIB** `static` (UA stylesheet memberi `position: absolute` + `inset-inline-start: 0`, yang membuatnya keluar dari flow flex → sheet menggantung di bawah viewport dan menempel kiri), `rounded-t-xl rounded-b-none`, `bg-surface-container-low`, max 640dp, `max-h-[50dvh]` (peek) ⇄ `max-h-[90dvh]` (expand via tombol drag handle), margin 56dp hanya di `sm:`. Detail spec + jebakan ada di DESIGN 12.7. Verifikasi: `bun run verify:sheet` (27 assertion, Chromium asli, 2 viewport).
 - Contact form (Session 7): validasi di `src/utils/contact-schema.ts` (`contactSchema` + `ContactFormValues`), field M3 Filled Text Field di `src/components/ui/input-form.tsx` (props `title` / `error` / `isTextArea`), label float via `placeholder=' '` + varian `peer-[:placeholder-shown:not(:focus)]`. Jangan pasang `placeholder` asli di field kontak — akan merusak mekanisme float.
 - Zod 4.6.5: pakai `z.email()` (top-level), **bukan** `z.string().email()` yang sudah deprecated. Kalau butuh `trim()` sebelum cek format, gunakan `.pipe(z.email({ message }))`.
-- **Working tree** sejauh Session 13 hanya menyisakan `package.json` + `bun.lock` (dependency `use-sync-external-store`, lihat Session 13 poin 2). **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
+- **Working tree bersih** (2026-10-03). **Jangan jalankan `bun run build` selagi `next dev` hidup** — keduanya berbagi `.next` dan dev akan mati dengan `ENOENT _buildManifest.js`.
 - **Jangan pipe `bun run build` ke `head`/`tail`** (Session 15): SIGPIPE mematikan `next build` di tengah jalan dan merusak `.next` dengan gejala menyesatkan — halaman tampil dari SSR tapi hydrasi mati tanpa error di console. Redirect ke file log, baru dibaca.
 - **`next start` lama tidak selalu mati oleh `fuser -k`/`pkill`** (Session 15): kill lewat PID dari `ss -ltnp` dan pastikan port 3000 bebas, kalau tidak server lama akan terus menyajikan prerender lama (chunk `status=400`) dan semua pengukuran jadi palsu.
 - **`use-sync-external-store@^1.7.0` wajib ada di `dependencies`**: `src/store/useStore.ts` memakai `createWithEqualityFn` dari `zustand/traditional`, yang mengimpor `use-sync-external-store/shim/with-selector.js`. Menghapusnya membuat `zustand/traditional` gagal resolve pada instalasi bersih.
-- **Lingkungan ini punya Chromium dan PinchTab (Session 13)**: `/usr/bin/chromium` (154.0.8037.57, dipasang via apt Debian 13) dan `pinchtab 0.15.2` (config `~/.pinchtab/config.json`, server `127.0.0.1:9867`). Jalankan `pinchtab doctor` dulu — satu-satunya cek yang pernah gagal adalah `chrome_present`.
+- **Lingkungan ini TIDAK punya Chromium** (2026-10-03): `/usr/bin/chromium` dari Session 13 hilang. Yang ada: **Helium** (`/opt/helium-browser-bin/helium`, Chromium 154.0.8037.92) dan Firefox. Skrip CDP (`verify:sheet`, `verify:form`) tetap jalan di Helium dengan `--headless=new --remote-debugging-port=9222`; **jangan** pakai Helium untuk Lighthouse (uBOL bawaan mencemari audit). Jalankan `pinchtab doctor` dulu kalau memakai PinchTab.
+- **Deploy Cloudflare**: `bun run build` = `next build` (Node). Untuk artefak Worker pakai `bun run preview`/`deploy`/`upload` (yang memanggil `opennextjs-cloudflare build`). **Jangan taruh `opennextjs-cloudflare build` di script `build`** — rekursi tak terbatas (bug `ad0d6fc`, diperbaiki 2026-10-03). `open-next.config.ts` tanpa `incrementalCache`/R2 memang sengaja.
 - **PinchTab capability flags sengaja default (dibatasi)**: `security.allowEvaluate`, `security.allowNetworkIntercept`, dan `security.idpi.strictMode` **false**. Akibatnya `pinchtab eval`, `pinchtab network route`, dan `pinchtab snap` mengembalikan 403 — `snap` bahkan diblokir IDPI karena copy halaman kita sendiri memicu "jailbreak/role-hijack pattern" (false positive). Untuk uji fungsional, gunakan CDP mentah + stub `window.fetch` di page context (skrip `/tmp/cdp.ts` + `/tmp/form-e2e.ts`), bukan melonggarkan postur keamanan daemon.
 - **Lightpanda BUKAN browser verifikasi**: `/home/hutamatr/lightpanda` tidak punya paint/layout (Lighthouse mustahil) dan gagal senyap pada React — `reset()` react-hook-form jadi no-op tanpa error apa pun, dan node toast lama tertinggal di DOM. Pakai hanya untuk scraping DOM murah.
 - **Kalau commit tiba-tiba gagal dengan `Syntax error: word unexpected (expecting ")")`**: itu hook lefthook yang menulis path repo tanpa kutip, dan path repo ini memuat `(` `)`. Perbaiki dengan mengutip path di `.git/hooks/pre-commit` dan `.git/hooks/commit-msg` (dua file itu tidak ikut ter-commit, jadi fix-nya tidak ikut ke clone lain).
@@ -611,3 +639,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - Verifikasi UI di browser: pakai **tab dingin** (prefetch membuat navigasi klien berulang instan sehingga loading boundary tak sempat muncul) + `page.emulateNetworkConditions({ offline, latency, download, upload })` — nama field versi ini `download`/`upload`, bukan `downloadThroughput`. Chromium headless resolve `prefers-color-scheme: dark`, jadi uji tema terang harus melepas kelas `dark` secara eksplisit.
 - Konten home (About/Skills/Portfolio/Footer) sekarang **SSR langsung** dari `src/app/page.tsx`; hanya hero yang masih `isClient`-gated. Jangan tambahkan gate hidrasi baru di jalur render tanpa mengukur LCP lagi — gate itu yang menahan `/` mobile di 78 (Slice 5.2).
 - **Audit Lighthouse & verifikasi browser**: ikuti skill global **`local-browser-verification`** (pemilihan engine + CDP mentah + median Lighthouse). Skrip milik project: `bun run verify:form` (18-cek form kontak lewat CDP) dan `bun run audit:lighthouse` (median n=5 per halaman); detail di `scripts/README.md`. Jangan pakai browser ber-adblock, jangan unduh salinan Chrome terpisah, dan jangan percaya satu run Lighthouse.
+- **Deploy = Cloudflare Workers via OpenNext** (Session 16), bukan Vercel lagi. `bun run build` = `next build --turbopack` (Node, output `.next`); artefak Worker (`.open-next/`) dibuat oleh `bun run preview`/`deploy`/`upload` (`opennextjs-cloudflare build && opennextjs-cloudflare ...`). **Jangan pernah menaruh `opennextjs-cloudflare build` di script `build`** — OpenNext memanggil `bun run build` sendiri sehingga jadi rekursi tak terbatas. Config: `wrangler.jsonc` (main `.open-next/worker.js`, `nodejs_compat` + `global_fetch_strictly_public`, binding `ASSETS`/`IMAGES`/`WORKER_SELF_REFERENCE`, EmailJS public id di `previews.vars`) + `open-next.config.ts` (`defineCloudflareConfig({})`). `.gitignore` mengabaikan `.open-next`, `.dev.vars`, `.wrangler`.
+- **`incrementalCache`/R2 sengaja tidak dipasang** di `open-next.config.ts`: tidak ada ISR, `revalidate`, atau dynamic route, jadi cache itu beban mati. Jangan tambahkan R2 tanpa memperkenalkan ISR lebih dulu.
+- **Belum dipasang**: `initOpenNextCloudflareForDev()` di `next.config.ts` dan `cloudflare-env.d.ts` (`bun run cf-typegen`). Belum wajib karena belum ada binding yang dibaca runtime.
+- **`.env.local` sudah diisi user** (2026-10-03) → build lokal meng-inline EmailJS id. Tapi file itu gitignored: CI/Workers Builds wajib set build-time vars sendiri, kalau tidak form kontak rusak.
