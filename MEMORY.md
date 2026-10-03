@@ -561,7 +561,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Quirk Next redirect**: `source: '/:path*'` dengan destination `https://htma.my.id/:path*` mengeluarkan Location **literal** `https://htma.my.id/:path*` untuk root `/` (berujung 404). Wajib ada rule root eksplisit (`source: '/'`). Path non-root interpolasi normal.
    - **Workers Builds ditinggalkan (2026-10-03)**: setelah Git integration di-disconnect/reconnect user, push ke `main` (merge PR #7 dan #8) tetap tidak menghasilkan versi baru — init timeout berulang. Diganti **GitHub Actions** lewat `.github/workflows/deploy.yml`: push ke `main` atau `workflow_dispatch` → `bun install --frozen-lockfile` + `bun run deploy`; nilai EmailJS publik di-inline di workflow, satu repository secret `CLOUDFLARE_API_TOKEN` (plus `CLOUDFLARE_ACCOUNT_ID` inline). Verifikasi hasil: `gh run list` atau `bunx wrangler versions list`.
    - **Deploy CI pertama berhasil**: run `37105537793` (job 43 detik) dari commit `10a424e` → `bun install --frozen-lockfile` (490 paket, 1.89 s) + `bun run deploy` → version `8cc833c2-789e-4204-81d3-f64780cfdbce`, kedua custom domain terpasang. Produksi dicek: apex 200 + `x-opennext: 1`, `www` 308 → apex, `www/contact` 200.
-   - **Saran tindak lanjut**: putuskan GitHub integration Workers Builds (Settings → Builds) supaya tidak ada build gagal tiap push dan tidak berpotensi deploy ganda kalau builder-nya pulih.
+   - **Workers Builds sudah diputus user (2026-10-03)** → GitHub Actions menjadi satu-satunya jalur deploy; tidak ada lagi build gagal tiap push maupun risiko deploy ganda kalau builder-nya pulih.
 
 ---
 

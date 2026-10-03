@@ -93,7 +93,7 @@ BASE_URL=http://127.0.0.1:8787 bun run verify:form
 (`@opennextjs/aws` `buildNextApp`), so **never** put `opennextjs-cloudflare build` in the
 `build` script — it recurses forever and never finishes.
 
-### Workers Builds (CI)
+### Workers Builds (abandoned, kept for reference)
 
 The dashboard build settings are separate from these local scripts. Set:
 
@@ -134,8 +134,7 @@ fails while updating triggers, also grant **Zone → Workers Routes → Edit** f
 
 Check the result with `gh run list` or `bunx wrangler versions list`.
 
-Workers Builds is still connected and fails on every push. Disconnect it in
-Settings → Builds so it cannot fail noisily or, if it recovers, deploy a second time.
+Workers Builds was disconnected on 2026-10-03, so this workflow is the only deploy path.
 
 Browser note: on this host `/usr/bin/chromium` is not installed. Helium
 (`/opt/helium-browser-bin/helium`, Chromium 154) works as the CDP browser for these checks;
