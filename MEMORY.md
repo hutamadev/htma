@@ -567,11 +567,12 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 
 ## Git State
 
-- **Branch `main`:** sudah memuat PR #3, #4, dan #5 (`0fe215f Merge pull request #5 from hutamadev/feat/portfolio-update`) — sinkron dengan `origin/main`.
-- **Branch `feat/portfolio-update`:** masih ada, isinya sudah masuk `main` lewat PR #5.
-- **Branch `legacy`** (remote) dan **`feat/migrate-bun`** (lokal, `71eceea`) masih ada.
+- **Branch `main`:** sudah memuat PR #3–#11 (terakhir `a1e00b2 Merge pull request #11 from hutamadev/docs/workers-builds-disconnected`) — sinkron dengan `origin/main`.
+- **Branch `feat/portfolio-update`:** branch kerja utama, disinkronkan ke `main` dengan fast-forward pada 2026-10-03.
+- **Branch `origin/legacy`:** **kode legacy milik user — ARSIP PERMANEN, JANGAN dihapus.** Boleh dibaca untuk konteks saja.
+- **Branch `feat/migrate-bun`:** sudah tidak ada lagi (lokal maupun remote).
 - **Working tree:** bersih.
-- **Deploy aktif:** Cloudflare Worker `htma` versi `f47cde49-7b84-4858-bd6e-79c646f9d228` (deploy lokal 2026-10-03), custom domain `htma.my.id` aktif.
+- **Deploy aktif:** Cloudflare Worker `htma`, dideploy otomatis oleh GitHub Actions pada setiap push ke `main` (versi terakhir cek `bunx wrangler versions list`). Custom domain `htma.my.id` + `www.htma.my.id` (308 → apex).
 - **`.open-next/`** sudah ter-build di checkout ini; `.next` ikut terisi oleh `next build` di dalam opennext build.
 
 ---
@@ -641,6 +642,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **`next start` lama tidak selalu mati oleh `fuser -k`/`pkill`** (Session 15): kill lewat PID dari `ss -ltnp` dan pastikan port 3000 bebas, kalau tidak server lama akan terus menyajikan prerender lama (chunk `status=400`) dan semua pengukuran jadi palsu.
 - **`use-sync-external-store@^1.7.0` wajib ada di `dependencies`**: `src/store/useStore.ts` memakai `createWithEqualityFn` dari `zustand/traditional`, yang mengimpor `use-sync-external-store/shim/with-selector.js`. Menghapusnya membuat `zustand/traditional` gagal resolve pada instalasi bersih.
 - **Lingkungan ini TIDAK punya Chromium** (2026-10-03): `/usr/bin/chromium` dari Session 13 hilang. Yang ada: **Helium** (`/opt/helium-browser-bin/helium`, Chromium 154.0.8037.92) dan Firefox. Skrip CDP (`verify:sheet`, `verify:form`) tetap jalan di Helium dengan `--headless=new --remote-debugging-port=9222`; **jangan** pakai Helium untuk Lighthouse (uBOL bawaan mencemari audit). Jalankan `pinchtab doctor` dulu kalau memakai PinchTab.
+- **`origin/legacy` JANGAN dihapus.** Itu kode legacy hasil coding user sendiri, dipertahankan sebagai arsip permanen. Larangan eksplisit dari user (2026-10-03): jangan `git push origin --delete legacy`, jangan `git branch -D legacy`, jangan force-push atau timpa isinya. Membaca/diff untuk konteks tetap boleh.
 - **CI = GitHub Actions**, bukan Workers Builds (yang gagal `Initializing build environment` berulang, dan tombol `Retry build`-nya hilang setelah Git integration di-reconnect). Workflow: `.github/workflows/deploy.yml`. Secret wajib `CLOUDFLARE_API_TOKEN` (template "Edit Cloudflare Workers"; tambah Zone → Workers Routes → Edit untuk `htma.my.id` kalau update trigger gagal). Trigger yang bisa diandalkan adalah push ke `main`; verifikasi lewat `gh run list` / `bunx wrangler versions list`. Deploy manual tetap `bun run deploy`.
 - **Workers Builds (CI dashboard)**: Build command **wajib** `npx opennextjs-cloudflare build`. Kalau dibiarkan `npm run build` (= `next build`), `.open-next/worker.js` tidak dibuat dan `wrangler preview`/`deploy` gagal `The entry-point file at ".open-next/worker.js" was not found.`. Deploy/Preview command default Cloudflare sudah benar. Build variables `NEXT_PUBLIC_EMAILJS_*` wajib diisi di CI — `.env.local` gitignored dan `previews.vars` runtime-only, jadi keduanya tidak menolong build. **Catatan: jalur ini sudah ditinggalkan** (lihat butir GitHub Actions di atas) karena init timeout berulang.
 - **Workers Builds CI masih gagal di `Initializing build environment` (timeout 20 menit)** per 2026-10-03, sementara deploy lokal sukses. Deploy produksi karena itu lewat `bunx wrangler login` + `bun run deploy`. Jalan pintas ini sah dan sudah terverifikasi penuh.
