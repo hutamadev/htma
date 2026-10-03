@@ -5,6 +5,7 @@
   "compatibility_date": "2026-10-02",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "keep_vars": true,
+  "routes": [{ "pattern": "htma.my.id", "custom_domain": true }],
   "previews": {
     "vars": {
       "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "mOGadpyPTWnn2gI4L",
