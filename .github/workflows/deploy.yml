@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # NEXT_PUBLIC_* is inlined into the client bundle at build time. These are the same
+      # public values that already live in wrangler.jsonc, and they end up in the browser
+      # bundle either way, so they are safe to keep here.
+      NEXT_PUBLIC_EMAILJS_SERVICE_ID: service_3bekg8c
+      NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: template_zwkk43w
+      NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: mOGadpyPTWnn2gI4L
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for the deploy token
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Repository secret CLOUDFLARE_API_TOKEN is missing. Add it with: gh secret set CLOUDFLARE_API_TOKEN -R hutamadev/htma"
+            exit 1
+          fi
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+
+      - run: bun install --frozen-lockfile
+
+      - name: Build and deploy the Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: b9d55296c8bdfca38000df2fd312e74b
+        run: bun run deploy

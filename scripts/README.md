@@ -116,6 +116,24 @@ merging a pull request is enough. Confirm a CI deploy actually landed with
 `bunx wrangler versions list`: a new version ID means it did, otherwise deploy manually with
 `bun run deploy`.
 
+### GitHub Actions (current production path)
+
+Workers Builds kept timing out during `Initializing build environment`, so production deploys
+moved to `.github/workflows/deploy.yml`, which runs on every push to `main` and can also be
+started with `workflow_dispatch`.
+
+It needs one repository secret:
+
+```bash
+gh secret set CLOUDFLARE_API_TOKEN -R hutamadev/htma
+```
+
+Create the token in Cloudflare with the **"Edit Cloudflare Workers"** template. If the deploy
+fails while updating triggers, also grant **Zone → Workers Routes → Edit** for `htma.my.id`.
+`CLOUDFLARE_ACCOUNT_ID` and the public EmailJS values are inlined in the workflow file.
+
+Check the result with `gh run list` or `bunx wrangler versions list`.
+
 Browser note: on this host `/usr/bin/chromium` is not installed. Helium
 (`/opt/helium-browser-bin/helium`, Chromium 154) works as the CDP browser for these checks;
 **do not** use it for Lighthouse — its bundled uBOL contaminates the audit.
