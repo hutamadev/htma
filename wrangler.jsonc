@@ -5,6 +5,9 @@
   "compatibility_date": "2026-10-02",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "keep_vars": true,
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": { "enabled": true },
   "routes": [{ "pattern": "htma.my.id", "custom_domain": true }],
   "previews": {
     "vars": {

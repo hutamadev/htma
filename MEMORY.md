@@ -549,16 +549,26 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Fix di dashboard** (Workers & Pages → `htma` → Settings → Build): Build command = `npx opennextjs-cloudflare build`; Deploy command `npx wrangler deploy` dan Preview command `npx wrangler preview` dibiarkan default.
    - **Wajib sekalian**: Build variables `NEXT_PUBLIC_EMAILJS_SERVICE_ID`, `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`, `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`. `previews.vars` di `wrangler.jsonc` adalah runtime var dan **tidak** menutup inlining build-time.
    - `[FACT — source: developers.cloudflare.com/workers/framework-guides/web-apps/opennext]` autoconfig Cloudflare untuk Next.js memakai **vinext**, bukan OpenNext, jadi build command ini tidak akan disiapkan otomatis.
+6. **Deploy produksi pertama (2026-10-03) — berhasil lewat lokal, CI tetap gagal.**
+   - Workers Builds (CI) mati di `Initializing build environment...` lalu `Build failed to initialize and was timed out` (batas 20 menit). Bukan repo: pack cuma 3.62 MiB / 122 file, dan status.cloudflare.com tidak punya incident aktif. Tersangka: antrean/concurrency (free plan = **1 concurrent build**) atau integrasi GitHub perlu re-authorize. `[FACT — Workers Builds limits: concurrent builds free = 1, build timeout = 20 menit]`
+   - Karena itu deploy dilakukan lokal: `bunx wrangler login` lalu `bun run deploy` (build opennext + deploy).
+   - **Deploy #1**: Worker ter-upload (`Uploaded htma (16.03 sec)`) tapi attach custom domain gagal — `[ERROR] Hostname 'htma.my.id' already has externally managed DNS records (A, CNAME, etc). Delete them first or try a different hostname. [code: 100117]`. Record A apex/www/wildcard masih menunjuk Vercel (`64.29.17.x` / `216.198.79.x`), dan `htma.my.id` sendiri sedang 404 (`x-vercel-error: DEPLOYMENT_NOT_FOUND`) karena deployment Vercel-nya sudah tidak ada.
+   - **Fix**: hapus 6 record A Vercel (apex ×2, `www` ×2, wildcard ×2) di dashboard DNS. **Dipertahankan**: CAA (`sectigo.com`, `pki.goog`, `letsencrypt.org` — dibutuhkan TLS) dan TXT (`_dmarc`, `*_domainkey`, `v=spf1 -all` — proteksi email).
+   - **Deploy #2**: exit 0 — `Uploaded htma (15.90 sec)` + `Deployed htma triggers`, URL `https://htma.hutamatr.workers.dev` dan `htma.my.id (custom domain)`, Version ID `f47cde49-7b84-4858-bd6e-79c646f9d228`.
+   - **Verifikasi produksi langsung** (`https://htma.my.id`): apex **200** dengan `x-opennext: 1` + kelima security header, `server: cloudflare` (Vercel hilang); `/contact` 200 dengan title benar; `/robots.txt`, `/sitemap.xml`, `/manifest.webmanifest`, `/opengraph-image` semua 200; path tak dikenal 404; konten SSR nyata (`Garuda Universe`, `Ibrahim Law`, JSON-LD 2×). `verify:form` **18/18** dan `verify:sheet` **42/42** dijalankan langsung ke domain produksi (Helium sebagai browser CDP).
+   - **Regresi config yang ketahuan**: deploy mematikan `workers_dev`, `preview_urls`, dan `observability` karena ketiganya tidak ada di `wrangler.jsonc` sementara remote sebelumnya aktif. Sudah dikembalikan eksplisit.
+   - **Masih terbuka**: `www.htma.my.id` tidak resolve (record www dihapus, belum ada route/redirect www); Workers Builds CI masih gagal init.
 
 ---
 
 ## Git State
 
-- **Branch aktif:** `feat/portfolio-update` — **sinkron** dengan `origin/feat/portfolio-update` (`git rev-list --left-right --count origin/feat/portfolio-update...HEAD` → `0 0`).
-- **Branch lain:** `main`, `legacy` (remote), dan `feat/migrate-bun` (lokal, menunjuk commit `71eceea`).
+- **Branch `main`:** sudah memuat PR #3, #4, dan #5 (`0fe215f Merge pull request #5 from hutamadev/feat/portfolio-update`) — sinkron dengan `origin/main`.
+- **Branch `feat/portfolio-update`:** masih ada, isinya sudah masuk `main` lewat PR #5.
+- **Branch `legacy`** (remote) dan **`feat/migrate-bun`** (lokal, `71eceea`) masih ada.
 - **Working tree:** bersih.
-- **Commit terakhir:** `ad0d6fc` (`fix(deploy): use opennextjs-cloudflare build in package.json build script`).
-- **Build aktif di `.next`:** build Node lama (10/10 static pages); **`.open-next/` belum pernah di-build** di checkout ini.
+- **Deploy aktif:** Cloudflare Worker `htma` versi `f47cde49-7b84-4858-bd6e-79c646f9d228` (deploy lokal 2026-10-03), custom domain `htma.my.id` aktif.
+- **`.open-next/`** sudah ter-build di checkout ini; `.next` ikut terisi oleh `next build` di dalam opennext build.
 
 ---
 
@@ -629,6 +639,9 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
 - **Lingkungan ini TIDAK punya Chromium** (2026-10-03): `/usr/bin/chromium` dari Session 13 hilang. Yang ada: **Helium** (`/opt/helium-browser-bin/helium`, Chromium 154.0.8037.92) dan Firefox. Skrip CDP (`verify:sheet`, `verify:form`) tetap jalan di Helium dengan `--headless=new --remote-debugging-port=9222`; **jangan** pakai Helium untuk Lighthouse (uBOL bawaan mencemari audit). Jalankan `pinchtab doctor` dulu kalau memakai PinchTab.
 - **Deploy Cloudflare**: `bun run build` = `next build` (Node). Untuk artefak Worker pakai `bun run preview`/`deploy`/`upload` (yang memanggil `opennextjs-cloudflare build`). **Jangan taruh `opennextjs-cloudflare build` di script `build`** — rekursi tak terbatas (bug `ad0d6fc`, diperbaiki 2026-10-03). `open-next.config.ts` tanpa `incrementalCache`/R2 memang sengaja.
 - **Workers Builds (CI dashboard)**: Build command **wajib** `npx opennextjs-cloudflare build`. Kalau dibiarkan `npm run build` (= `next build`), `.open-next/worker.js` tidak dibuat dan `wrangler preview`/`deploy` gagal `The entry-point file at ".open-next/worker.js" was not found.`. Deploy/Preview command default Cloudflare sudah benar. Build variables `NEXT_PUBLIC_EMAILJS_*` wajib diisi di CI — `.env.local` gitignored dan `previews.vars` runtime-only, jadi keduanya tidak menolong build.
+- **Workers Builds CI masih gagal di `Initializing build environment` (timeout 20 menit)** per 2026-10-03, sementara deploy lokal sukses. Deploy produksi karena itu lewat `bunx wrangler login` + `bun run deploy`. Jalan pintas ini sah dan sudah terverifikasi penuh.
+- **Attach custom domain gagal `100117`** kalau hostname masih punya record A/CNAME "externally managed" (mis. sisa Vercel). Workers custom domain butuh record itu dihapus dulu; dia akan membuat record-nya sendiri. Jangan hapus record CAA dan TXT (SPF/DMARC/DKIM) — itu untuk TLS dan anti-spoofing email.
+- **Deploy akan mematikan setting Worker yang tidak ada di `wrangler.jsonc`.** `workers_dev`, `preview_urls`, dan `observability` harus ditulis eksplisit, kalau tidak nilai remote (yang aktif) akan ditimpa jadi mati. `keep_vars: true` tetap menjaga runtime vars.
 - **PinchTab capability flags sengaja default (dibatasi)**: `security.allowEvaluate`, `security.allowNetworkIntercept`, dan `security.idpi.strictMode` **false**. Akibatnya `pinchtab eval`, `pinchtab network route`, dan `pinchtab snap` mengembalikan 403 — `snap` bahkan diblokir IDPI karena copy halaman kita sendiri memicu "jailbreak/role-hijack pattern" (false positive). Untuk uji fungsional, gunakan CDP mentah + stub `window.fetch` di page context (skrip `/tmp/cdp.ts` + `/tmp/form-e2e.ts`), bukan melonggarkan postur keamanan daemon.
 - **Lightpanda BUKAN browser verifikasi**: `/home/hutamatr/lightpanda` tidak punya paint/layout (Lighthouse mustahil) dan gagal senyap pada React — `reset()` react-hook-form jadi no-op tanpa error apa pun, dan node toast lama tertinggal di DOM. Pakai hanya untuk scraping DOM murah.
 - **Kalau commit tiba-tiba gagal dengan `Syntax error: word unexpected (expecting ")")`**: itu hook lefthook yang menulis path repo tanpa kutip, dan path repo ini memuat `(` `)`. Perbaiki dengan mengutip path di `.git/hooks/pre-commit` dan `.git/hooks/commit-msg` (dua file itu tidak ikut ter-commit, jadi fix-nya tidak ikut ke clone lain).
