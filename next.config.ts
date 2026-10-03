@@ -24,6 +24,22 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        has: [{ type: 'host', value: 'www.htma.my.id' }],
+        destination: 'https://htma.my.id/',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.htma.my.id' }],
+        destination: 'https://htma.my.id/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
