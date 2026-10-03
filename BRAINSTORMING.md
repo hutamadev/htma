@@ -1437,7 +1437,16 @@ Verifikasi: `bun run lint` 0 error, `bunx tsc --noEmit` 0 error, `bun run build`
     - **Cross-browser non-Chromium: known-unverified** (keputusan user, tanpa unduhan tambahan). Alasan: Chromium satu-satunya engine di mesin; Firefox tidak membuktikan kasus `background-attachment: fixed` milik iOS Safari, dan WebKit Linux Playwright pun bukan iOS Safari.
     - ✅ `.env.local` sudah ada → jalur EmailJS nyata **terverifikasi Session 14** (dev + Chromium CDP: POST 200, toast sukses, reset, 0 error). Uji stub 18/18 dengan id dummy tetap valid untuk jalur validasi.
     - **Rujukan lama ke skill `lighthouse-audit-local` tidak berlaku** (skill itu tidak ada). Penggantinya: skill global **`local-browser-verification`** + skrip milik project di `scripts/` (`bun run verify:form`, `bun run audit:lighthouse`, didokumentasikan di `scripts/README.md`).
-    - Branch `feat/portfolio-update` sekarang **ahead dari origin** (2 commit lokal Session 13) dan **belum di-push**; user memutuskan **tanpa PR**.
+    - Branch `feat/portfolio-update` sudah di-fast-forward ke `main` (`a1e00b2`) pada 2026-10-03, jadi tidak tertinggal lagi; sekarang ahead 1 commit (`289d216`) yang sengaja belum di-PR atas permintaan user.
+
+### Backlog Pasca-Launch (2026-10-03)
+
+Belum ada yang dikerjakan; ini daftar kandidat lanjutan. Kerjakan di branch `feat/portfolio-update` supaya bisa masuk satu PR.
+
+- **Performa (sisa lever Slice 5.2)**: hero masih client-gated; `image-delivery-insight` ~190 KiB (thumbnail portfolio 600×600 untuk slot ~212 px); `@import` Google Fonts render-blocking 140–180 ms; `legacy-javascript` 14 KiB dan `unused-javascript` 116–131 KiB dari chunk framework.
+- **Verifikasi**: Lighthouse di runtime Worker (angka terakhir dari `next start`); host develop tidak punya Chromium, jadi audit perlu mesin lain atau Chromium bersih.
+- **Cross-browser non-Chromium**: tetap `known-unverified`.
+- **Repo / hygiene**: `initOpenNextCloudflareForDev()` belum dipasang di `next.config.ts`; binding `IMAGES` belum diuji transform-nya di produksi; padding kartu portfolio `p-6` masih 24% lebar kartu di mobile (kandidat `p-4 sm:p-6`).
 
 ---
 

@@ -609,8 +609,14 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
      - ⚠️ **Cross-browser dicatat known-unverified** atas keputusan user: mesin hanya punya Chromium, dan engine lain tidak bisa membuktikan kasus `background-attachment: fixed` milik iOS Safari.
      - ⚠️ `.env.local` sudah ada (diisi user Session 14) → jalur EmailJS nyata **terverifikasi** (dev + Chromium CDP: POST 200, toast sukses, reset, 0 error). Uji stub 18/18 dengan id dummy tetap valid untuk jalur validasi.
      - Catatan: rujukan lama ke skill **`lighthouse-audit-local` tidak berlaku** (skill itu tidak pernah ada). Penggantinya: skill global **`local-browser-verification`**, plus skrip milik project `bun run verify:form` dan `bun run audit:lighthouse`.
-     - Branch `feat/portfolio-update` **sudah sinkron** dengan `origin` (0 ahead / 0 behind per 2026-10-03); user memutuskan **tanpa PR**: merge diserahkan ke keputusan sendiri nanti.
+     - Branch `feat/portfolio-update` **sudah di-fast-forward ke `main`** (`a1e00b2`) pada 2026-10-03, jadi tidak lagi tertinggal; sekarang **ahead 1 commit** karena `289d216` yang sengaja belum di-PR atas permintaan user.
    - **Deploy** Cloudflare Workers via OpenNext (Session 16): pipeline build→preview→e2e terverifikasi, `routes` custom domain `htma.my.id` sudah ditambahkan, gzip 1.73 MiB (aman). Sisa: `wrangler login` (atau `CLOUDFLARE_API_TOKEN`) lalu `bun run deploy`; untuk CI isi build-time EmailJS vars.
+6. **Backlog pasca-launch (dicatat 2026-10-03, belum dikerjakan)** — kandidat lanjutan. Kerjakan di branch `feat/portfolio-update` supaya bisa satu PR.
+   - **Performa (sisa lever Slice 5.2)**: hero masih client-gated (kandidat LCP); `image-delivery-insight` ~190 KiB — thumbnail portfolio 600×600 dipakai di slot ~212 px; `@import` Google Fonts render-blocking 140–180 ms; chunk framework `legacy-javascript` 14 KiB dan `unused-javascript` 116–131 KiB.
+   - **Verifikasi**: Lighthouse diukur ulang di runtime Worker. Angka terakhir diambil dari `next start`, dan host develop ini tidak punya Chromium — jadi audit harus dijalankan di mesin lain atau dengan Chromium bersih (ikuti skill `local-browser-verification`).
+   - **Cross-browser non-Chromium**: masih `known-unverified` (keputusan user, tanpa unduhan engine tambahan).
+   - **Repo / hygiene**: `next.config.ts` belum memanggil `initOpenNextCloudflareForDev()` (baru perlu kalau binding Cloudflare diakses dari `next dev`); binding `IMAGES` belum pernah diuji transform-nya di produksi; padding kartu portfolio `p-6` masih memakan 24% lebar kartu di mobile — kandidat `p-4 sm:p-6`.
+   - **Sengaja tertunda**: commit `289d216` (`docs: mark the legacy branch as a permanent user archive`) di branch `feat/portfolio-update` belum di-PR atas permintaan user; bundle bersama pekerjaan berikutnya.
 
 **Pekerjaan tambahan Session 6 yang sudah selesai** (di luar slice): custom cursor smooth fluid shrink + magnetic parallax, two-stage section header, header transparan + hero diperlebar, ukuran kursor 40px, hapus `ArrowSVG.tsx`, Slice 3.5 (sidebar rail, active indicator, FAB, footer) + perf fix scroll listener.
 
