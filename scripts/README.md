@@ -93,6 +93,23 @@ BASE_URL=http://127.0.0.1:8787 bun run verify:form
 (`@opennextjs/aws` `buildNextApp`), so **never** put `opennextjs-cloudflare build` in the
 `build` script — it recurses forever and never finishes.
 
+### Workers Builds (CI)
+
+The dashboard build settings are separate from these local scripts. Set:
+
+| Setting         | Value                             |
+| --------------- | --------------------------------- |
+| Build command   | `npx opennextjs-cloudflare build` |
+| Deploy command  | `npx wrangler deploy` (default)   |
+| Preview command | `npx wrangler preview` (default)  |
+
+If the build command is left at `npm run build`, only `next build` runs, and the
+`wrangler preview` / `wrangler deploy` step fails with
+`✘ [ERROR] The entry-point file at ".open-next/worker.js" was not found.`
+
+`NEXT_PUBLIC_EMAILJS_*` must be set as **Build variables**: they are inlined at build time,
+and `previews.vars` in `wrangler.jsonc` is runtime-only.
+
 Browser note: on this host `/usr/bin/chromium` is not installed. Helium
 (`/opt/helium-browser-bin/helium`, Chromium 154) works as the CDP browser for these checks;
 **do not** use it for Lighthouse — its bundled uBOL contaminates the audit.

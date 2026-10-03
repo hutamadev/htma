@@ -200,6 +200,7 @@ Bun membaca `.env` secara otomatis (built-in dotenv). Tidak perlu install `doten
 - `bun run preview` = build + jalankan Worker lokal; `bun run deploy` = build + deploy; `bun run upload` = build + upload versi tanpa mempromosikan.
 - `bun run cf-typegen` menghasilkan `cloudflare-env.d.ts` untuk tipe binding (belum di-generate; belum ada binding yang dibaca runtime).
 - Vercel tidak dipakai lagi; `@vercel/analytics` sudah dihapus.
+- **Workers Builds (dashboard)**: Build command wajib `npx opennextjs-cloudflare build` — bukan `npm run build`, yang cuma menjalankan `next build` sehingga `.open-next/worker.js` tidak dibuat dan `wrangler preview`/`deploy` gagal `The entry-point file at ".open-next/worker.js" was not found.`. Deploy/Preview command default Cloudflare (`npx wrangler deploy`, `npx wrangler preview`) sudah benar. Build variables `NEXT_PUBLIC_EMAILJS_*` wajib diisi di CI karena `.env.local` gitignored dan `previews.vars` hanya runtime.
 
 #### 2.10 next.config migration
 
