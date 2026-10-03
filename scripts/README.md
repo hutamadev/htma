@@ -134,6 +134,9 @@ fails while updating triggers, also grant **Zone → Workers Routes → Edit** f
 
 Check the result with `gh run list` or `bunx wrangler versions list`.
 
+Workers Builds is still connected and fails on every push. Disconnect it in
+Settings → Builds so it cannot fail noisily or, if it recovers, deploy a second time.
+
 Browser note: on this host `/usr/bin/chromium` is not installed. Helium
 (`/opt/helium-browser-bin/helium`, Chromium 154) works as the CDP browser for these checks;
 **do not** use it for Lighthouse — its bundled uBOL contaminates the audit.
