@@ -559,7 +559,7 @@ Semua 11 pertanyaan terbuka sudah dijawab di Session 2 (2026-09-03). Lihat `BRAI
    - **Regresi config yang ketahuan**: deploy mematikan `workers_dev`, `preview_urls`, dan `observability` karena ketiganya tidak ada di `wrangler.jsonc` sementara remote sebelumnya aktif. Sudah dikembalikan eksplisit.
    - **www.htma.my.id — SELESAI (2026-10-03)**: ditambahkan sebagai custom domain kedua di `wrangler.jsonc` plus redirect **308** ke apex lewat `redirects()` di `next.config.ts` (deploy `a429df86-bc5d-4ccd-aff3-89b8cac01363`). Verifikasi: `www/` → `https://htma.my.id/` (200), `www/contact` → 200, `www/robots.txt` → redirect, query string ikut terbawa, apex tetap 200. Catatan: resolver lokal sempat meng-cache NXDOMAIN untuk `www`, jadi verifikasi harus pakai `dig @1.1.1.1` atau `curl --resolve`.
    - **Quirk Next redirect**: `source: '/:path*'` dengan destination `https://htma.my.id/:path*` mengeluarkan Location **literal** `https://htma.my.id/:path*` untuk root `/` (berujung 404). Wajib ada rule root eksplisit (`source: '/'`). Path non-root interpolasi normal.
-   - **Masih terbuka**: Workers Builds CI tetap gagal init — tidak ada versi baru setelah merge PR #6 (`wrangler deployments list` berhenti di deploy lokal `f47cde49`).
+   - **Masih terbuka**: Workers Builds CI tetap gagal init — tidak ada versi baru setelah merge PR #6 (`wrangler deployments list` berhenti di deploy lokal `f47cde49`). Git integration lalu di-disconnect/reconnect user (2026-10-03); tombol `Retry build` tidak tersedia setelah reconnect, jadi trigger yang dipakai adalah push ke `main` (merge PR). Verifikasi lewat `bunx wrangler versions list`.
 
 ---
 
